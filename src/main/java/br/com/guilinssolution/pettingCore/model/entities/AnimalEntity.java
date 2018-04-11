@@ -17,10 +17,10 @@ public class AnimalEntity implements Serializable {
     private Integer id;
 
 
-    private String especie;
+    private String species;
 
 
-    private String raca;
+    private String breed;
 
 
 }

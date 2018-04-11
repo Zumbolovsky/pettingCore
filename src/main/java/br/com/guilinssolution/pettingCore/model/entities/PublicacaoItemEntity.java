@@ -17,13 +17,13 @@ public class PublicacaoItemEntity implements Serializable {
     private Integer id;
 
 
-    private String titulo;
+    private String title;
 
 
-    private String descricao;
+    private String description;
 
 
-    private String imagem;
+    private String image;
 
 
     private Integer idAnimal;

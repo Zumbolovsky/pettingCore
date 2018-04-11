@@ -17,15 +17,18 @@ public class ContribuicaoEntity implements Serializable {
     private Integer id;
 
 
-    private String descricao;
+    private String description;
 
 
-    private Integer idSolicitante;
+    private Integer idRequest;
 
 
-    private Integer idDoador;
+    private Integer idDonator;
 
 
-    private Integer idPublicacao;
+    private Integer idPostAnimal;
+
+
+    private Integer idPostItem;
 
 }

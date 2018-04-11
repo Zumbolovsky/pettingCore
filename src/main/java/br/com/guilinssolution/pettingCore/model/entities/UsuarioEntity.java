@@ -18,42 +18,36 @@ public class UsuarioEntity implements Serializable {
     private Integer id;
 
 
-    private String nome;
+    private String name;
 
 
     private String cpf;
 
 
-    private String endereco;
+    private String address;
 
 
-    private String estado;
+    private String state;
 
 
-    private String cidade;
+    private String city;
 
 
-    private String telefone;
+    private String phone;
 
 
-    private String celular;
+    private String cellphone;
 
 
-    private String imagem;
+    private String image;
 
 
-    private Integer idSolicitante;
+    private Set<Integer> idContribution;
 
 
-    private Integer idDoador;
+    private Set<Integer> idPostItem;
 
 
-    private Set<Integer> idContribuicao;
-
-
-    private Set<Integer> idPublicacaoItem;
-
-
-    private Set<Integer> idPublicacaoAnimal;
+    private Set<Integer> idPostAnimal;
 
 }

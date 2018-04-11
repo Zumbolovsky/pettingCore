@@ -1,6 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
-import br.com.guilinssolution.pettingCore.model.enums.Porte;
+import br.com.guilinssolution.pettingCore.model.enums.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,16 +18,16 @@ public class PublicacaoAnimalEntity implements Serializable {
     private Integer id;
 
 
-    private String titulo;
+    private String title;
 
 
-    private Porte porte;
+    private Size size;
 
 
-    private String descricao;
+    private String description;
 
 
-    private String imagem;
+    private String image;
 
 
     private Integer idAnimal;
