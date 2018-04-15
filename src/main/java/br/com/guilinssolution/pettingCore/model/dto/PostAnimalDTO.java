@@ -2,16 +2,14 @@ package br.com.guilinssolution.pettingCore.model.dto;
 
 import br.com.guilinssolution.pettingCore.model.enums.Size;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
+@Builder
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
