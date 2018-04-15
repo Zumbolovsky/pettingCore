@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="pettingdb" match-schema="dbo" match-name="animalEntity"/>
+  <table-filter match-catalog="pettingdb" match-schema="dbo" match-name="contributionEntity"/>
+  <table-filter match-catalog="pettingdb" match-schema="dbo" match-name="postAnimalEntity"/>
+  <table-filter match-catalog="pettingdb" match-schema="dbo" match-name="postItemEntity"/>
+  <table-filter match-catalog="pettingdb" match-schema="dbo" match-name="usurEntity"/>
+</hibernate-reverse-engineering>

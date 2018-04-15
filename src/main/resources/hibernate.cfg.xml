@@ -4,8 +4,14 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url"/>
-    <property name="connection.driver_class"/>
+    <property name="connection.url">jdbc:sqlserver://localhost\SQLEXPRESS:1433;database=pettingdb</property>
+    <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+    <mapping class="br.com.guilinssolution.pettingCore.model.entities.AnimalEntity"/>
+    <mapping resource="hibernate.map.xml"/>
+    <mapping class="br.com.guilinssolution.pettingCore.model.entities.ContributionEntity"/>
+    <mapping class="br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity"/>
+    <mapping class="br.com.guilinssolution.pettingCore.model.entities.PostItemEntity"/>
+    <mapping class="br.com.guilinssolution.pettingCore.model.entities.UsurEntity"/>
     <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
