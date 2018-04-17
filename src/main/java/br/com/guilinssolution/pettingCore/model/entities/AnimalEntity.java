@@ -10,7 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.*;
+import lombok.Data;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Data
 @Builder

@@ -5,7 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
@@ -34,6 +34,6 @@ public class ContributionDTO {
 	private String descriptionContribution;
 
 	@ApiModelProperty(hidden = true)
-	private Set<UsurDTO> usurDTOS;
+	private List<UsurDTO> usurDTOS;
 
 }

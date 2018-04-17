@@ -5,7 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
@@ -34,9 +34,9 @@ public class PostItemDTO {
 	private String imagePostItem;
 
 	@ApiModelProperty(hidden = true)
-	private Set<ContributionDTO> contributionDTOS;
+	private List<ContributionDTO> contributionDTOS;
 
 	@ApiModelProperty(hidden = true)
-	private Set<UsurDTO> usurDTOS;
+	private List<UsurDTO> usurDTOS;
 
 }
