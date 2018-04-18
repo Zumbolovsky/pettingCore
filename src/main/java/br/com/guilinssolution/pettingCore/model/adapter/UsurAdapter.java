@@ -1,8 +1,12 @@
 package br.com.guilinssolution.pettingCore.model.adapter;
 
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
+import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
+import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
+import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
+import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 
 import java.util.ArrayList;
@@ -18,13 +22,19 @@ public class UsurAdapter {
         }
 
         ContributionEntity contributionEntity = entity.getContributionEntity();
-        ContributionDTO contributionDTO = ContributionAdapter.convertToDTOLite(contributionEntity);
+        ContributionDTO contributionDTO = ContributionAdapter.convertToDTO(contributionEntity);
 
         Set<ContributionEntity> contributionEntitiesForIdDonator = entity.getContributionsForIdDonator();
         List<ContributionDTO> contributionDTOSForIdDonator = ContributionAdapter.convertToDTOLite(contributionEntitiesForIdDonator);
 
         Set<ContributionEntity> contributionEntitiesForIdRequest = entity.getContributionsForIdRequest();
         List<ContributionDTO> contributionDTOSForIdRequest = ContributionAdapter.convertToDTOLite(contributionEntitiesForIdRequest);
+
+        PostAnimalEntity postAnimalEntity = entity.getPostAnimalEntity();
+        PostAnimalDTO postAnimalDTO = PostAnimalAdapter.convertToDTO(postAnimalEntity);
+
+        PostItemEntity postItemEntity = entity.getPostItemEntity();
+        PostItemDTO postItemDTO = PostItemAdapter.convertToDTO(postItemEntity);
 
         return UsurDTO.builder()
                 .idUsur(entity.getIdUsur())
@@ -38,8 +48,8 @@ public class UsurAdapter {
                 .contributionDTO(contributionDTO)
                 .contributionsForIdDonator(contributionDTOSForIdDonator)
                 .contributionsForIdRequest(contributionDTOSForIdRequest)
-                // TODO: .postAnimalDTO(entity.getPostAnimalEntity())
-                // TODO: .postItemDTO(entity.getPostItemEntity())
+                .postAnimalDTO(postAnimalDTO)
+                .postItemDTO(postItemDTO)
                 .build();
     }
 
@@ -65,6 +75,12 @@ public class UsurAdapter {
             contributionEntitiesForIdRequest.add(contributionEntityForIdRequest);
         }
 
+        PostAnimalDTO postAnimalDTO = dto.getPostAnimalDTO();
+        PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(postAnimalDTO);
+
+        PostItemDTO postItemDTO = dto.getPostItemDTO();
+        PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(postItemDTO);
+
         return UsurEntity.builder()
                 .idUsur(dto.getIdUsur())
                 .addressUsur(dto.getAddressUsur())
@@ -77,17 +93,22 @@ public class UsurAdapter {
                 .contributionEntity(contributionEntity)
                 .contributionsForIdDonator(contributionEntitiesForIdDonator)
                 .contributionsForIdRequest(contributionEntitiesForIdRequest)
-                // TODO: .postAnimalEntity(dto.getPostAnimalDTO())
-                // TODO: .postItemEntity(dto.getPostItemDTO())
+                .postAnimalEntity(postAnimalEntity)
+                .postItemEntity(postItemEntity)
                 .build();
     }
 
     public static List<UsurDTO> convertToDTOLite(Set<UsurEntity> entities) {
+        if(entities == null) {
+            return null;
+        }
         List<UsurDTO> dtos = new ArrayList<>();
 
         for (UsurEntity entity : entities) {
             UsurDTO dto = convertToDTOLite(entity);
-            dtos.add(dto);
+            if(dto != null) {
+                dtos.add(dto);
+            }
         }
 
         return dtos;

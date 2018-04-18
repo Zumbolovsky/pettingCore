@@ -1,8 +1,12 @@
 package br.com.guilinssolution.pettingCore.model.adapter;
 
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
+import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
+import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
+import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
+import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 
 import java.util.ArrayList;
@@ -17,11 +21,17 @@ public class ContributionAdapter {
             return null;
         }
 
+        PostAnimalEntity postAnimalEntity = entity.getPostAnimalEntity();
+        PostAnimalDTO postAnimalDTO = PostAnimalAdapter.convertToDTO(postAnimalEntity);
+
+        PostItemEntity postItemEntity = entity.getPostItemEntity();
+        PostItemDTO postItemDTO = PostItemAdapter.convertToDTO(postItemEntity);
+
         UsurEntity usurEntityByIdDonator = entity.getUsurEntityByIdDonator();
-        UsurDTO usurDTOByIdDonator = UsurAdapter.convertToDTOLite(usurEntityByIdDonator);
+        UsurDTO usurDTOByIdDonator = UsurAdapter.convertToDTO(usurEntityByIdDonator);
 
         UsurEntity usurEntityByIdRequest = entity.getUsurEntityByIdRequest();
-        UsurDTO usurDTOByIdRequest = UsurAdapter.convertToDTOLite(usurEntityByIdRequest);
+        UsurDTO usurDTOByIdRequest = UsurAdapter.convertToDTO(usurEntityByIdRequest);
 
         Set<UsurEntity> usurEntities = entity.getUsurEntities();
         List<UsurDTO> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
@@ -29,8 +39,8 @@ public class ContributionAdapter {
         return ContributionDTO.builder()
                 .idContribution(entity.getIdContribution())
                 .descriptionContribution(entity.getDescriptionContribution())
-                // TODO: .postAnimalDTO(entity.getPostAnimalEntity())
-                // TODO: .postItemDTO(entity.getPostItemEntity())
+                .postAnimalDTO(postAnimalDTO)
+                .postItemDTO(postItemDTO)
                 .usurDTOByIdDonator(usurDTOByIdDonator)
                 .usurDTOByIdRequest(usurDTOByIdRequest)
                 .usurDTOS(usurDTOS)
@@ -41,6 +51,12 @@ public class ContributionAdapter {
         if(dto == null) {
             return null;
         }
+
+        PostAnimalDTO postAnimalDTO = dto.getPostAnimalDTO();
+        PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(postAnimalDTO);
+
+        PostItemDTO postItemDTO = dto.getPostItemDTO();
+        PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(postItemDTO);
 
         UsurDTO usurDTOByIdDonator = dto.getUsurDTOByIdDonator();
         UsurEntity usurEntityByIdDonator = UsurAdapter.convertToEntity(usurDTOByIdDonator);
@@ -58,8 +74,8 @@ public class ContributionAdapter {
         return ContributionEntity.builder()
                 .idContribution(dto.getIdContribution())
                 .descriptionContribution(dto.getDescriptionContribution())
-                // TODO: .postAnimalEntity(dto.getPostAnimalDTO())
-                // TODO: .postItemEntity(dto.getPostItemDTO())
+                .postAnimalEntity(postAnimalEntity)
+                .postItemEntity(postItemEntity)
                 .usurEntityByIdDonator(usurEntityByIdDonator)
                 .usurEntityByIdRequest(usurEntityByIdRequest)
                 .usurEntities(usurEntities)
@@ -67,11 +83,16 @@ public class ContributionAdapter {
     }
 
     public static List<ContributionDTO> convertToDTOLite(Set<ContributionEntity> entities) {
+        if(entities == null) {
+            return null;
+        }
         List<ContributionDTO> dtos = new ArrayList<>();
 
         for (ContributionEntity entity : entities) {
             ContributionDTO dto = convertToDTOLite(entity);
-            dtos.add(dto);
+            if(dto != null) {
+                dtos.add(dto);
+            }
         }
 
         return dtos;
