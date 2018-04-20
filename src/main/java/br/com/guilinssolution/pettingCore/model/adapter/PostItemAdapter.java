@@ -44,18 +44,10 @@ public class PostItemAdapter {
         AnimalEntity animalEntity  = AnimalAdapter.convertToEntity(animalDTO);
 
         List<ContributionDTO> contributionDTOS = dto.getContributionDTOS();
-        Set<ContributionEntity> contributionEntities = new HashSet<>();
-        for (ContributionDTO contributionDTO : contributionDTOS) {
-            ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(contributionDTO);
-            contributionEntities.add(contributionEntity);
-        }
+        Set<ContributionEntity> contributionEntities = ContributionAdapter.convertToEntityLite(contributionDTOS);
 
         List<UsurDTO> usurDTOS = dto.getUsurDTOS();
-        Set<UsurEntity> usurEntities = new HashSet<>();
-        for (UsurDTO usurDTO : usurDTOS) {
-            UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);
-            usurEntities.add(usurEntity);
-        }
+        Set<UsurEntity> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
 
         return PostItemEntity.builder()
                 .idPostItem(dto.getIdPostItem())
@@ -91,6 +83,32 @@ public class PostItemAdapter {
 
         return PostItemDTO.builder()
                 .idPostItem(entity.getIdPostItem())
+                .build();
+    }
+
+    public static Set<PostItemEntity> convertToEntityLite(List<PostItemDTO> dtos) {
+        if(dtos == null) {
+            return null;
+        }
+        Set<PostItemEntity> entities = new HashSet<>();
+
+        for (PostItemDTO dto : dtos) {
+            PostItemEntity entity = convertToEntityLite(dto);
+            if(entity != null) {
+                dtos.add(dto);
+            }
+        }
+
+        return entities;
+    }
+
+    public static PostItemEntity convertToEntityLite(PostItemDTO dto) {
+        if(dto == null) {
+            return null;
+        }
+
+        return PostItemEntity.builder()
+                .idPostItem(dto.getIdPostItem())
                 .build();
     }
 

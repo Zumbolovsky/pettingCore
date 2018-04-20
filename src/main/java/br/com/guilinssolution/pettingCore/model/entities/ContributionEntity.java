@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Data
+@Entity
 @Builder
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "ContributionEntity")
+@EqualsAndHashCode(of= {"idContribution"})
 @Table(name = "contribution", schema = "dbo", catalog = "pettingdb")
 public class ContributionEntity implements Serializable {
 
@@ -31,7 +31,7 @@ public class ContributionEntity implements Serializable {
 
 	@Id
 	@Column(name = "id_contribution", unique = true, nullable = false)
-	private int idContribution;
+	private Integer idContribution;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_postAnimal")

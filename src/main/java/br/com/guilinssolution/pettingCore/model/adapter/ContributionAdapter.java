@@ -65,11 +65,7 @@ public class ContributionAdapter {
         UsurEntity usurEntityByIdRequest = UsurAdapter.convertToEntity(usurDTOByIdRequest);
 
         List<UsurDTO> usurDTOS = dto.getUsurDTOS();
-        Set<UsurEntity> usurEntities = new HashSet<>();
-        for (UsurDTO usurDTO : usurDTOS) {
-            UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);
-            usurEntities.add(usurEntity);
-        }
+        Set<UsurEntity> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
 
         return ContributionEntity.builder()
                 .idContribution(dto.getIdContribution())
@@ -105,6 +101,32 @@ public class ContributionAdapter {
 
         return ContributionDTO.builder()
                 .idContribution(entity.getIdContribution())
+                .build();
+    }
+
+    public static Set<ContributionEntity> convertToEntityLite(List<ContributionDTO> dtos) {
+        if(dtos == null) {
+            return null;
+        }
+        Set<ContributionEntity> entities = new HashSet<>();
+
+        for (ContributionDTO dto : dtos) {
+            ContributionEntity entity = convertToEntityLite(dto);
+            if(entity != null) {
+                dtos.add(dto);
+            }
+        }
+
+        return entities;
+    }
+
+    public static ContributionEntity convertToEntityLite(ContributionDTO dto) {
+        if(dto == null) {
+            return null;
+        }
+
+        return ContributionEntity.builder()
+                .idContribution(dto.getIdContribution())
                 .build();
     }
 

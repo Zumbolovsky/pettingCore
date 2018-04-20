@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Data
+@Entity
 @Builder
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "AnimalEntity")
+@EqualsAndHashCode(of= {"idAnimal"})
 @Table(name = "animal", schema = "dbo", catalog = "pettingdb")
 public class AnimalEntity implements Serializable {
 
@@ -29,7 +29,7 @@ public class AnimalEntity implements Serializable {
 
 	@Id
 	@Column(name = "id_animal", unique = true, nullable = false)
-	private int idAnimal;
+	private Integer idAnimal;
 
 	@Column(name = "species_animal", nullable = false, length = 30)
 	private String speciesAnimal;

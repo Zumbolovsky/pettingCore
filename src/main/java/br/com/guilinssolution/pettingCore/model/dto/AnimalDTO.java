@@ -1,5 +1,7 @@
 package br.com.guilinssolution.pettingCore.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -9,13 +11,15 @@ import java.util.List;
 
 @Data
 @Builder
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"idAnimal"})
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AnimalDTO {
 
 	@NotNull
-	private int idAnimal;
+	private Integer idAnimal;
 
 	@NotNull
 	@Length(max = 30)

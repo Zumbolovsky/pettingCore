@@ -62,18 +62,10 @@ public class UsurAdapter {
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(contributionDTO);
 
         List<ContributionDTO> contributionDTOSForIdDonator = dto.getContributionsForIdDonator();
-        Set<ContributionEntity> contributionEntitiesForIdDonator = new HashSet<>();
-        for (ContributionDTO contributionDTOForIdDonator : contributionDTOSForIdDonator) {
-            ContributionEntity contributionEntityForIdDonator = ContributionAdapter.convertToEntity(contributionDTOForIdDonator);
-            contributionEntitiesForIdDonator.add(contributionEntityForIdDonator);
-        }
+        Set<ContributionEntity> contributionEntitiesForIdDonator = ContributionAdapter.convertToEntityLite(contributionDTOSForIdDonator);
 
         List<ContributionDTO> contributionDTOSForIdRequest = dto.getContributionsForIdRequest();
-        Set<ContributionEntity> contributionEntitiesForIdRequest = new HashSet<>();
-        for (ContributionDTO contributionDTOForIdRequest : contributionDTOSForIdRequest) {
-            ContributionEntity contributionEntityForIdRequest = ContributionAdapter.convertToEntity(contributionDTOForIdRequest);
-            contributionEntitiesForIdRequest.add(contributionEntityForIdRequest);
-        }
+        Set<ContributionEntity> contributionEntitiesForIdRequest = ContributionAdapter.convertToEntityLite(contributionDTOSForIdRequest);
 
         PostAnimalDTO postAnimalDTO = dto.getPostAnimalDTO();
         PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(postAnimalDTO);
@@ -123,4 +115,31 @@ public class UsurAdapter {
                 .idUsur(entity.getIdUsur())
                 .build();
     }
+
+    public static Set<UsurEntity> convertToEntityLite(List<UsurDTO> dtos) {
+        if(dtos == null) {
+            return null;
+        }
+        Set<UsurEntity> entities = new HashSet<>();
+
+        for (UsurDTO dto : dtos) {
+            UsurEntity entity = convertToEntityLite(dto);
+            if(entity != null) {
+                dtos.add(dto);
+            }
+        }
+
+        return entities;
+    }
+
+    public static UsurEntity convertToEntityLite(UsurDTO dto) {
+        if(dto == null) {
+            return null;
+        }
+
+        return UsurEntity.builder()
+                .idUsur(dto.getIdUsur())
+                .build();
+    }
+
 }
