@@ -1,7 +1,13 @@
 package br.com.guilinssolution.pettingCore.model.adapter;
 
-import br.com.guilinssolution.pettingCore.model.dto.*;
-import br.com.guilinssolution.pettingCore.model.entities.*;
+import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
+import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
+import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
+import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
+import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
+import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
+import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
+import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
 import java.util.ArrayList;

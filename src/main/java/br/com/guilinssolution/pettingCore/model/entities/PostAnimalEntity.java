@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.guilinssolution.pettingCore.model.enums.Size;
 import lombok.Data;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
