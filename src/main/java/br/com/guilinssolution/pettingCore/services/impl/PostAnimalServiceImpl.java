@@ -26,6 +26,10 @@ import java.util.List;
 
 import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 
+/////////////////////////////////////////
+// TODO: Implementar serviço para imagem
+/////////////////////////////////////////
+
 @Service
 public class PostAnimalServiceImpl implements PostAnimalService {
 
