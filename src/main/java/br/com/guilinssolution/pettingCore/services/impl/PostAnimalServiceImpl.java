@@ -9,7 +9,6 @@ import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
-import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.services.PostAnimalService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -33,11 +32,11 @@ import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 @Service
 public class PostAnimalServiceImpl implements PostAnimalService {
 
-    private final PostAnimalRepository repository;
+    private final PostAnimalRepository repository; //Injeção de dependências do SpringBoot
 
-    private final Validator validator;
+    private final Validator validator; //Injeção de dependências do SpringBoot
 
-    @Autowired
+    @Autowired //Injeção de dependências do SpringBoot
     public PostAnimalServiceImpl(PostAnimalRepository repository, Validator validator) {
         this.repository = repository;
         this.validator = validator;
@@ -46,29 +45,29 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     @Override
     public ListResultDTO<PostAnimalDTO> findAll(PostAnimalDTO dto, PageDTO page) {
 
-        BooleanExpression query = queryGeneration(dto);
-        Pageable pageable = PageHelper.getPage(page);
+        BooleanExpression query = queryGeneration(dto); //BooleanExpression é usado em QueryDSL para armazenar uma query
+        Pageable pageable = PageHelper.getPage(page); //Cria um objeto paginável para nevegação em páginas dos resultados
 
-        return findAll(query, pageable, ConvertType.NORMAL);
-    }
-
+        return findAll(query, pageable, ConvertType.NORMAL); //método para encontrar todos resultados no banco de dados, de modo paginável
+    }                                                        //(passa NORMAL como tipo de conversão para DTO, isto é, uma entidade COM suas
+                                                             //entidades filhas - referente a relações One to Many)
     @Override
     public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageDTO page) {
 
-        BooleanExpression query = queryGeneration(dto);
-        Pageable pageable = PageHelper.getPage(page);
+        BooleanExpression query = queryGeneration(dto); //BooleanExpression é usado em QueryDSL para armazenar uma query
+        Pageable pageable = PageHelper.getPage(page); //Cria um objeto paginável para nevegação em páginas dos resultados
 
-        return findAll(query, pageable, ConvertType.LITE);
-    }
-
+        return findAll(query, pageable, ConvertType.LITE); //método para encontrar todos resultados no banco de dados, de modo paginável
+    }                                                      //(passa LITE como tipo de conversão para DTO, isto é, uma entidade SEM suas
+                                                           //entidades filhas - referente a relações One to Many)
     @Override
     public PostAnimalDTO findOne(Integer id) {
-        PostAnimalEntity postAnimalEntity = this.repository.getOne(id);
-
-        this.validator.entityNull(postAnimalEntity);
-
-        return PostAnimalAdapter.convertToDTO(postAnimalEntity);
-    }
+        PostAnimalEntity postAnimalEntity = this.repository.getOne(id); //Usa o repositório criado da entidade em questão para selecionar
+                                                                        //uma única ocorrência da entidade (a que possui o ID passado)
+        this.validator.entityNull(postAnimalEntity); //Assegura que a entidade não seja nula
+                                                     //(ver classe Validator - no pacote validation - para maiores detalhes)
+        return PostAnimalAdapter.convertToDTO(postAnimalEntity); //Método usado para converter a entidade passada em DTO
+    }                                                            //(ver respectivo Adapter - no pacote model.adapter - para mais detalhes)
 
     @Override
     public PostAnimalDTO save(PostAnimalDTO dto) {
