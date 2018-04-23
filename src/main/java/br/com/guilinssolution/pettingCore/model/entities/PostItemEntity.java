@@ -52,4 +52,12 @@ public class PostItemEntity implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postItemEntity")
 	private Set<UsurEntity> usurEntities;
 
+	public void update(PostItemEntity entity) {
+		this.setIdPostItem(entity.getIdPostItem());
+		this.setTitlePostItem(entity.getTitlePostItem());
+		this.setDescriptionPostItem(entity.getDescriptionPostItem());
+		this.setImagePostItem(entity.getImagePostItem());
+		this.setAnimalEntity(entity.getAnimalEntity());
+	}
+
 }

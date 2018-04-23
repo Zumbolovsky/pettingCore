@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of= {"idContribution"})
+@EqualsAndHashCode(of = {"idContribution"})
 @Table(name = "contribution", schema = "dbo", catalog = "pettingdb")
 public class ContributionEntity implements Serializable {
 
@@ -54,5 +54,15 @@ public class ContributionEntity implements Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contributionEntity")
 	private Set<UsurEntity> usurEntities;
+
+	public void update(ContributionEntity entity) {
+		this.setIdContribution(entity.getIdContribution());
+		this.setDescriptionContribution(entity.getDescriptionContribution());
+		this.setIdContribution(entity.getIdContribution());
+		this.setPostAnimalEntity(entity.getPostAnimalEntity());
+		this.setPostItemEntity(entity.getPostItemEntity());
+		this.setUsurEntityByIdDonator(entity.getUsurEntityByIdDonator());
+		this.setUsurEntityByIdRequest(entity.getUsurEntityByIdRequest());
+	}
 
 }

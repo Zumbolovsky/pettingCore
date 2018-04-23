@@ -86,6 +86,18 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- APACHE COMMONS -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
+		</dependency>
+
 		<!-- TESTES -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -95,6 +107,33 @@
 	</dependencies>
 
 	<build>
+
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/application*.yml</include>
+					<include>**/application*.yaml</include>
+					<include>**/bootstrap*.yml</include>
+					<include>**/bootstrap*.yaml</include>
+					<include>**/application*.properties</include>
+					<include>**/bootstrap*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<excludes>
+					<exclude>**/application*.yml</exclude>
+					<exclude>**/application*.yaml</exclude>
+					<exclude>**/application*.properties</exclude>
+					<exclude>**/bootstrap*.yml</exclude>
+					<exclude>**/bootstrap*.yaml</exclude>
+					<exclude>**/bootstrap*.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
 		<plugins>
             <!-- SPRING BOOT -->
 			<plugin>
@@ -121,5 +160,23 @@
             </plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>Maven</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<properties.from>POM.XML</properties.from>
+
+				<!-- SQLSERVER -->
+				<datasource.url>jdbc:sqlserver://localhost\SQLEXPRESS:1433;database=pettingdb</datasource.url>
+				<datasource.username>sa</datasource.username>
+				<datasource.password>SQLSenha</datasource.password>
+				<jpa.properties.hibernate.dialect>org.hibernate.dialect.SQLServer2008Dialect</jpa.properties.hibernate.dialect>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>

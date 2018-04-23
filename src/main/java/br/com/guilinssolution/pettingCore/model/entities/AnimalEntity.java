@@ -43,4 +43,10 @@ public class AnimalEntity implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "animalEntity")
 	private Set<PostItemEntity> postItemEntities;
 
+	public void update(AnimalEntity entity) {
+		this.setIdAnimal(entity.getIdAnimal());
+		this.setBreedAnimal(entity.getBreedAnimal());
+		this.setSpeciesAnimal(entity.getSpeciesAnimal());
+	}
+
 }

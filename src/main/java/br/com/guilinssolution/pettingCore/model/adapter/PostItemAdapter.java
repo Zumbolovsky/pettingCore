@@ -2,6 +2,7 @@ package br.com.guilinssolution.pettingCore.model.adapter;
 
 import br.com.guilinssolution.pettingCore.model.dto.*;
 import br.com.guilinssolution.pettingCore.model.entities.*;
+import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -110,6 +111,24 @@ public class PostItemAdapter {
         return PostItemEntity.builder()
                 .idPostItem(dto.getIdPostItem())
                 .build();
+    }
+
+    public static PostItemDTO convertToDTO(PostItemEntity entity, ConvertType convertType) {
+        if(convertType == ConvertType.LITE) {
+            return convertToDTOLite(entity);
+        } else if(convertType == ConvertType.NORMAL) {
+            return convertToDTO(entity);
+        }
+        return null;
+    }
+
+    public static PostItemEntity convertToEntity(PostItemDTO dto, ConvertType convertType) {
+        if(convertType == ConvertType.LITE) {
+            return convertToEntityLite(dto);
+        } else if(convertType == ConvertType.NORMAL) {
+            return convertToEntity(dto);
+        }
+        return null;
     }
 
 }

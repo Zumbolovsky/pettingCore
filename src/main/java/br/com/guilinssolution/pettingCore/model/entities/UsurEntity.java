@@ -72,4 +72,18 @@ public class UsurEntity implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdRequest")
 	private Set<ContributionEntity> contributionsForIdRequest;
 
+	public void update(UsurEntity entity) {
+		this.setIdUsur(entity.getIdUsur());
+		this.setAddressUsur(entity.getAddressUsur());
+		this.setCellphoneUsur(entity.getCellphoneUsur());
+		this.setCityUsur(entity.getCityUsur());
+		this.setCpfUsur(entity.getCpfUsur());
+		this.setNameUsur(entity.getNameUsur());
+		this.setPhoneUsur(entity.getPhoneUsur());
+		this.setStateUsur(entity.getStateUsur());
+		this.setContributionEntity(entity.getContributionEntity());
+		this.setPostAnimalEntity(entity.getPostAnimalEntity());
+		this.setPostItemEntity(entity.getPostItemEntity());
+	}
+
 }

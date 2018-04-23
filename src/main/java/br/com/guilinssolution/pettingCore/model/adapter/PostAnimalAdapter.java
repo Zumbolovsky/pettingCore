@@ -8,6 +8,7 @@ import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
+import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.Size;
 
 import java.util.ArrayList;
@@ -119,6 +120,24 @@ public class PostAnimalAdapter {
         return PostAnimalEntity.builder()
                 .idPostAnimal(dto.getIdPostAnimal())
                 .build();
+    }
+
+    public static PostAnimalDTO convertToDTO(PostAnimalEntity entity, ConvertType convertType) {
+        if(convertType == ConvertType.LITE) {
+            return convertToDTOLite(entity);
+        } else if(convertType == ConvertType.NORMAL) {
+            return convertToDTO(entity);
+        }
+        return null;
+    }
+
+    public static PostAnimalEntity convertToEntity(PostAnimalDTO dto, ConvertType convertType) {
+        if(convertType == ConvertType.LITE) {
+            return convertToEntityLite(dto);
+        } else if(convertType == ConvertType.NORMAL) {
+            return convertToEntity(dto);
+        }
+        return null;
     }
 
 }
