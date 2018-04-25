@@ -24,7 +24,7 @@ management:
   endpoints:
     web:
       cors:
-        allowed-origins: *
+        allowed-origins: '*'
 info:
   version: "@project.version@"
     properties.from: "@properties.from@"
