@@ -11,12 +11,6 @@ spring:
       hibernate:
         dialect: "@jpa.properties.hibernate.dialect@"
     show-sql: true
-  jackson:
-    time-zone: GMT-3
-    serialization:
-      fail-on-empty-beans: false
-      write-null-map-values: false
-      WRITE_DATES_AS_TIMESTAMPS: false
 management:
   endpoint:
     auditevents:
@@ -27,11 +21,11 @@ management:
         allowed-origins: '*'
 info:
   version: "@project.version@"
-    properties.from: "@properties.from@"
-    app:
-      name: "@project.name@"
-      description: "@project.description@"
-      version: "@project.version@"
-    encoding: "@project.build.sourceEncoding@"
-    java:
-      version: "@java.version@"
+  properties.from: "@properties.from@"
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+  encoding: "@project.build.sourceEncoding@"
+  java:
+    version: "@java.version@"

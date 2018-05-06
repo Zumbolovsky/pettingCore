@@ -1,13 +1,10 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -37,11 +34,11 @@ public class AnimalEntity implements Serializable {
 	@Column(name = "breed_animal", nullable = false, length = 30)
 	private String breedAnimal;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "animalEntity")
-	private Set<PostAnimalEntity> postAnimalEntities;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "animalEntity")
-	private Set<PostItemEntity> postItemEntities;
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "animalEntity")
+//	private List<PostAnimalEntityLite> postAnimalEntities;
+//
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "animalEntity")
+//	private List<PostItemEntityLite> postItemEntities;
 
 	public void update(AnimalEntity entity) {
 		this.setIdAnimal(entity.getIdAnimal());

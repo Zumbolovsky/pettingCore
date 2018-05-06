@@ -1,7 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -66,11 +64,11 @@ public class UsurEntity implements Serializable {
 	@Column(name = "phone_usur", nullable = false, length = 15)
 	private String phoneUsur;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdDonator")
-	private Set<ContributionEntity> contributionsForIdDonator;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdRequest")
-	private Set<ContributionEntity> contributionsForIdRequest;
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdDonator")
+//	private List<ContributionEntityLite> contributionsForIdDonator;
+//
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdRequest")
+//	private List<ContributionEntityLite> contributionsForIdRequest;
 
 	public void update(UsurEntity entity) {
 		this.setIdUsur(entity.getIdUsur());

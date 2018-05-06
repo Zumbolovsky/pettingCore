@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,6 +26,14 @@ public class Validator {
 
     public <T> void entityNull(T entity) {
         if (entity == null) {
+            String msg = "Entidade nula !";
+            log.warn(msg);
+            throw new ApplicationException(msg, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public <T> void entityNull(Optional<T> optional) {
+        if (!optional.isPresent()) {
             String msg = "Entidade nula !";
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.NOT_FOUND);

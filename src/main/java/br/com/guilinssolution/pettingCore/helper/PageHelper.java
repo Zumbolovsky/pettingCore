@@ -42,6 +42,6 @@ public class PageHelper {
             thisLimit = maxLimit;
         }
 
-        return new PageRequest(thisOffSet, thisLimit);
+        return PageRequest.of(thisOffSet, thisLimit);
     }
 }

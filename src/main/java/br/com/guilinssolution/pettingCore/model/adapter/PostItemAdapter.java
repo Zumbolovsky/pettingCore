@@ -5,9 +5,7 @@ import br.com.guilinssolution.pettingCore.model.entities.*;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PostItemAdapter {
 
@@ -19,20 +17,21 @@ public class PostItemAdapter {
         AnimalEntity animalEntity = entity.getAnimalEntity();
         AnimalDTO animalDTO = AnimalAdapter.convertToDTO(animalEntity);
 
-        Set<ContributionEntity> contributionEntities = entity.getContributionEntities();
-        List<ContributionDTO> contributionDTOS = ContributionAdapter.convertToDTOLite(contributionEntities);
-
-        Set<UsurEntity> usurEntities = entity.getUsurEntities();
-        List<UsurDTO> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
+//        List<ContributionEntityLite> contributionEntities = entity.getContributionEntities();
+//        List<ContributionDTOLite> contributionDTOS = ContributionAdapter.convertToDTOLite(contributionEntities);
+//
+//        List<UsurEntityLite> usurEntities = entity.getUsurEntities();
+//        List<UsurDTOLite> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
 
         return PostItemDTO.builder()
                 .idPostItem(entity.getIdPostItem())
                 .descriptionPostItem(entity.getDescriptionPostItem())
                 .imagePostItem(entity.getImagePostItem())
                 .titlePostItem(entity.getTitlePostItem())
+                .typePostItem(entity.getTypePostItem())
                 .animalDTO(animalDTO)
-                .contributionDTOS(contributionDTOS)
-                .usurDTOS(usurDTOS)
+//                .contributionDTOS(contributionDTOS)
+//                .usurDTOS(usurDTOS)
                 .build();
     }
 
@@ -44,24 +43,25 @@ public class PostItemAdapter {
         AnimalDTO animalDTO = dto.getAnimalDTO();
         AnimalEntity animalEntity  = AnimalAdapter.convertToEntity(animalDTO);
 
-        List<ContributionDTO> contributionDTOS = dto.getContributionDTOS();
-        Set<ContributionEntity> contributionEntities = ContributionAdapter.convertToEntityLite(contributionDTOS);
-
-        List<UsurDTO> usurDTOS = dto.getUsurDTOS();
-        Set<UsurEntity> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
+//        List<ContributionDTOLite> contributionDTOS = dto.getContributionDTOS();
+//        List<ContributionEntityLite> contributionEntities = ContributionAdapter.convertToEntityLite(contributionDTOS);
+//
+//        List<UsurDTOLite> usurDTOS = dto.getUsurDTOS();
+//        List<UsurEntityLite> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
 
         return PostItemEntity.builder()
                 .idPostItem(dto.getIdPostItem())
                 .descriptionPostItem(dto.getDescriptionPostItem())
                 .imagePostItem(dto.getImagePostItem())
                 .titlePostItem(dto.getTitlePostItem())
+                .typePostItem(dto.getTypePostItem())
                 .animalEntity(animalEntity)
-                .contributionEntities(contributionEntities)
-                .usurEntities(usurEntities)
+//                .contributionEntities(contributionEntities)
+//                .usurEntities(usurEntities)
                 .build();
     }
 
-    public static List<PostItemDTO> convertToDTOLite(Set<PostItemEntity> entities) {
+    public static List<PostItemDTO> convertToDTOLite(List<PostItemEntity> entities) {
         if(entities == null) {
             return null;
         }
@@ -87,11 +87,11 @@ public class PostItemAdapter {
                 .build();
     }
 
-    public static Set<PostItemEntity> convertToEntityLite(List<PostItemDTO> dtos) {
+    public static List<PostItemEntity> convertToEntityLite(List<PostItemDTO> dtos) {
         if(dtos == null) {
             return null;
         }
-        Set<PostItemEntity> entities = new HashSet<>();
+        List<PostItemEntity> entities = new ArrayList<>();
 
         for (PostItemDTO dto : dtos) {
             PostItemEntity entity = convertToEntityLite(dto);

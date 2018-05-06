@@ -9,12 +9,9 @@ import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
-import br.com.guilinssolution.pettingCore.model.enums.Size;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PostAnimalAdapter {
 
@@ -26,21 +23,21 @@ public class PostAnimalAdapter {
         AnimalEntity animalEntity = entity.getAnimalEntity();
         AnimalDTO animalDTO = AnimalAdapter.convertToDTO(animalEntity);
 
-        Set<ContributionEntity> contributionEntities = entity.getContributionEntities();
-        List<ContributionDTO> contributionDTOS = ContributionAdapter.convertToDTOLite(contributionEntities);
-
-        Set<UsurEntity> usurEntities = entity.getUsurEntities();
-        List<UsurDTO> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
+//        List<ContributionEntityLite> contributionEntities = entity.getContributionEntities();
+//        List<ContributionDTOLite> contributionDTOS = ContributionAdapter.convertToDTOLite(contributionEntities);
+//
+//        List<UsurEntityLite> usurEntities = entity.getUsurEntities();
+//        List<UsurDTOLite> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
 
         return PostAnimalDTO.builder()
                 .idPostAnimal(entity.getIdPostAnimal())
                 .descriptionPostAnimal(entity.getDescriptionPostAnimal())
                 .imagePostAnimal(entity.getImagePostAnimal())
-                .sizePostAnimal(Size.getEnum(entity.getSizePostAnimal()))
+                .sizePostAnimal(entity.getSizePostAnimal())
                 .titlePostAnimal(entity.getTitlePostAnimal())
                 .animalDTO(animalDTO)
-                .contributionDTOS(contributionDTOS)
-                .usurDTOS(usurDTOS)
+//                .contributionDTOS(contributionDTOS)
+//                .usurDTOS(usurDTOS)
                 .build();
     }
 
@@ -52,25 +49,25 @@ public class PostAnimalAdapter {
         AnimalDTO animalDTO = dto.getAnimalDTO();
         AnimalEntity animalEntity  = AnimalAdapter.convertToEntity(animalDTO);
 
-        List<ContributionDTO> contributionDTOS = dto.getContributionDTOS();
-        Set<ContributionEntity> contributionEntities = ContributionAdapter.convertToEntityLite(contributionDTOS);
-
-        List<UsurDTO> usurDTOS = dto.getUsurDTOS();
-        Set<UsurEntity> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
+//        List<ContributionDTOLite> contributionDTOS = dto.getContributionDTOS();
+//        List<ContributionEntityLite> contributionEntities = ContributionAdapter.convertToEntityLite(contributionDTOS);
+//
+//        List<UsurDTOLite> usurDTOS = dto.getUsurDTOS();
+//        List<UsurEntityLite> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
 
         return PostAnimalEntity.builder()
                 .idPostAnimal(dto.getIdPostAnimal())
                 .descriptionPostAnimal(dto.getDescriptionPostAnimal())
                 .imagePostAnimal(dto.getImagePostAnimal())
-                .sizePostAnimal(dto.getSizePostAnimal().getSizeValue())
+                .sizePostAnimal(dto.getSizePostAnimal())
                 .titlePostAnimal(dto.getTitlePostAnimal())
                 .animalEntity(animalEntity)
-                .contributionEntities(contributionEntities)
-                .usurEntities(usurEntities)
+//                .contributionEntities(contributionEntities)
+//                .usurEntities(usurEntities)
                 .build();
     }
 
-    public static List<PostAnimalDTO> convertToDTOLite(Set<PostAnimalEntity> entities) {
+    public static List<PostAnimalDTO> convertToDTOLite(List<PostAnimalEntity> entities) {
         if(entities == null) {
             return null;
         }
@@ -96,11 +93,11 @@ public class PostAnimalAdapter {
                 .build();
     }
 
-    public static Set<PostAnimalEntity> convertToEntityLite(List<PostAnimalDTO> dtos) {
+    public static List<PostAnimalEntity> convertToEntityLite(List<PostAnimalDTO> dtos) {
         if(dtos == null) {
             return null;
         }
-        Set<PostAnimalEntity> entities = new HashSet<>();
+        List<PostAnimalEntity> entities = new ArrayList<>();
 
         for (PostAnimalDTO dto : dtos) {
             PostAnimalEntity entity = convertToEntityLite(dto);

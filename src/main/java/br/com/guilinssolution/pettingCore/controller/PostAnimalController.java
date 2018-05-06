@@ -31,14 +31,14 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalDTO dto, PageDTO page) {
+    public ListResultDTO<PostAnimalDTO> findAll(@Valid @RequestBody PostAnimalDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAll(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
-    @RequestMapping(value = "/allLite", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageDTO page) {
+    @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
+    public ListResultDTO<PostAnimalDTO> findAllLite(@Valid @RequestBody PostAnimalDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAllLite(dto, page);
     }
@@ -67,7 +67,7 @@ public class PostAnimalController {
     }
 
     @ApiOperation("Exclui dados no banco")
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Publicação Animal");
         this.service.delete(id);

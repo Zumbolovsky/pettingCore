@@ -2,13 +2,15 @@ package br.com.guilinssolution.pettingCore.model.dto;
 
 import br.com.guilinssolution.pettingCore.model.enums.Size;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @Builder
@@ -16,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"idPostAnimal"})
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostAnimalDTO {
 
 	@NotNull
@@ -35,16 +36,17 @@ public class PostAnimalDTO {
 	private String descriptionPostAnimal;
 
 	@NotNull
+	@Length(max = 7)
 	private Size sizePostAnimal;
 
 	@NotNull
 	@Length(max = 50)
 	private String imagePostAnimal;
 
-	@ApiModelProperty(hidden = true)
-	private List<UsurDTO> usurDTOS;
-
-	@ApiModelProperty(hidden = true)
-	private List<ContributionDTO> contributionDTOS;
+//	@ApiModelProperty(hidden = true)
+//	private List<UsurDTOLite> usurDTOS;
+//
+//	@ApiModelProperty(hidden = true)
+//	private List<ContributionDTOLite> contributionDTOS;
 
 }

@@ -9,9 +9,7 @@ import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AnimalAdapter {
 
@@ -20,18 +18,18 @@ public class AnimalAdapter {
             return null;
         }
 
-        Set<PostAnimalEntity> postAnimalEntities = entity.getPostAnimalEntities();
-        List<PostAnimalDTO> postAnimalDTOS = PostAnimalAdapter.convertToDTOLite(postAnimalEntities);
-
-        Set<PostItemEntity> postItemEntities = entity.getPostItemEntities();
-        List<PostItemDTO> postItemDTOS = PostItemAdapter.convertToDTOLite(postItemEntities);
+//        List<PostAnimalEntityLite> postAnimalEntities = entity.getPostAnimalEntities();
+//        List<PostAnimalDTOLite> postAnimalDTOS = PostAnimalAdapter.convertToDTOLite(postAnimalEntities);
+//
+//        List<PostItemEntityLite> postItemEntities = entity.getPostItemEntities();
+//        List<PostItemDTOLite> postItemDTOS = PostItemAdapter.convertToDTOLite(postItemEntities);
 
         return AnimalDTO.builder()
                 .idAnimal(entity.getIdAnimal())
                 .breedAnimal(entity.getBreedAnimal())
                 .speciesAnimal(entity.getSpeciesAnimal())
-                .postAnimalDTOS(postAnimalDTOS)
-                .postItemDTOS(postItemDTOS)
+//                .postAnimalDTOS(postAnimalDTOS)
+//                .postItemDTOS(postItemDTOS)
                 .build();
     }
 
@@ -40,22 +38,22 @@ public class AnimalAdapter {
             return null;
         }
 
-        List<PostAnimalDTO> postAnimalDTOS = dto.getPostAnimalDTOS();
-        Set<PostAnimalEntity> postAnimalEntities = PostAnimalAdapter.convertToEntityLite(postAnimalDTOS);
-
-        List<PostItemDTO> postItemDTOS = dto.getPostItemDTOS();
-        Set<PostItemEntity> postItemEntities = PostItemAdapter.convertToEntityLite(postItemDTOS);
+//        List<PostAnimalDTOLite> postAnimalDTOS = dto.getPostAnimalDTOS();
+//        List<PostAnimalEntityLite> postAnimalEntities = PostAnimalAdapter.convertToEntityLite(postAnimalDTOS);
+//
+//        List<PostItemDTOLite> postItemDTOS = dto.getPostItemDTOS();
+//        List<PostItemEntityLite> postItemEntities = PostItemAdapter.convertToEntityLite(postItemDTOS);
 
         return AnimalEntity.builder()
                 .idAnimal(dto.getIdAnimal())
                 .breedAnimal(dto.getBreedAnimal())
                 .speciesAnimal(dto.getSpeciesAnimal())
-                .postAnimalEntities(postAnimalEntities)
-                .postItemEntities(postItemEntities)
+//                .postAnimalEntities(postAnimalEntities)
+//                .postItemEntities(postItemEntities)
                 .build();
     }
 
-    public static List<AnimalDTO> convertToDTOLite(Set<AnimalEntity> entities) {
+    public static List<AnimalDTO> convertToDTOLite(List<AnimalEntity> entities) {
         if(entities == null) {
             return null;
         }
@@ -81,11 +79,11 @@ public class AnimalAdapter {
                 .build();
     }
 
-    public static Set<AnimalEntity> convertToEntityLite(List<AnimalDTO> dtos) {
+    public static List<AnimalEntity> convertToEntityLite(List<AnimalDTO> dtos) {
         if(dtos == null) {
             return null;
         }
-        Set<AnimalEntity> entities = new HashSet<>();
+        List<AnimalEntity> entities = new ArrayList<>();
 
         for (AnimalDTO dto : dtos) {
             AnimalEntity entity = convertToEntityLite(dto);

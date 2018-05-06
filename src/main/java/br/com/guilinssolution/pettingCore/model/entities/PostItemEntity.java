@@ -1,7 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +8,11 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 
+import br.com.guilinssolution.pettingCore.model.enums.Type;
 import lombok.Data;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -46,17 +47,22 @@ public class PostItemEntity implements Serializable {
 	@Column(name = "image_postItem", nullable = false, length = 50)
 	private String imagePostItem;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postItemEntity")
-	private Set<ContributionEntity> contributionEntities;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type_postItem", nullable = false, length = 7)
+	private Type typePostItem;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postItemEntity")
-	private Set<UsurEntity> usurEntities;
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postItemEntity")
+//	private List<ContributionEntityLite> contributionEntities;
+//
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postItemEntity")
+//	private List<UsurEntityLite> usurEntities;
 
 	public void update(PostItemEntity entity) {
 		this.setIdPostItem(entity.getIdPostItem());
 		this.setTitlePostItem(entity.getTitlePostItem());
 		this.setDescriptionPostItem(entity.getDescriptionPostItem());
 		this.setImagePostItem(entity.getImagePostItem());
+		this.setTypePostItem(entity.getTypePostItem());
 		this.setAnimalEntity(entity.getAnimalEntity());
 	}
 

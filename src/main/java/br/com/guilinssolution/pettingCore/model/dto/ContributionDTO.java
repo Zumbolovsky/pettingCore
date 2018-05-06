@@ -1,13 +1,16 @@
 package br.com.guilinssolution.pettingCore.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @Builder
@@ -15,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"idContribution"})
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContributionDTO {
 
 	@NotNull
@@ -28,16 +30,18 @@ public class ContributionDTO {
 	private PostItemDTO postItemDTO;
 
 	@NotNull
+	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTOByIdDonator;
 
 	@NotNull
+	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTOByIdRequest;
 
 	@NotNull
 	@Length(max = 100)
 	private String descriptionContribution;
 
-	@ApiModelProperty(hidden = true)
-	private List<UsurDTO> usurDTOS;
+//	@ApiModelProperty(hidden = true)
+//	private List<UsurDTOLite> usurDTOS;
 
 }

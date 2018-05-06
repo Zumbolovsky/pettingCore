@@ -31,14 +31,14 @@ public class ContributionController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page) {
+    public ListResultDTO<ContributionDTO> findAll(@Valid @RequestBody ContributionDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAll(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
-    @RequestMapping(value = "/allLite", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page) {
+    @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
+    public ListResultDTO<ContributionDTO> findAllLite(@Valid @RequestBody ContributionDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAllLite(dto, page);
     }
@@ -67,7 +67,7 @@ public class ContributionController {
     }
 
     @ApiOperation("Exclui dados no banco")
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de uma Contribuição");
         this.service.delete(id);

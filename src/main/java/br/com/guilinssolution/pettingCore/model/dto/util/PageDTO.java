@@ -20,6 +20,7 @@ public class PageDTO {
     long totalPages;
 
     int limit;
+
     int offset;
 
     @ApiModelProperty(hidden= true)

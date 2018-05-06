@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -37,7 +38,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
-    @RequestMapping(value = "/allLite", method = RequestMethod.GET)
+    @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
     public ListResultDTO<UsurDTO> findAllLite(UsurDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Usuário");
         return this.service.findAllLite(dto, page);
@@ -67,7 +68,7 @@ public class UsurController {
     }
 
     @ApiOperation("Exclui dados no banco")
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Usuário");
         this.service.delete(id);

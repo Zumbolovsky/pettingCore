@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 
@@ -59,11 +60,11 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public AnimalDTO findOne(Integer id) {
-        AnimalEntity animalEntity = this.repository.getOne(id);
+        Optional<AnimalEntity> animalEntity = this.repository.findById(id);
 
         this.validator.entityNull(animalEntity);
 
-        return AnimalAdapter.convertToDTO(animalEntity);
+        return AnimalAdapter.convertToDTO(animalEntity.get());
     }
 
     @Override

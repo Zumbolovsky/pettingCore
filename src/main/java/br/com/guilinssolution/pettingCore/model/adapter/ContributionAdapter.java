@@ -11,9 +11,7 @@ import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ContributionAdapter {
 
@@ -34,8 +32,8 @@ public class ContributionAdapter {
         UsurEntity usurEntityByIdRequest = entity.getUsurEntityByIdRequest();
         UsurDTO usurDTOByIdRequest = UsurAdapter.convertToDTO(usurEntityByIdRequest);
 
-        Set<UsurEntity> usurEntities = entity.getUsurEntities();
-        List<UsurDTO> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
+//        List<UsurEntityLite> usurEntities = entity.getUsurEntities();
+//        List<UsurDTOLite> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
 
         return ContributionDTO.builder()
                 .idContribution(entity.getIdContribution())
@@ -44,7 +42,7 @@ public class ContributionAdapter {
                 .postItemDTO(postItemDTO)
                 .usurDTOByIdDonator(usurDTOByIdDonator)
                 .usurDTOByIdRequest(usurDTOByIdRequest)
-                .usurDTOS(usurDTOS)
+//                .usurDTOS(usurDTOS)
                 .build();
     }
 
@@ -65,8 +63,8 @@ public class ContributionAdapter {
         UsurDTO usurDTOByIdRequest = dto.getUsurDTOByIdRequest();
         UsurEntity usurEntityByIdRequest = UsurAdapter.convertToEntity(usurDTOByIdRequest);
 
-        List<UsurDTO> usurDTOS = dto.getUsurDTOS();
-        Set<UsurEntity> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
+//        List<UsurDTOLite> usurDTOS = dto.getUsurDTOS();
+//        List<UsurEntityLite> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
 
         return ContributionEntity.builder()
                 .idContribution(dto.getIdContribution())
@@ -75,11 +73,11 @@ public class ContributionAdapter {
                 .postItemEntity(postItemEntity)
                 .usurEntityByIdDonator(usurEntityByIdDonator)
                 .usurEntityByIdRequest(usurEntityByIdRequest)
-                .usurEntities(usurEntities)
+//                .usurEntities(usurEntities)
                 .build();
     }
 
-    public static List<ContributionDTO> convertToDTOLite(Set<ContributionEntity> entities) {
+    public static List<ContributionDTO> convertToDTOLite(List<ContributionEntity> entities) {
         if(entities == null) {
             return null;
         }
@@ -105,11 +103,11 @@ public class ContributionAdapter {
                 .build();
     }
 
-    public static Set<ContributionEntity> convertToEntityLite(List<ContributionDTO> dtos) {
+    public static List<ContributionEntity> convertToEntityLite(List<ContributionDTO> dtos) {
         if(dtos == null) {
             return null;
         }
-        Set<ContributionEntity> entities = new HashSet<>();
+        List<ContributionEntity> entities = new ArrayList<>();
 
         for (ContributionDTO dto : dtos) {
             ContributionEntity entity = convertToEntityLite(dto);
