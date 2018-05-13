@@ -4,6 +4,7 @@ import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.services.UsurService;
+import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -25,9 +25,12 @@ public class UsurController {
 
     private final UsurService service;
 
+    private final Validator validator;
+
     @Autowired
-    public UsurController(UsurService service) {
+    public UsurController(UsurService service, Validator validator) {
         this.service = service;
+        this.validator = validator;
     }
 
     @ApiOperation(value = "Lista de todos dados")
@@ -48,23 +51,27 @@ public class UsurController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<UsurDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Usuário");
-        return ResponseEntity.ok(this.service.findOne(id));
+        return new ResponseEntity<>(this.service.findOne(id), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto, BindingResult result) {
+    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto, @RequestParam Integer idContribution,
+                                        @RequestParam Integer idPostAnimal, @RequestParam Integer idPostItem,
+                                        BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
-        //validar
-        return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.save(dto, idContribution, idPostAnimal, idPostItem), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<UsurDTO> update(@Valid @RequestBody UsurDTO dto, @PathVariable Integer id, BindingResult result) {
+    public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId, @Valid @RequestBody UsurDTO dto,
+                                          @RequestParam Integer idContribution, @RequestParam Integer idPostAnimal,
+                                          @RequestParam Integer idPostItem, BindingResult result) {
         log.info("Atualizando dados de um Usuário");
-        //validar
-        return ResponseEntity.ok(this.service.update(id, dto));
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idContribution, idPostAnimal, idPostItem), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

@@ -2,11 +2,9 @@ package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import lombok.Data;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,18 +16,20 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of= {"idAnimal"})
+@EqualsAndHashCode(of = {"idAnimal"})
 @Table(name = "animal", schema = "dbo", catalog = "pettingdb")
 public class AnimalEntity implements Serializable {
 
 	private static final long serialVersionUID = -9017871019686804718L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_animal", unique = true, nullable = false)
 	private Integer idAnimal;
 
-	@Column(name = "species_animal", nullable = false, length = 30)
-	private String speciesAnimal;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "species_animal", nullable = false, length = 8)
+	private Species speciesAnimal;
 
 	@Column(name = "breed_animal", nullable = false, length = 30)
 	private String breedAnimal;

@@ -1,6 +1,8 @@
 package br.com.guilinssolution.pettingCore.model.dto;
 
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,15 +20,12 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AnimalDTO {
 
-	@NotNull
+	@ApiModelProperty(hidden = true)
 	private Integer idAnimal;
 
-	@NotNull
-	@Length(max = 30)
-	private String speciesAnimal;
+	private Species speciesAnimal;
 
-	@NotNull
-	@Length(max = 30)
+	@Length(max = 30, message = "{length.thirty}")
 	private String breedAnimal;
 
 //	@ApiModelProperty(hidden = true)

@@ -9,8 +9,8 @@ public interface UsurService {
     ListResultDTO<UsurDTO> findAll(UsurDTO dto, PageDTO page);
     ListResultDTO<UsurDTO> findAllLite(UsurDTO dto, PageDTO page);
     UsurDTO findOne(Integer id);
-    UsurDTO save(UsurDTO dto);
-    UsurDTO update(Integer id, UsurDTO dto);
+    UsurDTO save(UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem);
+    UsurDTO update(Integer id, UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem);
     void delete(Integer id);
 
 }

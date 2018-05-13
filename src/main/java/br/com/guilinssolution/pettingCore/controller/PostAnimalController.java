@@ -4,7 +4,9 @@ import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.services.PostAnimalService;
+import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -24,21 +27,24 @@ public class PostAnimalController {
 
     private final PostAnimalService service;
 
+    private final Validator validator;
+
     @Autowired
-    public PostAnimalController(PostAnimalService service) {
+    public PostAnimalController(PostAnimalService service, Validator validator) {
         this.service = service;
+        this.validator = validator;
     }
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAll(@Valid @RequestBody PostAnimalDTO dto, PageDTO page) {
+    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAll(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllLite(@Valid @RequestBody PostAnimalDTO dto, PageDTO page) {
+    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAllLite(dto, page);
     }
@@ -47,23 +53,25 @@ public class PostAnimalController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PostAnimalDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Publicação Animal");
-        return ResponseEntity.ok(this.service.findOne(id));
+        return new ResponseEntity<>(this.service.findOne(id), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PostAnimalDTO> save(@Valid @RequestBody PostAnimalDTO dto, BindingResult result) {
+    public ResponseEntity<PostAnimalDTO> save(@Valid @RequestBody PostAnimalDTO dto, @RequestParam Integer idAnimal,
+                                              BindingResult result) {
         log.info("Cadastrando dados de um Publicação Animal");
-        //validar
-        return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.save(dto, idAnimal), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<PostAnimalDTO> update(@Valid @RequestBody PostAnimalDTO dto, @PathVariable Integer id, BindingResult result) {
+    @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
+    public ResponseEntity<PostAnimalDTO> update(@PathVariable Integer currentId, @Valid @RequestBody PostAnimalDTO dto,
+                                                @RequestParam Integer idAnimal, BindingResult result) {
         log.info("Atualizando dados de um Publicação Animal");
-        //validar
-        return ResponseEntity.ok(this.service.update(id, dto));
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idAnimal), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

@@ -38,7 +38,7 @@ public class ContributionController {
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAllLite(@Valid @RequestBody ContributionDTO dto, PageDTO page) {
+    public ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAllLite(dto, page);
     }

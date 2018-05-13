@@ -11,6 +11,10 @@ spring:
       hibernate:
         dialect: "@jpa.properties.hibernate.dialect@"
     show-sql: true
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 management:
   endpoint:
     auditevents:

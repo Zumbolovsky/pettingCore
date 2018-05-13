@@ -20,27 +20,21 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PostAnimalDTO {
 
-	@NotNull
+	@ApiModelProperty(hidden = true)
 	private Integer idPostAnimal;
 
-	@NotNull
 	@ApiModelProperty(hidden = true)
 	private AnimalDTO animalDTO;
 
-	@NotNull
-	@Length(max = 30)
+	@Length(max = 30, message = "{length.thirty}")
 	private String titlePostAnimal;
 
-	@NotNull
-	@Length(max = 100)
+	@Length(max = 100, message = "{length.hundred}")
 	private String descriptionPostAnimal;
 
-	@NotNull
-	@Length(max = 7)
 	private Size sizePostAnimal;
 
-	@NotNull
-	@Length(max = 50)
+	@Length(max = 50, message = "{length.fifty}")
 	private String imagePostAnimal;
 
 //	@ApiModelProperty(hidden = true)

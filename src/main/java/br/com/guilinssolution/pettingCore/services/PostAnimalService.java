@@ -9,8 +9,8 @@ public interface PostAnimalService {
     ListResultDTO<PostAnimalDTO> findAll(PostAnimalDTO dto, PageDTO page);
     ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageDTO page);
     PostAnimalDTO findOne(Integer id);
-    PostAnimalDTO save(PostAnimalDTO dto);
-    PostAnimalDTO update(Integer id, PostAnimalDTO dto);
+    PostAnimalDTO save(PostAnimalDTO dto, Integer idAnimal);
+    PostAnimalDTO update(Integer id, PostAnimalDTO dto, Integer idAnimal);
     void delete(Integer id);
 
 }

@@ -3,12 +3,14 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
+import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.Size;
 import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.services.PostAnimalService;
@@ -35,11 +37,14 @@ public class PostAnimalServiceImpl implements PostAnimalService {
 
     private final PostAnimalRepository repository;
 
+    private final AnimalRepository animalRepository;
+
     private final Validator validator;
 
     @Autowired
-    public PostAnimalServiceImpl(PostAnimalRepository repository, Validator validator) {
+    public PostAnimalServiceImpl(PostAnimalRepository repository, AnimalRepository animalRepository, Validator validator) {
         this.repository = repository;
+        this.animalRepository = animalRepository;
         this.validator = validator;
     }
 
@@ -71,18 +76,34 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
-    public PostAnimalDTO save(PostAnimalDTO dto) {
+    public PostAnimalDTO save(PostAnimalDTO dto, Integer idAnimal) {
+//        this.validator.entityNotExist(idAnimal, animalRepository);
+
+        dto.setAnimalDTO(AnimalDTO
+                .builder()
+                .idAnimal(idAnimal)
+                .build());
         PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
 
-        this.validator.entityExist(dto.getIdPostAnimal(), this.repository);
+        //unnecessary
+//        this.validator.entityExist(dto.getIdPostAnimal(), this.repository);
 
         postAnimalEntity = this.repository.save(postAnimalEntity);
         return PostAnimalAdapter.convertToDTO(postAnimalEntity);
     }
 
     @Override
-    public PostAnimalDTO update(Integer id, PostAnimalDTO dto) {
+    public PostAnimalDTO update(Integer id, PostAnimalDTO dto, Integer idAnimal) {
+        this.validator.entityNotExist(id, this.repository);
+//        this.validator.entityNotExist(idAnimal, animalRepository);
+
         PostAnimalEntity vesselPostAnimalEntity = this.repository.getOne(id);
+        if(!vesselPostAnimalEntity.getAnimalEntity().getIdAnimal().equals(idAnimal)) {
+            dto.setAnimalDTO(AnimalDTO
+                    .builder()
+                    .idAnimal(idAnimal)
+                    .build());
+        }
 
         this.validator.entityNull(vesselPostAnimalEntity);
 
@@ -126,7 +147,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
 
         Integer idPostAnimal = dto.getIdPostAnimal();
         String descriptionPostAnimal = dto.getDescriptionPostAnimal();
-        Integer sizePostAnimal = dto.getSizePostAnimal().getSizeValue();
+        Size sizePostAnimal = dto.getSizePostAnimal();
         String titlePostAnimal = dto.getTitlePostAnimal();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();

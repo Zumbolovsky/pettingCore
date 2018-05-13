@@ -1,5 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.dto;
 
+import br.com.guilinssolution.pettingCore.model.enums.State;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsurDTO {
 
-	@NotNull
+    @ApiModelProperty(hidden = true)
 	private Integer idUsur;
 
 	@ApiModelProperty(hidden = true)
@@ -31,32 +32,27 @@ public class UsurDTO {
 	@ApiModelProperty(hidden = true)
 	private PostItemDTO postItemDTO;
 
-	@NotNull
-	@Length(max = 30)
+	@Length(max = 30, message = "{length.thirty}")
 	private String nameUsur;
 
-	@NotNull
-	@Length(max = 11)
+	@Length(max = 11, message = "{length.cpf}")
 	private String cpfUsur;
 
-	@NotNull
-	@Length(max = 30)
+	@Length(max = 30, message = "{length.thirty}")
 	private String addressUsur;
 
-	@NotNull
-	@Length(max = 30)
+	@Length(max = 30, message = "{length.thirty}")
 	private String cityUsur;
 
-	@NotNull
-	@Length(max = 2)
-	private String stateUsur;
+	@Length(max = 30, message = "{length.thirty}")
+	private String emailUsur;
 
-	@NotNull
-	@Length(max = 15)
+	private State stateUsur;
+
+	@Length(max = 15, message = "{length.phone}")
 	private String cellphoneUsur;
 
-	@NotNull
-	@Length(max = 15)
+	@Length(max = 15, message = "{length.phone}")
 	private String phoneUsur;
 
 //	@ApiModelProperty(hidden = true)

@@ -1,13 +1,9 @@
 package br.com.guilinssolution.pettingCore.model.adapter;
 
 import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
-import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
-import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
-import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
-import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
 import java.util.ArrayList;
@@ -56,7 +52,6 @@ public class PostAnimalAdapter {
 //        List<UsurEntityLite> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
 
         return PostAnimalEntity.builder()
-                .idPostAnimal(dto.getIdPostAnimal())
                 .descriptionPostAnimal(dto.getDescriptionPostAnimal())
                 .imagePostAnimal(dto.getImagePostAnimal())
                 .sizePostAnimal(dto.getSizePostAnimal())

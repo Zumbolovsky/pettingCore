@@ -2,15 +2,7 @@ package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Enumerated;
-import javax.persistence.EnumType;
+import javax.persistence.*;
 
 import br.com.guilinssolution.pettingCore.model.enums.Type;
 import lombok.Data;
@@ -24,13 +16,14 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of= {"idPostItem"})
+@EqualsAndHashCode(of = {"idPostItem"})
 @Table(name = "postItem", schema = "dbo", catalog = "pettingdb")
 public class PostItemEntity implements Serializable {
 
 	private static final long serialVersionUID = 1651057555186766600L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_postItem", unique = true, nullable = false)
 	private Integer idPostItem;
 

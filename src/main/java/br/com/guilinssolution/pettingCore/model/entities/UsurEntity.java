@@ -2,14 +2,9 @@ package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import br.com.guilinssolution.pettingCore.model.enums.State;
 import lombok.Data;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -21,13 +16,14 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of= {"idUsur"})
+@EqualsAndHashCode(of = {"idUsur"})
 @Table(name = "usur", schema = "dbo", catalog = "pettingdb")
 public class UsurEntity implements Serializable {
 
 	private static final long serialVersionUID = 2129748439735669799L;
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usur", unique = true, nullable = false)
 	private Integer idUsur;
 
@@ -55,8 +51,12 @@ public class UsurEntity implements Serializable {
 	@Column(name = "city_usur", nullable = false, length = 30)
 	private String cityUsur;
 
+	@Column(name = "email_usur", nullable = false, length = 30)
+	private String emailUsur;
+
+	@Enumerated(EnumType.STRING)
 	@Column(name = "state_usur", nullable = false, length = 2)
-	private String stateUsur;
+	private State stateUsur;
 
 	@Column(name = "cellphone_usur", nullable = false, length = 15)
 	private String cellphoneUsur;
@@ -71,11 +71,11 @@ public class UsurEntity implements Serializable {
 //	private List<ContributionEntityLite> contributionsForIdRequest;
 
 	public void update(UsurEntity entity) {
-		this.setIdUsur(entity.getIdUsur());
 		this.setAddressUsur(entity.getAddressUsur());
 		this.setCellphoneUsur(entity.getCellphoneUsur());
 		this.setCityUsur(entity.getCityUsur());
 		this.setCpfUsur(entity.getCpfUsur());
+		this.setEmailUsur(entity.getEmailUsur());
 		this.setNameUsur(entity.getNameUsur());
 		this.setPhoneUsur(entity.getPhoneUsur());
 		this.setStateUsur(entity.getStateUsur());

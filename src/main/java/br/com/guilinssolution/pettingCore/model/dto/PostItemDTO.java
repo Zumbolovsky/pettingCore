@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -20,27 +21,21 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PostItemDTO {
 
-	@NotNull
+	@ApiModelProperty(hidden = true)
 	private Integer idPostItem;
 
-	@NotNull
 	@ApiModelProperty(hidden = true)
 	private AnimalDTO animalDTO;
 
-	@NotNull
-	@Length(max = 30)
+	@Length(max = 30, message = "{length.thirty}")
 	private String titlePostItem;
 
-	@NotNull
-	@Length(max = 100)
+	@Length(max = 100, message = "{length.hundred}")
 	private String descriptionPostItem;
 
-	@NotNull
-	@Length(max = 50)
+	@Length(max = 50, message = "{length.fifty}")
 	private String imagePostItem;
 
-	@NotNull
-	@Length(max = 7)
 	private Type typePostItem;
 
 //	@ApiModelProperty(hidden = true)

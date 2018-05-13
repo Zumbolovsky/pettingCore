@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContributionDTO {
 
-	@NotNull
+	@ApiModelProperty(hidden = true)
 	private Integer idContribution;
 
 	@ApiModelProperty(hidden = true)
@@ -29,16 +29,13 @@ public class ContributionDTO {
 	@ApiModelProperty(hidden = true)
 	private PostItemDTO postItemDTO;
 
-	@NotNull
 	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTOByIdDonator;
 
-	@NotNull
 	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTOByIdRequest;
 
-	@NotNull
-	@Length(max = 100)
+	@Length(max = 100, message = "{length.hundred}")
 	private String descriptionContribution;
 
 //	@ApiModelProperty(hidden = true)

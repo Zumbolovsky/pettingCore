@@ -9,6 +9,7 @@ import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.services.AnimalService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -123,7 +124,7 @@ public class AnimalServiceImpl implements AnimalService {
 
         Integer idAnimal = dto.getIdAnimal();
         String breedAnimal = dto.getBreedAnimal();
-        String speciesAnimal = dto.getSpeciesAnimal();
+        Species speciesAnimal = dto.getSpeciesAnimal();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
         if (idAnimal != null) {
@@ -132,8 +133,8 @@ public class AnimalServiceImpl implements AnimalService {
         if (StringUtils.isNotEmpty(breedAnimal)) {
             expressionsAnd.add(root.breedAnimal.like("%"+breedAnimal+"%"));
         }
-        if (StringUtils.isNotEmpty(speciesAnimal)) {
-            expressionsAnd.add(root.speciesAnimal.like("%"+speciesAnimal+"%"));
+        if (speciesAnimal != null) {
+            expressionsAnd.add(root.speciesAnimal.eq(speciesAnimal));
         }
 
         return addAnd(expressionsAnd);

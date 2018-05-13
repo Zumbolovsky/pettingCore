@@ -3,12 +3,13 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
+import br.com.guilinssolution.pettingCore.model.dto.*;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
-import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.State;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.UsurService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -65,23 +66,53 @@ public class UsurServiceImpl implements UsurService {
         UsurEntity usurEntity = this.repository.getOne(id);
 
         this.validator.entityNull(usurEntity);
+        this.validator.entityNotExist(id, this.repository);
 
         return UsurAdapter.convertToDTO(usurEntity);
     }
 
     @Override
-    public UsurDTO save(UsurDTO dto) {
-        UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
+    public UsurDTO save(UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem) {
 
-        this.validator.entityExist(dto.getIdUsur(), this.repository);
+        dto.setContributionDTO(ContributionDTO
+                .builder()
+                .idContribution(idContribution)
+                .build());
+        dto.setPostAnimalDTO(PostAnimalDTO
+                .builder()
+                .idPostAnimal(idPostAnimal)
+                .build());
+        dto.setPostItemDTO(PostItemDTO
+                .builder()
+                .idPostItem(idPostItem)
+                .build());
+        UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
         usurEntity = this.repository.save(usurEntity);
         return UsurAdapter.convertToDTO(usurEntity);
     }
 
     @Override
-    public UsurDTO update(Integer id, UsurDTO dto) {
+    public UsurDTO update(Integer id, UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem) {
+        this.validator.entityNotExist(id, this.repository);
+
         UsurEntity vesselUsurEntity = this.repository.getOne(id);
+        if(!(vesselUsurEntity.getContributionEntity().getIdContribution().equals(idContribution)
+            && vesselUsurEntity.getPostAnimalEntity().getIdPostAnimal().equals(idPostAnimal)
+            && vesselUsurEntity.getPostItemEntity().getIdPostItem().equals(idPostItem))) {
+            dto.setContributionDTO(ContributionDTO
+                    .builder()
+                    .idContribution(idContribution)
+                    .build());
+            dto.setPostAnimalDTO(PostAnimalDTO
+                    .builder()
+                    .idPostAnimal(idPostAnimal)
+                    .build());
+            dto.setPostItemDTO(PostItemDTO
+                    .builder()
+                    .idPostItem(idPostItem)
+                    .build());
+        }
 
         this.validator.entityNull(vesselUsurEntity);
 
@@ -101,14 +132,12 @@ public class UsurServiceImpl implements UsurService {
 
             this.repository.deleteById(id);
         } catch (Exception e) {
-            String errorMessage = "Valor inválido para a constraint !";
-            throw new ConstraintException(errorMessage, HttpStatus.BAD_REQUEST);
+            String errorMessage = "ID do dado inexistente !";
+            throw new ConstraintException(errorMessage, HttpStatus.NOT_FOUND);
         }
-
     }
 
     private ListResultDTO<UsurDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
-
         Page<UsurEntity> usurEntityPages = this.repository.findAll(query, page);
         List<UsurDTO> usurDTOS = new ArrayList<>();
 
@@ -121,7 +150,6 @@ public class UsurServiceImpl implements UsurService {
     }
 
     private BooleanExpression queryGeneration(UsurDTO dto) {
-
         QUsurEntity root = QUsurEntity.usurEntity;
 
         Integer idUsur = dto.getIdUsur();
@@ -129,9 +157,10 @@ public class UsurServiceImpl implements UsurService {
         String cellphoneUsur = dto.getCellphoneUsur();
         String cityUsur = dto.getCityUsur();
         String cpfUsur = dto.getCpfUsur();
+        String emailUsur = dto.getEmailUsur();
         String nameUsur = dto.getNameUsur();
         String phoneUsur = dto.getPhoneUsur();
-        String stateUsur = dto.getStateUsur();
+        State stateUsur = dto.getStateUsur();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
         if (idUsur != null) {
@@ -149,14 +178,17 @@ public class UsurServiceImpl implements UsurService {
         if (StringUtils.isNotEmpty(cpfUsur)) {
             expressionsAnd.add(root.cpfUsur.like("%"+cpfUsur+"%"));
         }
+        if (StringUtils.isNotEmpty(emailUsur)) {
+            expressionsAnd.add(root.emailUsur.like("%"+emailUsur+"%"));
+        }
         if (StringUtils.isNotEmpty(nameUsur)) {
             expressionsAnd.add(root.nameUsur.like("%"+nameUsur+"%"));
         }
         if (StringUtils.isNotEmpty(phoneUsur)) {
             expressionsAnd.add(root.phoneUsur.like("%"+phoneUsur+"%"));
         }
-        if (StringUtils.isNotEmpty(stateUsur)) {
-            expressionsAnd.add(root.stateUsur.like("%"+stateUsur+"%"));
+        if (stateUsur != null) {
+            expressionsAnd.add(root.stateUsur.eq(stateUsur));
         }
 
         return addAnd(expressionsAnd);
