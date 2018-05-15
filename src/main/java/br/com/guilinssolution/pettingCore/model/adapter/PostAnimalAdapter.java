@@ -2,8 +2,10 @@ package br.com.guilinssolution.pettingCore.model.adapter;
 
 import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
+import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
+import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
 import java.util.ArrayList;
@@ -19,11 +21,8 @@ public class PostAnimalAdapter {
         AnimalEntity animalEntity = entity.getAnimalEntity();
         AnimalDTO animalDTO = AnimalAdapter.convertToDTO(animalEntity);
 
-//        List<ContributionEntityLite> contributionEntities = entity.getContributionEntities();
-//        List<ContributionDTOLite> contributionDTOS = ContributionAdapter.convertToDTOLite(contributionEntities);
-//
-//        List<UsurEntityLite> usurEntities = entity.getUsurEntities();
-//        List<UsurDTOLite> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
+        UsurEntity usurEntity = entity.getUsurEntity();
+        UsurDTO usurDTO = UsurAdapter.convertToDTO(usurEntity);
 
         return PostAnimalDTO.builder()
                 .idPostAnimal(entity.getIdPostAnimal())
@@ -32,8 +31,7 @@ public class PostAnimalAdapter {
                 .sizePostAnimal(entity.getSizePostAnimal())
                 .titlePostAnimal(entity.getTitlePostAnimal())
                 .animalDTO(animalDTO)
-//                .contributionDTOS(contributionDTOS)
-//                .usurDTOS(usurDTOS)
+                .usurDTO(usurDTO)
                 .build();
     }
 
@@ -45,11 +43,8 @@ public class PostAnimalAdapter {
         AnimalDTO animalDTO = dto.getAnimalDTO();
         AnimalEntity animalEntity  = AnimalAdapter.convertToEntity(animalDTO);
 
-//        List<ContributionDTOLite> contributionDTOS = dto.getContributionDTOS();
-//        List<ContributionEntityLite> contributionEntities = ContributionAdapter.convertToEntityLite(contributionDTOS);
-//
-//        List<UsurDTOLite> usurDTOS = dto.getUsurDTOS();
-//        List<UsurEntityLite> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
+        UsurDTO usurDTO = dto.getUsurDTO();
+        UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);
 
         return PostAnimalEntity.builder()
                 .descriptionPostAnimal(dto.getDescriptionPostAnimal())
@@ -57,8 +52,7 @@ public class PostAnimalAdapter {
                 .sizePostAnimal(dto.getSizePostAnimal())
                 .titlePostAnimal(dto.getTitlePostAnimal())
                 .animalEntity(animalEntity)
-//                .contributionEntities(contributionEntities)
-//                .usurEntities(usurEntities)
+                .usurEntity(usurEntity)
                 .build();
     }
 

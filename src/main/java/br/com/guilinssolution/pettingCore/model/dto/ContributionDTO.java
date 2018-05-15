@@ -38,7 +38,4 @@ public class ContributionDTO {
 	@Length(max = 100, message = "{length.hundred}")
 	private String descriptionContribution;
 
-//	@ApiModelProperty(hidden = true)
-//	private List<UsurDTOLite> usurDTOS;
-
 }

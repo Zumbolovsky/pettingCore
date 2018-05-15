@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -10,6 +11,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Data
 @Entity
@@ -27,9 +30,16 @@ public class PostAnimalEntity implements Serializable {
 	@Column(name = "id_postAnimal", unique = true, nullable = false)
 	private Integer idPostAnimal;
 
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "postAnimalEntity")
+	private ContributionEntity contributionEntity;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_animal", nullable = false)
 	private AnimalEntity animalEntity;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_usur")
+	private UsurEntity usurEntity;
 
 	@Column(name = "title_postAnimal", nullable = false, length = 30)
 	private String titlePostAnimal;
@@ -44,19 +54,24 @@ public class PostAnimalEntity implements Serializable {
 	@Column(name = "image_postAnimal", nullable = false, length = 50)
 	private String imagePostAnimal;
 
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postAnimalEntity")
-//	private List<UsurEntityLite> usurEntities;
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postAnimalEntity")
-//	private List<ContributionEntityLite> contributionEntities;
+	@CreatedDate
+	@Temporal(TemporalType.DATE)
+	@Column(name = "createdDate_postAnimal", nullable = false)
+	private Date createdDatePostAnimal;
+
+	@LastModifiedDate
+	@Temporal(TemporalType.DATE)
+	@Column(name = "lastModifiedDate_postAnimal", nullable = false)
+	private Date lastModifiedDatePostAnimal;
 
 	public void update(PostAnimalEntity entity) {
 		this.setIdPostAnimal(entity.getIdPostAnimal());
+		this.setAnimalEntity(entity.getAnimalEntity());
+		this.setUsurEntity(entity.getUsurEntity());
 		this.setTitlePostAnimal(entity.getTitlePostAnimal());
 		this.setDescriptionPostAnimal(entity.getDescriptionPostAnimal());
 		this.setSizePostAnimal(entity.getSizePostAnimal());
 		this.setImagePostAnimal(entity.getImagePostAnimal());
-		this.setAnimalEntity(entity.getAnimalEntity());
 	}
 
 }

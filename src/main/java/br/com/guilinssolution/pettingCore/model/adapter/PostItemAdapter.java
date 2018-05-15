@@ -17,11 +17,8 @@ public class PostItemAdapter {
         AnimalEntity animalEntity = entity.getAnimalEntity();
         AnimalDTO animalDTO = AnimalAdapter.convertToDTO(animalEntity);
 
-//        List<ContributionEntityLite> contributionEntities = entity.getContributionEntities();
-//        List<ContributionDTOLite> contributionDTOS = ContributionAdapter.convertToDTOLite(contributionEntities);
-//
-//        List<UsurEntityLite> usurEntities = entity.getUsurEntities();
-//        List<UsurDTOLite> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
+        UsurEntity usurEntity = entity.getUsurEntity();
+        UsurDTO usurDTO = UsurAdapter.convertToDTO(usurEntity);
 
         return PostItemDTO.builder()
                 .idPostItem(entity.getIdPostItem())
@@ -30,8 +27,7 @@ public class PostItemAdapter {
                 .titlePostItem(entity.getTitlePostItem())
                 .typePostItem(entity.getTypePostItem())
                 .animalDTO(animalDTO)
-//                .contributionDTOS(contributionDTOS)
-//                .usurDTOS(usurDTOS)
+                .usurDTO(usurDTO)
                 .build();
     }
 
@@ -43,11 +39,8 @@ public class PostItemAdapter {
         AnimalDTO animalDTO = dto.getAnimalDTO();
         AnimalEntity animalEntity  = AnimalAdapter.convertToEntity(animalDTO);
 
-//        List<ContributionDTOLite> contributionDTOS = dto.getContributionDTOS();
-//        List<ContributionEntityLite> contributionEntities = ContributionAdapter.convertToEntityLite(contributionDTOS);
-//
-//        List<UsurDTOLite> usurDTOS = dto.getUsurDTOS();
-//        List<UsurEntityLite> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
+        UsurDTO usurDTO = dto.getUsurDTO();
+        UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);
 
         return PostItemEntity.builder()
                 .idPostItem(dto.getIdPostItem())
@@ -56,8 +49,7 @@ public class PostItemAdapter {
                 .titlePostItem(dto.getTitlePostItem())
                 .typePostItem(dto.getTypePostItem())
                 .animalEntity(animalEntity)
-//                .contributionEntities(contributionEntities)
-//                .usurEntities(usurEntities)
+                .usurEntity(usurEntity)
                 .build();
     }
 

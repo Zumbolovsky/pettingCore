@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,6 +24,9 @@ public class PostAnimalDTO {
 	@ApiModelProperty(hidden = true)
 	private AnimalDTO animalDTO;
 
+	@ApiModelProperty(hidden = true)
+	private UsurDTO usurDTO;
+
 	@Length(max = 30, message = "{length.thirty}")
 	private String titlePostAnimal;
 
@@ -36,11 +37,5 @@ public class PostAnimalDTO {
 
 	@Length(max = 50, message = "{length.fifty}")
 	private String imagePostAnimal;
-
-//	@ApiModelProperty(hidden = true)
-//	private List<UsurDTOLite> usurDTOS;
-//
-//	@ApiModelProperty(hidden = true)
-//	private List<ContributionDTOLite> contributionDTOS;
 
 }

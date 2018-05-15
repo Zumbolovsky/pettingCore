@@ -2,6 +2,9 @@ package br.com.guilinssolution.pettingCore.services.impl;
 
 import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
+import br.com.guilinssolution.pettingCore.model.adapter.ContributionAdapter;
+import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
+import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.*;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
@@ -10,6 +13,9 @@ import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.State;
+import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
+import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
+import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.UsurService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -23,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 
@@ -33,14 +40,24 @@ import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 @Service
 public class UsurServiceImpl implements UsurService {
 
+    private final ContributionRepository contributionRepository;
+
+    private final PostAnimalRepository postAnimalRepository;
+
+    private final PostItemRepository postItemRepository;
+
     private final UsurRepository repository;
 
     private final Validator validator;
 
     @Autowired
-    public UsurServiceImpl(UsurRepository repository, Validator validator) {
+    public UsurServiceImpl(UsurRepository repository, Validator validator, ContributionRepository contributionRepository,
+                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository) {
         this.repository = repository;
         this.validator = validator;
+        this.contributionRepository = contributionRepository;
+        this.postAnimalRepository = postAnimalRepository;
+        this.postItemRepository = postItemRepository;
     }
 
     @Override
@@ -73,19 +90,25 @@ public class UsurServiceImpl implements UsurService {
 
     @Override
     public UsurDTO save(UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem) {
+        if (idContribution != null) {
+            this.validator.entityNotExist(idContribution, this.contributionRepository);
+            dto.setContributionDTO(ContributionAdapter.convertToDTO(this.contributionRepository.getOne(idContribution)));
+        } else {
+            dto.setContributionDTO(null);
+        }
+        if (idPostAnimal != null) {
+            this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
+            dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
+        } else {
+            dto.setPostAnimalDTO(null);
+        }
+        if (idPostItem != null) {
+            this.validator.entityNotExist(idPostItem, this.postItemRepository);
+            dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
+        } else {
+            dto.setPostItemDTO(null);
+        }
 
-        dto.setContributionDTO(ContributionDTO
-                .builder()
-                .idContribution(idContribution)
-                .build());
-        dto.setPostAnimalDTO(PostAnimalDTO
-                .builder()
-                .idPostAnimal(idPostAnimal)
-                .build());
-        dto.setPostItemDTO(PostItemDTO
-                .builder()
-                .idPostItem(idPostItem)
-                .build());
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
         usurEntity = this.repository.save(usurEntity);
@@ -95,6 +118,15 @@ public class UsurServiceImpl implements UsurService {
     @Override
     public UsurDTO update(Integer id, UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem) {
         this.validator.entityNotExist(id, this.repository);
+        if (idContribution != null) {
+            this.validator.entityNotExist(idContribution, this.contributionRepository);
+        }
+        if (idPostAnimal != null) {
+            this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
+        }
+        if (idPostItem != null) {
+            this.validator.entityNotExist(idPostItem, this.postItemRepository);
+        }
 
         UsurEntity vesselUsurEntity = this.repository.getOne(id);
         if(!(vesselUsurEntity.getContributionEntity().getIdContribution().equals(idContribution)

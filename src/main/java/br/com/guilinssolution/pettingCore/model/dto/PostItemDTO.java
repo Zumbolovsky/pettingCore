@@ -27,6 +27,9 @@ public class PostItemDTO {
 	@ApiModelProperty(hidden = true)
 	private AnimalDTO animalDTO;
 
+	@ApiModelProperty(hidden = true)
+	private UsurDTO usurDTO;
+
 	@Length(max = 30, message = "{length.thirty}")
 	private String titlePostItem;
 
@@ -37,11 +40,5 @@ public class PostItemDTO {
 	private String imagePostItem;
 
 	private Type typePostItem;
-
-//	@ApiModelProperty(hidden = true)
-//	private List<ContributionDTOLite> contributionDTOS;
-//
-//	@ApiModelProperty(hidden = true)
-//	private List<UsurDTOLite> usurDTOS;
 
 }

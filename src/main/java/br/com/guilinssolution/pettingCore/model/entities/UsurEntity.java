@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -27,18 +28,6 @@ public class UsurEntity implements Serializable {
 	@Column(name = "id_usur", unique = true, nullable = false)
 	private Integer idUsur;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_contribution")
-	private ContributionEntity contributionEntity;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_postAnimal")
-	private PostAnimalEntity postAnimalEntity;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_postItem")
-	private PostItemEntity postItemEntity;
-
 	@Column(name = "name_usur", nullable = false, length = 30)
 	private String nameUsur;
 
@@ -64,12 +53,19 @@ public class UsurEntity implements Serializable {
 	@Column(name = "phone_usur", nullable = false, length = 15)
 	private String phoneUsur;
 
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdDonator")
-//	private List<ContributionEntityLite> contributionsForIdDonator;
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdRequest")
-//	private List<ContributionEntityLite> contributionsForIdRequest;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntity")
+	private List<PostAnimalEntity> postAnimalEntities;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntity")
+	private List<PostItemEntity> postItemEntities;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdDonator")
+	private List<ContributionEntity> contributionsForIdDonator;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdRequest")
+	private List<ContributionEntity> contributionsForIdRequest;
+
+	//todo: reset operations
 	public void update(UsurEntity entity) {
 		this.setAddressUsur(entity.getAddressUsur());
 		this.setCellphoneUsur(entity.getCellphoneUsur());
@@ -79,9 +75,9 @@ public class UsurEntity implements Serializable {
 		this.setNameUsur(entity.getNameUsur());
 		this.setPhoneUsur(entity.getPhoneUsur());
 		this.setStateUsur(entity.getStateUsur());
-		this.setContributionEntity(entity.getContributionEntity());
-		this.setPostAnimalEntity(entity.getPostAnimalEntity());
-		this.setPostItemEntity(entity.getPostItemEntity());
+		//this.setContributionEntity(entity.getContributionEntity());
+		//this.setPostAnimalEntity(entity.getPostAnimalEntity());
+		//this.setPostItemEntity(entity.getPostItemEntity());
 	}
 
 }

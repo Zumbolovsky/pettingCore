@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -9,6 +10,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Data
 @Entity
@@ -26,27 +29,34 @@ public class ContributionEntity implements Serializable {
 	@Column(name = "id_contribution", unique = true, nullable = false)
 	private Integer idContribution;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_postAnimal")
 	private PostAnimalEntity postAnimalEntity;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_postItem")
 	private PostItemEntity postItemEntity;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_donator", nullable = false)
 	private UsurEntity usurEntityByIdDonator;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_request", nullable = false)
 	private UsurEntity usurEntityByIdRequest;
 
 	@Column(name = "description_contribution", nullable = false, length = 100)
 	private String descriptionContribution;
 
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contributionEntity")
-//	private List<UsurEntityLite> usurEntities;
+	@CreatedDate
+	@Temporal(TemporalType.DATE)
+	@Column(name = "createdDate_contribution", nullable = false)
+	private Date createdDatePostItem;
+
+	@LastModifiedDate
+	@Temporal(TemporalType.DATE)
+	@Column(name = "lastModifiedDate_contribution", nullable = false)
+	private Date lastModifiedDatePostItem;
 
 	public void update(ContributionEntity entity) {
 		this.setIdContribution(entity.getIdContribution());

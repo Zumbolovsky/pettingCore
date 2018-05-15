@@ -72,8 +72,6 @@ public class AnimalServiceImpl implements AnimalService {
     public AnimalDTO save(AnimalDTO dto) {
         AnimalEntity animalEntity = AnimalAdapter.convertToEntity(dto);
 
-        this.validator.entityExist(dto.getIdAnimal(), this.repository);
-
         animalEntity = this.repository.save(animalEntity);
         return AnimalAdapter.convertToDTO(animalEntity);
     }

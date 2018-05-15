@@ -2,6 +2,7 @@ package br.com.guilinssolution.pettingCore.services.impl;
 
 import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
+import br.com.guilinssolution.pettingCore.model.adapter.AnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
@@ -77,16 +78,10 @@ public class PostAnimalServiceImpl implements PostAnimalService {
 
     @Override
     public PostAnimalDTO save(PostAnimalDTO dto, Integer idAnimal) {
-//        this.validator.entityNotExist(idAnimal, animalRepository);
+        this.validator.entityNotExist(idAnimal, this.animalRepository);
 
-        dto.setAnimalDTO(AnimalDTO
-                .builder()
-                .idAnimal(idAnimal)
-                .build());
+        dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
         PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
-
-        //unnecessary
-//        this.validator.entityExist(dto.getIdPostAnimal(), this.repository);
 
         postAnimalEntity = this.repository.save(postAnimalEntity);
         return PostAnimalAdapter.convertToDTO(postAnimalEntity);
@@ -95,14 +90,11 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     @Override
     public PostAnimalDTO update(Integer id, PostAnimalDTO dto, Integer idAnimal) {
         this.validator.entityNotExist(id, this.repository);
-//        this.validator.entityNotExist(idAnimal, animalRepository);
 
         PostAnimalEntity vesselPostAnimalEntity = this.repository.getOne(id);
         if(!vesselPostAnimalEntity.getAnimalEntity().getIdAnimal().equals(idAnimal)) {
-            dto.setAnimalDTO(AnimalDTO
-                    .builder()
-                    .idAnimal(idAnimal)
-                    .build());
+            this.validator.entityNotExist(idAnimal, this.animalRepository);
+            dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
         }
 
         this.validator.entityNull(vesselPostAnimalEntity);

@@ -20,20 +20,25 @@ public class UsurAdapter {
             return null;
         }
 
-        ContributionEntity contributionEntity = entity.getContributionEntity();
-        ContributionDTO contributionDTO = ContributionAdapter.convertToDTO(contributionEntity);
+        List<ContributionEntity> contributionEntitiesForIdDonator = entity.getContributionsForIdDonator();
+        List<ContributionDTO> contributionDTOSForIdDonator = new ArrayList<>();
+        contributionEntitiesForIdDonator.forEach(contributionEntityForIdDonator ->
+                contributionDTOSForIdDonator.add(ContributionAdapter.convertToDTO(contributionEntityForIdDonator)));
 
-//        List<ContributionEntityLite> contributionEntitiesForIdDonator = entity.getContributionsForIdDonator();
-//        List<ContributionDTOLite> contributionDTOSForIdDonator = ContributionAdapter.convertToDTOLite(contributionEntitiesForIdDonator);
-//
-//        List<ContributionEntityLite> contributionEntitiesForIdRequest = entity.getContributionsForIdRequest();
-//        List<ContributionDTOLite> contributionDTOSForIdRequest = ContributionAdapter.convertToDTOLite(contributionEntitiesForIdRequest);
+        List<ContributionEntity> contributionEntitiesForIdRequest = entity.getContributionsForIdRequest();
+        List<ContributionDTO> contributionDTOSForIdRequest = new ArrayList<>();
+        contributionEntitiesForIdRequest.forEach(contributionEntityForIdRequest ->
+                contributionDTOSForIdRequest.add(ContributionAdapter.convertToDTO(contributionEntityForIdRequest)));
 
-        PostAnimalEntity postAnimalEntity = entity.getPostAnimalEntity();
-        PostAnimalDTO postAnimalDTO = PostAnimalAdapter.convertToDTO(postAnimalEntity);
+        List<PostAnimalEntity> postAnimalEntities = entity.getPostAnimalEntities();
+        List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
+        postAnimalEntities.forEach(postAnimalEntity ->
+                postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
 
-        PostItemEntity postItemEntity = entity.getPostItemEntity();
-        PostItemDTO postItemDTO = PostItemAdapter.convertToDTO(postItemEntity);
+        List<PostItemEntity> postItemEntities = entity.getPostItemEntities();
+        List<PostItemDTO> postItemDTOS = new ArrayList<>();
+        postItemEntities.forEach(postItemEntity ->
+                postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
 
         return UsurDTO.builder()
                 .idUsur(entity.getIdUsur())
@@ -45,11 +50,10 @@ public class UsurAdapter {
                 .nameUsur(entity.getNameUsur())
                 .phoneUsur(entity.getPhoneUsur())
                 .stateUsur(entity.getStateUsur())
-                .contributionDTO(contributionDTO)
-//                .contributionsForIdDonator(contributionDTOSForIdDonator)
-//                .contributionsForIdRequest(contributionDTOSForIdRequest)
-                .postAnimalDTO(postAnimalDTO)
-                .postItemDTO(postItemDTO)
+                .contributionsForIdDonator(contributionDTOSForIdDonator)
+                .contributionsForIdRequest(contributionDTOSForIdRequest)
+                .postAnimalDTOS(postAnimalDTOS)
+                .postItemDTOS(postItemDTOS)
                 .build();
     }
 
@@ -58,20 +62,25 @@ public class UsurAdapter {
             return null;
         }
 
-        ContributionDTO contributionDTO = dto.getContributionDTO();
-        ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(contributionDTO);
+        List<ContributionDTO> contributionDTOSForIdDonator = dto.getContributionsForIdDonator();
+        List<ContributionEntity> contributionEntitiesForIdDonator = new ArrayList<>();
+        contributionDTOSForIdDonator.forEach(contributionDTOForIdDonator ->
+                contributionEntitiesForIdDonator.add(ContributionAdapter.convertToEntity(contributionDTOForIdDonator)));
 
-//        List<ContributionDTOLite> contributionDTOSForIdDonator = dto.getContributionsForIdDonator();
-//        List<ContributionEntityLite> contributionEntitiesForIdDonator = ContributionAdapter.convertToEntityLite(contributionDTOSForIdDonator);
-//
-//        List<ContributionDTOLite> contributionDTOSForIdRequest = dto.getContributionsForIdRequest();
-//        List<ContributionEntityLite> contributionEntitiesForIdRequest = ContributionAdapter.convertToEntityLite(contributionDTOSForIdRequest);
+        List<ContributionDTO> contributionDTOSForIdRequest = dto.getContributionsForIdRequest();
+        List<ContributionEntity> contributionEntitiesForIdRequest = new ArrayList<>();
+        contributionDTOSForIdRequest.forEach(contributionDTOForIdRequest ->
+                contributionEntitiesForIdRequest.add(ContributionAdapter.convertToEntity(contributionDTOForIdRequest)));
 
-        PostAnimalDTO postAnimalDTO = dto.getPostAnimalDTO();
-        PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(postAnimalDTO);
+        List<PostAnimalDTO> postAnimalDTOS = dto.getPostAnimalDTOS();
+        List<PostAnimalEntity> postAnimalEntities = new ArrayList<>();
+        postAnimalDTOS.forEach(postAnimalDTO ->
+                postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
 
-        PostItemDTO postItemDTO = dto.getPostItemDTO();
-        PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(postItemDTO);
+        List<PostItemDTO> postItemDTOS = dto.getPostItemDTOS();
+        List<PostItemEntity> postItemEntities = new ArrayList<>();
+        postItemDTOS.forEach(postItemDTO ->
+                postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
 
         return UsurEntity.builder()
                 .idUsur(dto.getIdUsur())
@@ -83,11 +92,10 @@ public class UsurAdapter {
                 .nameUsur(dto.getNameUsur())
                 .phoneUsur(dto.getPhoneUsur())
                 .stateUsur(dto.getStateUsur())
-                .contributionEntity(contributionEntity)
-//                .contributionsForIdDonator(contributionEntitiesForIdDonator)
-//                .contributionsForIdRequest(contributionEntitiesForIdRequest)
-                .postAnimalEntity(postAnimalEntity)
-                .postItemEntity(postItemEntity)
+                .contributionsForIdDonator(contributionEntitiesForIdDonator)
+                .contributionsForIdRequest(contributionEntitiesForIdRequest)
+                .postAnimalEntities(postAnimalEntities)
+                .postItemEntities(postItemEntities)
                 .build();
     }
 

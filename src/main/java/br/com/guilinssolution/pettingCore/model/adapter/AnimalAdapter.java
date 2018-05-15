@@ -18,18 +18,20 @@ public class AnimalAdapter {
             return null;
         }
 
-//        List<PostAnimalEntityLite> postAnimalEntities = entity.getPostAnimalEntities();
-//        List<PostAnimalDTOLite> postAnimalDTOS = PostAnimalAdapter.convertToDTOLite(postAnimalEntities);
-//
-//        List<PostItemEntityLite> postItemEntities = entity.getPostItemEntities();
-//        List<PostItemDTOLite> postItemDTOS = PostItemAdapter.convertToDTOLite(postItemEntities);
+        List<PostAnimalEntity> postAnimalEntities = entity.getPostAnimalEntities();
+        List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
+        postAnimalEntities.forEach(postAnimalEntity -> postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
+
+        List<PostItemEntity> postItemEntities = entity.getPostItemEntities();
+        List<PostItemDTO> postItemDTOS = new ArrayList<>();
+        postItemEntities.forEach(postItemEntity -> postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
 
         return AnimalDTO.builder()
                 .idAnimal(entity.getIdAnimal())
                 .breedAnimal(entity.getBreedAnimal())
                 .speciesAnimal(entity.getSpeciesAnimal())
-//                .postAnimalDTOS(postAnimalDTOS)
-//                .postItemDTOS(postItemDTOS)
+                .postAnimalDTOS(postAnimalDTOS)
+                .postItemDTOS(postItemDTOS)
                 .build();
     }
 
@@ -38,18 +40,20 @@ public class AnimalAdapter {
             return null;
         }
 
-//        List<PostAnimalDTOLite> postAnimalDTOS = dto.getPostAnimalDTOS();
-//        List<PostAnimalEntityLite> postAnimalEntities = PostAnimalAdapter.convertToEntityLite(postAnimalDTOS);
-//
-//        List<PostItemDTOLite> postItemDTOS = dto.getPostItemDTOS();
-//        List<PostItemEntityLite> postItemEntities = PostItemAdapter.convertToEntityLite(postItemDTOS);
+        List<PostAnimalDTO> postAnimalDTOS = dto.getPostAnimalDTOS();
+        List<PostAnimalEntity> postAnimalEntities = new ArrayList<>();
+        postAnimalDTOS.forEach(postAnimalDTO -> postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
+
+        List<PostItemDTO> postItemDTOS = dto.getPostItemDTOS();
+        List<PostItemEntity> postItemEntities = new ArrayList<>();
+        postItemDTOS.forEach(postItemDTO -> postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
 
         return AnimalEntity.builder()
                 .idAnimal(dto.getIdAnimal())
                 .breedAnimal(dto.getBreedAnimal())
                 .speciesAnimal(dto.getSpeciesAnimal())
-//                .postAnimalEntities(postAnimalEntities)
-//                .postItemEntities(postItemEntities)
+                .postAnimalEntities(postAnimalEntities)
+                .postItemEntities(postItemEntities)
                 .build();
     }
 

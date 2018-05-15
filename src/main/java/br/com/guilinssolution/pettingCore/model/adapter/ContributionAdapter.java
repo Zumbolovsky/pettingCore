@@ -32,9 +32,6 @@ public class ContributionAdapter {
         UsurEntity usurEntityByIdRequest = entity.getUsurEntityByIdRequest();
         UsurDTO usurDTOByIdRequest = UsurAdapter.convertToDTO(usurEntityByIdRequest);
 
-//        List<UsurEntityLite> usurEntities = entity.getUsurEntities();
-//        List<UsurDTOLite> usurDTOS = UsurAdapter.convertToDTOLite(usurEntities);
-
         return ContributionDTO.builder()
                 .idContribution(entity.getIdContribution())
                 .descriptionContribution(entity.getDescriptionContribution())
@@ -42,7 +39,6 @@ public class ContributionAdapter {
                 .postItemDTO(postItemDTO)
                 .usurDTOByIdDonator(usurDTOByIdDonator)
                 .usurDTOByIdRequest(usurDTOByIdRequest)
-//                .usurDTOS(usurDTOS)
                 .build();
     }
 
@@ -63,9 +59,6 @@ public class ContributionAdapter {
         UsurDTO usurDTOByIdRequest = dto.getUsurDTOByIdRequest();
         UsurEntity usurEntityByIdRequest = UsurAdapter.convertToEntity(usurDTOByIdRequest);
 
-//        List<UsurDTOLite> usurDTOS = dto.getUsurDTOS();
-//        List<UsurEntityLite> usurEntities = UsurAdapter.convertToEntityLite(usurDTOS);
-
         return ContributionEntity.builder()
                 .idContribution(dto.getIdContribution())
                 .descriptionContribution(dto.getDescriptionContribution())
@@ -73,7 +66,6 @@ public class ContributionAdapter {
                 .postItemEntity(postItemEntity)
                 .usurEntityByIdDonator(usurEntityByIdDonator)
                 .usurEntityByIdRequest(usurEntityByIdRequest)
-//                .usurEntities(usurEntities)
                 .build();
     }
 

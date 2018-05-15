@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -22,15 +22,6 @@ public class UsurDTO {
 
     @ApiModelProperty(hidden = true)
 	private Integer idUsur;
-
-	@ApiModelProperty(hidden = true)
-	private ContributionDTO contributionDTO;
-
-	@ApiModelProperty(hidden = true)
-	private PostAnimalDTO postAnimalDTO;
-
-	@ApiModelProperty(hidden = true)
-	private PostItemDTO postItemDTO;
 
 	@Length(max = 30, message = "{length.thirty}")
 	private String nameUsur;
@@ -55,10 +46,16 @@ public class UsurDTO {
 	@Length(max = 15, message = "{length.phone}")
 	private String phoneUsur;
 
-//	@ApiModelProperty(hidden = true)
-//	private List<ContributionDTOLite> contributionsForIdDonator;
-//
-//	@ApiModelProperty(hidden = true)
-//	private List<ContributionDTOLite> contributionsForIdRequest;
+	@ApiModelProperty(hidden = true)
+	private List<PostAnimalDTO> postAnimalDTOS;
+
+	@ApiModelProperty(hidden = true)
+	private List<PostItemDTO> postItemDTOS;
+
+	@ApiModelProperty(hidden = true)
+	private List<ContributionDTO> contributionsForIdDonator;
+
+	@ApiModelProperty(hidden = true)
+	private List<ContributionDTO> contributionsForIdRequest;
 
 }
