@@ -20,34 +20,6 @@ public class UsurAdapter {
             return null;
         }
 
-        List<ContributionEntity> contributionEntitiesForIdDonator = entity.getContributionsForIdDonator();
-        List<ContributionDTO> contributionDTOSForIdDonator = new ArrayList<>();
-        if (contributionEntitiesForIdDonator != null) {
-            contributionEntitiesForIdDonator.forEach(contributionEntityForIdDonator ->
-                    contributionDTOSForIdDonator.add(ContributionAdapter.convertToDTO(contributionEntityForIdDonator)));
-        }
-
-        List<ContributionEntity> contributionEntitiesForIdRequest = entity.getContributionsForIdRequest();
-        List<ContributionDTO> contributionDTOSForIdRequest = new ArrayList<>();
-        if (contributionEntitiesForIdRequest != null) {
-            contributionEntitiesForIdRequest.forEach(contributionEntityForIdRequest ->
-                    contributionDTOSForIdRequest.add(ContributionAdapter.convertToDTO(contributionEntityForIdRequest)));
-        }
-
-        List<PostAnimalEntity> postAnimalEntities = entity.getPostAnimalEntities();
-        List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
-        if (postAnimalEntities != null) {
-            postAnimalEntities.forEach(postAnimalEntity ->
-                    postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
-        }
-
-        List<PostItemEntity> postItemEntities = entity.getPostItemEntities();
-        List<PostItemDTO> postItemDTOS = new ArrayList<>();
-        if (postItemEntities != null) {
-            postItemEntities.forEach(postItemEntity ->
-                    postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
-        }
-
         return UsurDTO.builder()
                 .idUsur(entity.getIdUsur())
                 .addressUsur(entity.getAddressUsur())
@@ -56,46 +28,15 @@ public class UsurAdapter {
                 .cpfUsur(entity.getCpfUsur())
                 .emailUsur(entity.getEmailUsur())
                 .nameUsur(entity.getNameUsur())
+                .passwordUsur(entity.getPasswordUsur())
                 .phoneUsur(entity.getPhoneUsur())
                 .stateUsur(entity.getStateUsur())
-                .contributionsForIdDonator(contributionDTOSForIdDonator)
-                .contributionsForIdRequest(contributionDTOSForIdRequest)
-                .postAnimalDTOS(postAnimalDTOS)
-                .postItemDTOS(postItemDTOS)
                 .build();
     }
 
     public static UsurEntity convertToEntity(UsurDTO dto) {
         if (dto == null) {
             return null;
-        }
-
-        List<ContributionDTO> contributionDTOSForIdDonator = dto.getContributionsForIdDonator();
-        List<ContributionEntity> contributionEntitiesForIdDonator = new ArrayList<>();
-        if (contributionDTOSForIdDonator != null) {
-            contributionDTOSForIdDonator.forEach(contributionDTOForIdDonator ->
-                    contributionEntitiesForIdDonator.add(ContributionAdapter.convertToEntity(contributionDTOForIdDonator)));
-        }
-
-        List<ContributionDTO> contributionDTOSForIdRequest = dto.getContributionsForIdRequest();
-        List<ContributionEntity> contributionEntitiesForIdRequest = new ArrayList<>();
-        if (contributionDTOSForIdRequest != null) {
-            contributionDTOSForIdRequest.forEach(contributionDTOForIdRequest ->
-                    contributionEntitiesForIdRequest.add(ContributionAdapter.convertToEntity(contributionDTOForIdRequest)));
-        }
-
-        List<PostAnimalDTO> postAnimalDTOS = dto.getPostAnimalDTOS();
-        List<PostAnimalEntity> postAnimalEntities = new ArrayList<>();
-        if (postAnimalDTOS != null) {
-            postAnimalDTOS.forEach(postAnimalDTO ->
-                    postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
-        }
-
-        List<PostItemDTO> postItemDTOS = dto.getPostItemDTOS();
-        List<PostItemEntity> postItemEntities = new ArrayList<>();
-        if (postItemDTOS != null) {
-            postItemDTOS.forEach(postItemDTO ->
-                    postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
         }
 
         return UsurEntity.builder()
@@ -106,12 +47,9 @@ public class UsurAdapter {
                 .cpfUsur(dto.getCpfUsur())
                 .emailUsur(dto.getEmailUsur())
                 .nameUsur(dto.getNameUsur())
+                .passwordUsur(dto.getPasswordUsur())
                 .phoneUsur(dto.getPhoneUsur())
                 .stateUsur(dto.getStateUsur())
-                .contributionsForIdDonator(contributionEntitiesForIdDonator)
-                .contributionsForIdRequest(contributionEntitiesForIdRequest)
-                .postAnimalEntities(postAnimalEntities)
-                .postItemEntities(postItemEntities)
                 .build();
     }
 

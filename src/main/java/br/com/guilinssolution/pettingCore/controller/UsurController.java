@@ -63,7 +63,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId, @Valid @RequestBody UsurDTO dto,
                                           BindingResult result) {
         log.info("Atualizando dados de um Usuário");

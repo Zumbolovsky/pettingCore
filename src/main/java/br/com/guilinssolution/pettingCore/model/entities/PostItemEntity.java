@@ -30,9 +30,6 @@ public class PostItemEntity implements Serializable {
 	@Column(name = "id_postItem", unique = true, nullable = false)
 	private Integer idPostItem;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "postItemEntity")
-	private ContributionEntity contributionEntitiy;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_animal", nullable = false)
 	private AnimalEntity animalEntity;

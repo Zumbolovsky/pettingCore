@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Entity
@@ -20,6 +21,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"idPostAnimal"})
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "postAnimal", schema = "dbo", catalog = "pettingdb")
 public class PostAnimalEntity implements Serializable {
 
@@ -27,14 +29,11 @@ public class PostAnimalEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_postAnimal", unique = true, nullable = false)
+	@Column(name = "id_postAnimal", unique = true)
 	private Integer idPostAnimal;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "postAnimalEntity")
-	private ContributionEntity contributionEntity;
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_animal", nullable = false)
+	@JoinColumn(name = "id_animal")
 	private AnimalEntity animalEntity;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -56,12 +55,12 @@ public class PostAnimalEntity implements Serializable {
 
 	@CreatedDate
 	@Temporal(TemporalType.DATE)
-	@Column(name = "createdDate_postAnimal", nullable = false)
+	@Column(name = "createdDate_postAnimal")
 	private Date createdDatePostAnimal;
 
 	@LastModifiedDate
 	@Temporal(TemporalType.DATE)
-	@Column(name = "lastModifiedDate_postAnimal", nullable = false)
+	@Column(name = "lastModifiedDate_postAnimal")
 	private Date lastModifiedDatePostAnimal;
 
 	public void update(PostAnimalEntity entity) {

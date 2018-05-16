@@ -26,7 +26,7 @@ public class AnimalEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_animal", unique = true, nullable = false)
+	@Column(name = "id_animal", unique = true)
 	private Integer idAnimal;
 
 	@Enumerated(EnumType.STRING)
@@ -36,17 +36,9 @@ public class AnimalEntity implements Serializable {
 	@Column(name = "breed_animal", nullable = false, length = 30)
 	private String breedAnimal;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "animalEntity")
-	private List<PostAnimalEntity> postAnimalEntities;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "animalEntity")
-	private List<PostItemEntity> postItemEntities;
-
 	public void update(AnimalEntity entity) {
 		this.setBreedAnimal(entity.getBreedAnimal());
 		this.setSpeciesAnimal(entity.getSpeciesAnimal());
-		this.setPostAnimalEntities(entity.getPostAnimalEntities());
-		this.setPostItemEntities(entity.getPostItemEntities());
 	}
 
 }

@@ -18,26 +18,10 @@ public class AnimalAdapter {
             return null;
         }
 
-        List<PostAnimalEntity> postAnimalEntities = entity.getPostAnimalEntities();
-        List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
-        if (postAnimalEntities != null) {
-            postAnimalEntities.forEach(postAnimalEntity ->
-                    postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
-        }
-
-        List<PostItemEntity> postItemEntities = entity.getPostItemEntities();
-        List<PostItemDTO> postItemDTOS = new ArrayList<>();
-        if (postItemEntities != null) {
-            postItemEntities.forEach(postItemEntity ->
-                    postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
-        }
-
         return AnimalDTO.builder()
                 .idAnimal(entity.getIdAnimal())
                 .breedAnimal(entity.getBreedAnimal())
                 .speciesAnimal(entity.getSpeciesAnimal())
-                .postAnimalDTOS(postAnimalDTOS)
-                .postItemDTOS(postItemDTOS)
                 .build();
     }
 
@@ -46,26 +30,10 @@ public class AnimalAdapter {
             return null;
         }
 
-        List<PostAnimalDTO> postAnimalDTOS = dto.getPostAnimalDTOS();
-        List<PostAnimalEntity> postAnimalEntities = new ArrayList<>();
-        if (postAnimalDTOS != null) {
-            postAnimalDTOS.forEach(postAnimalDTO ->
-                    postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
-        }
-
-        List<PostItemDTO> postItemDTOS = dto.getPostItemDTOS();
-        List<PostItemEntity> postItemEntities = new ArrayList<>();
-        if (postItemDTOS != null) {
-            postItemDTOS.forEach(postItemDTO ->
-                    postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
-        }
-
         return AnimalEntity.builder()
                 .idAnimal(dto.getIdAnimal())
                 .breedAnimal(dto.getBreedAnimal())
                 .speciesAnimal(dto.getSpeciesAnimal())
-                .postAnimalEntities(postAnimalEntities)
-                .postItemEntities(postItemEntities)
                 .build();
     }
 

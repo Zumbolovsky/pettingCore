@@ -38,6 +38,9 @@ public class UsurDTO {
 	@Length(max = 30, message = "{length.thirty}")
 	private String emailUsur;
 
+	@Length(max = 15, min = 6, message = "{length.password}")
+	private String passwordUsur;
+
 	private State stateUsur;
 
 	@Length(max = 15, message = "{length.phone}")
@@ -45,17 +48,5 @@ public class UsurDTO {
 
 	@Length(max = 15, message = "{length.phone}")
 	private String phoneUsur;
-
-	@ApiModelProperty(hidden = true)
-	private List<PostAnimalDTO> postAnimalDTOS;
-
-	@ApiModelProperty(hidden = true)
-	private List<PostItemDTO> postItemDTOS;
-
-	@ApiModelProperty(hidden = true)
-	private List<ContributionDTO> contributionsForIdDonator;
-
-	@ApiModelProperty(hidden = true)
-	private List<ContributionDTO> contributionsForIdRequest;
 
 }

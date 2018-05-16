@@ -4,6 +4,7 @@ import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.services.AnimalService;
+import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,12 @@ public class AnimalController {
 
     private final AnimalService service;
 
+    private final Validator validator;
+
     @Autowired
-    public AnimalController(AnimalService service) {
+    public AnimalController(AnimalService service, Validator validator) {
         this.service = service;
+        this.validator = validator;
     }
 
     @ApiOperation(value = "Lista de todos dados")
@@ -54,15 +58,15 @@ public class AnimalController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<AnimalDTO> save(@Valid @RequestBody AnimalDTO dto, BindingResult result) {
         log.info("Cadastrando dados de um Animal");
-        //validar
+        this.validator.hibernateException(result);
         return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<AnimalDTO> update(@Valid @RequestBody AnimalDTO dto, @PathVariable Integer id, BindingResult result) {
         log.info("Atualizando dados de um Animal");
-        //validar
+        this.validator.hibernateException(result);
         return ResponseEntity.ok(this.service.update(id, dto));
     }
 

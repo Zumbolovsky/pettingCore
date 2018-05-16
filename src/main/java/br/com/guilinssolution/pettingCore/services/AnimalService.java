@@ -10,7 +10,7 @@ public interface AnimalService {
     ListResultDTO<AnimalDTO> findAllLite(AnimalDTO dto, PageDTO page);
     AnimalDTO findOne(Integer id);
     AnimalDTO save(AnimalDTO dto);
-    AnimalDTO update(Integer id, AnimalDTO dto);
+    AnimalDTO update(Integer currentId, AnimalDTO dto);
     void delete(Integer id);
 
 }

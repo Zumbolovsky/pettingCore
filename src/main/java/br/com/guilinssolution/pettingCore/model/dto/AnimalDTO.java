@@ -28,10 +28,4 @@ public class AnimalDTO {
 	@Length(max = 30, message = "{length.thirty}")
 	private String breedAnimal;
 
-	@ApiModelProperty(hidden = true)
-	private List<PostAnimalDTO> postAnimalDTOS;
-
-	@ApiModelProperty(hidden = true)
-	private List<PostItemDTO> postItemDTOS;
-
 }

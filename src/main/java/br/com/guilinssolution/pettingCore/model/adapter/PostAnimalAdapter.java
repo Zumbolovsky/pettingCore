@@ -47,6 +47,7 @@ public class PostAnimalAdapter {
         UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);
 
         return PostAnimalEntity.builder()
+                .idPostAnimal(dto.getIdPostAnimal())
                 .descriptionPostAnimal(dto.getDescriptionPostAnimal())
                 .imagePostAnimal(dto.getImagePostAnimal())
                 .sizePostAnimal(dto.getSizePostAnimal())

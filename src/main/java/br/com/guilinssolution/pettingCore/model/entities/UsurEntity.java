@@ -25,7 +25,7 @@ public class UsurEntity implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_usur", unique = true, nullable = false)
+	@Column(name = "id_usur", unique = true)
 	private Integer idUsur;
 
 	@Column(name = "name_usur", nullable = false, length = 30)
@@ -43,6 +43,9 @@ public class UsurEntity implements Serializable {
 	@Column(name = "email_usur", nullable = false, length = 30)
 	private String emailUsur;
 
+	@Column(name = "password_usur", nullable = false, length = 15)
+	private String passwordUsur;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "state_usur", nullable = false, length = 2)
 	private State stateUsur;
@@ -53,18 +56,6 @@ public class UsurEntity implements Serializable {
 	@Column(name = "phone_usur", nullable = false, length = 15)
 	private String phoneUsur;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntity")
-	private List<PostAnimalEntity> postAnimalEntities;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntity")
-	private List<PostItemEntity> postItemEntities;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdDonator")
-	private List<ContributionEntity> contributionsForIdDonator;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdRequest")
-	private List<ContributionEntity> contributionsForIdRequest;
-
 	public void update(UsurEntity entity) {
 		this.setAddressUsur(entity.getAddressUsur());
 		this.setCellphoneUsur(entity.getCellphoneUsur());
@@ -72,12 +63,9 @@ public class UsurEntity implements Serializable {
 		this.setCpfUsur(entity.getCpfUsur());
 		this.setEmailUsur(entity.getEmailUsur());
 		this.setNameUsur(entity.getNameUsur());
+		this.setPasswordUsur(entity.getPasswordUsur());
 		this.setPhoneUsur(entity.getPhoneUsur());
 		this.setStateUsur(entity.getStateUsur());
-		this.setPostAnimalEntities(entity.getPostAnimalEntities());
-		this.setPostItemEntities(entity.getPostItemEntities());
-		this.setContributionsForIdDonator(entity.getContributionsForIdDonator());
-		this.setContributionsForIdRequest(entity.getContributionsForIdRequest());
 	}
 
 }

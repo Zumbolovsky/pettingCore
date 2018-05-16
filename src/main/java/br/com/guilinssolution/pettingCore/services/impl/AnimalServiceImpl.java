@@ -77,8 +77,10 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public AnimalDTO update(Integer id, AnimalDTO dto) {
-        AnimalEntity vesselAnimalEntity = this.repository.getOne(id);
+    public AnimalDTO update(Integer currentId, AnimalDTO dto) {
+        this.validator.entityNotExist(currentId, this.repository);
+
+        AnimalEntity vesselAnimalEntity = this.repository.getOne(currentId);
 
         this.validator.entityNull(vesselAnimalEntity);
 
