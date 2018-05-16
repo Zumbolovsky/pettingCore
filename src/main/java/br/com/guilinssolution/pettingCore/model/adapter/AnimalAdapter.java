@@ -20,11 +20,17 @@ public class AnimalAdapter {
 
         List<PostAnimalEntity> postAnimalEntities = entity.getPostAnimalEntities();
         List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
-        postAnimalEntities.forEach(postAnimalEntity -> postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
+        if (postAnimalEntities != null) {
+            postAnimalEntities.forEach(postAnimalEntity ->
+                    postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
+        }
 
         List<PostItemEntity> postItemEntities = entity.getPostItemEntities();
         List<PostItemDTO> postItemDTOS = new ArrayList<>();
-        postItemEntities.forEach(postItemEntity -> postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
+        if (postItemEntities != null) {
+            postItemEntities.forEach(postItemEntity ->
+                    postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
+        }
 
         return AnimalDTO.builder()
                 .idAnimal(entity.getIdAnimal())
@@ -42,11 +48,17 @@ public class AnimalAdapter {
 
         List<PostAnimalDTO> postAnimalDTOS = dto.getPostAnimalDTOS();
         List<PostAnimalEntity> postAnimalEntities = new ArrayList<>();
-        postAnimalDTOS.forEach(postAnimalDTO -> postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
+        if (postAnimalDTOS != null) {
+            postAnimalDTOS.forEach(postAnimalDTO ->
+                    postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
+        }
 
         List<PostItemDTO> postItemDTOS = dto.getPostItemDTOS();
         List<PostItemEntity> postItemEntities = new ArrayList<>();
-        postItemDTOS.forEach(postItemDTO -> postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
+        if (postItemDTOS != null) {
+            postItemDTOS.forEach(postItemDTO ->
+                    postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
+        }
 
         return AnimalEntity.builder()
                 .idAnimal(dto.getIdAnimal())

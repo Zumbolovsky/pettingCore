@@ -22,23 +22,31 @@ public class UsurAdapter {
 
         List<ContributionEntity> contributionEntitiesForIdDonator = entity.getContributionsForIdDonator();
         List<ContributionDTO> contributionDTOSForIdDonator = new ArrayList<>();
-        contributionEntitiesForIdDonator.forEach(contributionEntityForIdDonator ->
-                contributionDTOSForIdDonator.add(ContributionAdapter.convertToDTO(contributionEntityForIdDonator)));
+        if (contributionEntitiesForIdDonator != null) {
+            contributionEntitiesForIdDonator.forEach(contributionEntityForIdDonator ->
+                    contributionDTOSForIdDonator.add(ContributionAdapter.convertToDTO(contributionEntityForIdDonator)));
+        }
 
         List<ContributionEntity> contributionEntitiesForIdRequest = entity.getContributionsForIdRequest();
         List<ContributionDTO> contributionDTOSForIdRequest = new ArrayList<>();
-        contributionEntitiesForIdRequest.forEach(contributionEntityForIdRequest ->
-                contributionDTOSForIdRequest.add(ContributionAdapter.convertToDTO(contributionEntityForIdRequest)));
+        if (contributionEntitiesForIdRequest != null) {
+            contributionEntitiesForIdRequest.forEach(contributionEntityForIdRequest ->
+                    contributionDTOSForIdRequest.add(ContributionAdapter.convertToDTO(contributionEntityForIdRequest)));
+        }
 
         List<PostAnimalEntity> postAnimalEntities = entity.getPostAnimalEntities();
         List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
-        postAnimalEntities.forEach(postAnimalEntity ->
-                postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
+        if (postAnimalEntities != null) {
+            postAnimalEntities.forEach(postAnimalEntity ->
+                    postAnimalDTOS.add(PostAnimalAdapter.convertToDTO(postAnimalEntity)));
+        }
 
         List<PostItemEntity> postItemEntities = entity.getPostItemEntities();
         List<PostItemDTO> postItemDTOS = new ArrayList<>();
-        postItemEntities.forEach(postItemEntity ->
-                postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
+        if (postItemEntities != null) {
+            postItemEntities.forEach(postItemEntity ->
+                    postItemDTOS.add(PostItemAdapter.convertToDTO(postItemEntity)));
+        }
 
         return UsurDTO.builder()
                 .idUsur(entity.getIdUsur())
@@ -64,23 +72,31 @@ public class UsurAdapter {
 
         List<ContributionDTO> contributionDTOSForIdDonator = dto.getContributionsForIdDonator();
         List<ContributionEntity> contributionEntitiesForIdDonator = new ArrayList<>();
-        contributionDTOSForIdDonator.forEach(contributionDTOForIdDonator ->
-                contributionEntitiesForIdDonator.add(ContributionAdapter.convertToEntity(contributionDTOForIdDonator)));
+        if (contributionDTOSForIdDonator != null) {
+            contributionDTOSForIdDonator.forEach(contributionDTOForIdDonator ->
+                    contributionEntitiesForIdDonator.add(ContributionAdapter.convertToEntity(contributionDTOForIdDonator)));
+        }
 
         List<ContributionDTO> contributionDTOSForIdRequest = dto.getContributionsForIdRequest();
         List<ContributionEntity> contributionEntitiesForIdRequest = new ArrayList<>();
-        contributionDTOSForIdRequest.forEach(contributionDTOForIdRequest ->
-                contributionEntitiesForIdRequest.add(ContributionAdapter.convertToEntity(contributionDTOForIdRequest)));
+        if (contributionDTOSForIdRequest != null) {
+            contributionDTOSForIdRequest.forEach(contributionDTOForIdRequest ->
+                    contributionEntitiesForIdRequest.add(ContributionAdapter.convertToEntity(contributionDTOForIdRequest)));
+        }
 
         List<PostAnimalDTO> postAnimalDTOS = dto.getPostAnimalDTOS();
         List<PostAnimalEntity> postAnimalEntities = new ArrayList<>();
-        postAnimalDTOS.forEach(postAnimalDTO ->
-                postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
+        if (postAnimalDTOS != null) {
+            postAnimalDTOS.forEach(postAnimalDTO ->
+                    postAnimalEntities.add(PostAnimalAdapter.convertToEntity(postAnimalDTO)));
+        }
 
         List<PostItemDTO> postItemDTOS = dto.getPostItemDTOS();
         List<PostItemEntity> postItemEntities = new ArrayList<>();
-        postItemDTOS.forEach(postItemDTO ->
-                postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
+        if (postItemDTOS != null) {
+            postItemDTOS.forEach(postItemDTO ->
+                    postItemEntities.add(PostItemAdapter.convertToEntity(postItemDTO)));
+        }
 
         return UsurEntity.builder()
                 .idUsur(dto.getIdUsur())

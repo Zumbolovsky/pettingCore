@@ -43,7 +43,6 @@ public class AnimalEntity implements Serializable {
 	private List<PostItemEntity> postItemEntities;
 
 	public void update(AnimalEntity entity) {
-		this.setIdAnimal(entity.getIdAnimal());
 		this.setBreedAnimal(entity.getBreedAnimal());
 		this.setSpeciesAnimal(entity.getSpeciesAnimal());
 		this.setPostAnimalEntities(entity.getPostAnimalEntities());

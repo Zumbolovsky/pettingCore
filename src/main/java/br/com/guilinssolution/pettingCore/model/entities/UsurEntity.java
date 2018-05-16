@@ -65,7 +65,6 @@ public class UsurEntity implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usurEntityByIdRequest")
 	private List<ContributionEntity> contributionsForIdRequest;
 
-	//todo: reset operations
 	public void update(UsurEntity entity) {
 		this.setAddressUsur(entity.getAddressUsur());
 		this.setCellphoneUsur(entity.getCellphoneUsur());
@@ -75,9 +74,10 @@ public class UsurEntity implements Serializable {
 		this.setNameUsur(entity.getNameUsur());
 		this.setPhoneUsur(entity.getPhoneUsur());
 		this.setStateUsur(entity.getStateUsur());
-		//this.setContributionEntity(entity.getContributionEntity());
-		//this.setPostAnimalEntity(entity.getPostAnimalEntity());
-		//this.setPostItemEntity(entity.getPostItemEntity());
+		this.setPostAnimalEntities(entity.getPostAnimalEntities());
+		this.setPostItemEntities(entity.getPostItemEntities());
+		this.setContributionsForIdDonator(entity.getContributionsForIdDonator());
+		this.setContributionsForIdRequest(entity.getContributionsForIdRequest());
 	}
 
 }

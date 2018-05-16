@@ -65,13 +65,12 @@ public class PostAnimalEntity implements Serializable {
 	private Date lastModifiedDatePostAnimal;
 
 	public void update(PostAnimalEntity entity) {
-		this.setIdPostAnimal(entity.getIdPostAnimal());
-		this.setAnimalEntity(entity.getAnimalEntity());
-		this.setUsurEntity(entity.getUsurEntity());
-		this.setTitlePostAnimal(entity.getTitlePostAnimal());
 		this.setDescriptionPostAnimal(entity.getDescriptionPostAnimal());
 		this.setSizePostAnimal(entity.getSizePostAnimal());
 		this.setImagePostAnimal(entity.getImagePostAnimal());
+		this.setAnimalEntity(entity.getAnimalEntity());
+		this.setUsurEntity(entity.getUsurEntity());
+		this.setTitlePostAnimal(entity.getTitlePostAnimal());
 	}
 
 }

@@ -89,26 +89,7 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO save(UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem) {
-        if (idContribution != null) {
-            this.validator.entityNotExist(idContribution, this.contributionRepository);
-            dto.setContributionDTO(ContributionAdapter.convertToDTO(this.contributionRepository.getOne(idContribution)));
-        } else {
-            dto.setContributionDTO(null);
-        }
-        if (idPostAnimal != null) {
-            this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
-            dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
-        } else {
-            dto.setPostAnimalDTO(null);
-        }
-        if (idPostItem != null) {
-            this.validator.entityNotExist(idPostItem, this.postItemRepository);
-            dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
-        } else {
-            dto.setPostItemDTO(null);
-        }
-
+    public UsurDTO save(UsurDTO dto) {
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
         usurEntity = this.repository.save(usurEntity);
@@ -116,35 +97,10 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO update(Integer id, UsurDTO dto, Integer idContribution, Integer idPostAnimal, Integer idPostItem) {
-        this.validator.entityNotExist(id, this.repository);
-        if (idContribution != null) {
-            this.validator.entityNotExist(idContribution, this.contributionRepository);
-        }
-        if (idPostAnimal != null) {
-            this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
-        }
-        if (idPostItem != null) {
-            this.validator.entityNotExist(idPostItem, this.postItemRepository);
-        }
+    public UsurDTO update(Integer currentId, UsurDTO dto) {
+        this.validator.entityNotExist(currentId, this.repository);
 
-        UsurEntity vesselUsurEntity = this.repository.getOne(id);
-        if(!(vesselUsurEntity.getContributionEntity().getIdContribution().equals(idContribution)
-            && vesselUsurEntity.getPostAnimalEntity().getIdPostAnimal().equals(idPostAnimal)
-            && vesselUsurEntity.getPostItemEntity().getIdPostItem().equals(idPostItem))) {
-            dto.setContributionDTO(ContributionDTO
-                    .builder()
-                    .idContribution(idContribution)
-                    .build());
-            dto.setPostAnimalDTO(PostAnimalDTO
-                    .builder()
-                    .idPostAnimal(idPostAnimal)
-                    .build());
-            dto.setPostItemDTO(PostItemDTO
-                    .builder()
-                    .idPostItem(idPostItem)
-                    .build());
-        }
+        UsurEntity vesselUsurEntity = this.repository.getOne(currentId);
 
         this.validator.entityNull(vesselUsurEntity);
 

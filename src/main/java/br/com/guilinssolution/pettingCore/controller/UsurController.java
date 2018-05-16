@@ -56,24 +56,19 @@ public class UsurController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto,
-                                        @RequestParam(required = false) Integer idContribution,
-                                        @RequestParam(required = false) Integer idPostAnimal,
-                                        @RequestParam(required = false) Integer idPostItem, BindingResult result) {
+    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto, BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(dto, idContribution, idPostAnimal, idPostItem), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId, @Valid @RequestBody UsurDTO dto,
-                                          @RequestParam(required = false) Integer idContribution,
-                                          @RequestParam(required = false) Integer idPostAnimal,
-                                          @RequestParam(required = false) Integer idPostItem, BindingResult result) {
+                                          BindingResult result) {
         log.info("Atualizando dados de um Usuário");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, dto, idContribution, idPostAnimal, idPostItem), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

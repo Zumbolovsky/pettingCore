@@ -65,7 +65,6 @@ public class PostItemEntity implements Serializable {
 	private Date lastModifiedDatePostItem;
 
 	public void update(PostItemEntity entity) {
-		this.setIdPostItem(entity.getIdPostItem());
 		this.setAnimalEntity(entity.getAnimalEntity());
 		this.setUsurEntity(entity.getUsurEntity());
 		this.setTitlePostItem(entity.getTitlePostItem());
