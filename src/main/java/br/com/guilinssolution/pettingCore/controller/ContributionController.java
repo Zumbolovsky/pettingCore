@@ -4,6 +4,7 @@ import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.services.ContributionService;
+import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,12 @@ public class ContributionController {
 
     private final ContributionService service;
 
+    private final Validator validator;
+
     @Autowired
-    public ContributionController(ContributionService service) {
+    public ContributionController(ContributionService service, Validator validator) {
         this.service = service;
+        this.validator = validator;
     }
 
     @ApiOperation(value = "Lista de todos dados")
@@ -52,18 +56,31 @@ public class ContributionController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ContributionDTO> save(@Valid @RequestBody ContributionDTO dto, BindingResult result) {
+    public ResponseEntity<ContributionDTO> save(@Valid @RequestBody ContributionDTO dto,
+                                                @RequestParam(required = false) Integer idPostAnimal,
+                                                @RequestParam(required = false) Integer idPostItem,
+                                                @RequestParam Integer idUsurRequest,
+                                                @RequestParam(required = false) Integer idUsurDonator,
+                                                BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição");
-        //validar
-        return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+                HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<ContributionDTO> update(@Valid @RequestBody ContributionDTO dto, @PathVariable Integer id, BindingResult result) {
+    @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
+    public ResponseEntity<ContributionDTO> update(@PathVariable Integer currentId,
+                                                  @RequestParam(required = false) Integer idPostAnimal,
+                                                  @RequestParam(required = false) Integer idPostItem,
+                                                  @RequestParam(required = false) Integer idUsurRequest,
+                                                  @RequestParam(required = false) Integer idUsurDonator,
+                                                  @Valid @RequestBody ContributionDTO dto,
+                                                  BindingResult result) {
         log.info("Atualizando dados de uma Contribuição");
-        //validar
-        return ResponseEntity.ok(this.service.update(id, dto));
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+                HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

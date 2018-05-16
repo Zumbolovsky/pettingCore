@@ -9,8 +9,8 @@ public interface ContributionService {
     ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page);
     ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page);
     ContributionDTO findOne(Integer id);
-    ContributionDTO save(ContributionDTO dto);
-    ContributionDTO update(Integer id, ContributionDTO dto);
+    ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator);
+    ContributionDTO update(Integer currentId, ContributionDTO dto, Integer idPostAnimal, Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator);
     void delete(Integer id);
 
 }

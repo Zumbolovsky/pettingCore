@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor

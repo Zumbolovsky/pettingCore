@@ -5,14 +5,11 @@ import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.AnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
-import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
-import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
-import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.Size;
 import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
@@ -101,6 +98,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         this.validator.entityNotExist(currentId, this.repository);
 
         PostAnimalEntity vesselPostAnimalEntity = this.repository.getOne(currentId);
+
         this.validator.entityNotExist(idAnimal, this.animalRepository);
         dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
 

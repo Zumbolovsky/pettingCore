@@ -2,14 +2,18 @@ package br.com.guilinssolution.pettingCore.services.impl;
 
 import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
+import br.com.guilinssolution.pettingCore.model.adapter.AnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
+import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostItemEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
+import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.PostItemService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -34,12 +38,18 @@ public class PostItemServiceImpl implements PostItemService {
 
     private final PostItemRepository repository;
 
+    private final AnimalRepository animalRepository;
+
+    private final UsurRepository usurRepository;
+
     private final Validator validator;
 
     @Autowired
-    public PostItemServiceImpl(PostItemRepository repository, Validator validator) {
+    public PostItemServiceImpl(PostItemRepository repository, Validator validator, AnimalRepository animalRepository, UsurRepository usurRepository) {
         this.repository = repository;
         this.validator = validator;
+        this.animalRepository = animalRepository;
+        this.usurRepository = usurRepository;
     }
 
     @Override
@@ -70,18 +80,28 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO save(PostItemDTO dto) {
-        PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
+    public PostItemDTO save(PostItemDTO dto, Integer idAnimal, Integer idUsur) {
+        this.validator.entityNotExist(idAnimal, this.animalRepository);
+        this.validator.entityNotExist(idUsur, this.usurRepository);
 
-        this.validator.entityExist(dto.getIdPostItem(), this.repository);
+        dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
+        dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
+        PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
 
         postItemEntity = this.repository.save(postItemEntity);
         return PostItemAdapter.convertToDTO(postItemEntity);
     }
 
     @Override
-    public PostItemDTO update(Integer id, PostItemDTO dto) {
-        PostItemEntity vesselPostItemEntity = this.repository.getOne(id);
+    public PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idAnimal, Integer idUsur) {
+        this.validator.entityNotExist(currentId, this.repository);
+
+        PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
+        this.validator.entityNotExist(idAnimal, this.animalRepository);
+        dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
+
+        this.validator.entityNotExist(idUsur, this.usurRepository);
+        dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
         this.validator.entityNull(vesselPostItemEntity);
 

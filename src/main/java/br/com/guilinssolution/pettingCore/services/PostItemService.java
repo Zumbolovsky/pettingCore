@@ -9,8 +9,8 @@ public interface PostItemService {
     ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, PageDTO page);
     ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page);
     PostItemDTO findOne(Integer id);
-    PostItemDTO save(PostItemDTO dto);
-    PostItemDTO update(Integer id, PostItemDTO dto);
+    PostItemDTO save(PostItemDTO dto, Integer idAnimal, Integer idUsur);
+    PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idAnimal, Integer idUsur);
     void delete(Integer id);
 
 }

@@ -4,6 +4,7 @@ import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.services.PostItemService;
+import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,12 @@ public class PostItemController {
 
     private final PostItemService service;
 
+    private final Validator validator;
+
     @Autowired
-    public PostItemController(PostItemService service) {
+    public PostItemController(PostItemService service, Validator validator) {
         this.service = service;
+        this.validator = validator;
     }
 
     @ApiOperation(value = "Lista de todos dados")
@@ -52,18 +56,21 @@ public class PostItemController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PostItemDTO> save(@Valid @RequestBody PostItemDTO dto, BindingResult result) {
+    public ResponseEntity<PostItemDTO> save(@Valid @RequestBody PostItemDTO dto, @RequestParam Integer idAnimal,
+                                            @RequestParam Integer idUsur, BindingResult result) {
         log.info("Cadastrando dados de um Publicação Item");
-        //validar
-        return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.save(dto, idAnimal, idUsur), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<PostItemDTO> update(@Valid @RequestBody PostItemDTO dto, @PathVariable Integer id, BindingResult result) {
+    @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
+    public ResponseEntity<PostItemDTO> update(@PathVariable Integer currentId, @Valid @RequestBody PostItemDTO dto,
+                                              @RequestParam Integer idAnimal, @RequestParam Integer idUsur,
+                                              BindingResult result) {
         log.info("Atualizando dados de um Publicação Item");
-        //validar
-        return ResponseEntity.ok(this.service.update(id, dto));
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idAnimal, idUsur), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

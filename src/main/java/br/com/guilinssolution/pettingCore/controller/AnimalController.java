@@ -64,10 +64,11 @@ public class AnimalController {
 
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
-    public ResponseEntity<AnimalDTO> update(@Valid @RequestBody AnimalDTO dto, @PathVariable Integer id, BindingResult result) {
+    public ResponseEntity<AnimalDTO> update(@PathVariable Integer currentId, @Valid @RequestBody AnimalDTO dto,
+                                            BindingResult result) {
         log.info("Atualizando dados de um Animal");
         this.validator.hibernateException(result);
-        return ResponseEntity.ok(this.service.update(id, dto));
+        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

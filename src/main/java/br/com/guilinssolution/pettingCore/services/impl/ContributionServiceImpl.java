@@ -3,6 +3,9 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.ContributionAdapter;
+import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
+import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
+import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
@@ -10,6 +13,9 @@ import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
+import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
+import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
+import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.ContributionService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -30,12 +36,21 @@ public class ContributionServiceImpl implements ContributionService {
 
     private final ContributionRepository repository;
 
+    private final PostAnimalRepository postAnimalRepository;
+
+    private final PostItemRepository postItemRepository;
+
+    private final UsurRepository usurRepository;
+
     private final Validator validator;
 
     @Autowired
-    public ContributionServiceImpl(ContributionRepository repository, Validator validator) {
+    public ContributionServiceImpl(ContributionRepository repository, Validator validator, PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository, UsurRepository usurRepository) {
         this.repository = repository;
         this.validator = validator;
+        this.postAnimalRepository = postAnimalRepository;
+        this.postItemRepository = postItemRepository;
+        this.usurRepository = usurRepository;
     }
 
     @Override
@@ -65,21 +80,44 @@ public class ContributionServiceImpl implements ContributionService {
         return ContributionAdapter.convertToDTO(contributionEntity);
     }
 
+    //todo: validar, se id (required = false) for nulo, setAtributoDTO(valorAnterior)
     @Override
-    public ContributionDTO save(ContributionDTO dto) {
+    public ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem,
+                                Integer idUsurRequest, Integer idUsurDonator) {
+        this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
+        this.validator.entityNotExist(idPostItem, this.postItemRepository);
+        this.validator.entityNotExist(idUsurRequest, this.usurRepository);
+        this.validator.entityNotExist(idUsurDonator, this.usurRepository);
 
+        dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
+        dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
+        dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
+        dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(dto);
-
-        this.validator.entityExist(dto.getIdContribution(), this.repository);
 
         contributionEntity = this.repository.save(contributionEntity);
         return ContributionAdapter.convertToDTO(contributionEntity);
     }
 
+    //todo: validar, se id (required = false) for nulo, setAtributoDTO(valorAnterior)
     @Override
-    public ContributionDTO update(Integer id, ContributionDTO dto) {
+    public ContributionDTO update(Integer currentId, ContributionDTO dto, Integer idPostAnimal,
+                                  Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator) {
+        this.validator.entityNotExist(currentId, this.repository);
 
-        ContributionEntity vesselContributionEntity = this.repository.getOne(id);
+        ContributionEntity vesselContributionEntity = this.repository.getOne(currentId);
+
+        this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
+        dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
+
+        this.validator.entityNotExist(idPostItem, this.postItemRepository);
+        dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
+
+        this.validator.entityNotExist(idUsurRequest, this.usurRepository);
+        dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
+
+        this.validator.entityNotExist(idUsurDonator, this.usurRepository);
+        dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
 
         this.validator.entityNull(vesselContributionEntity);
 

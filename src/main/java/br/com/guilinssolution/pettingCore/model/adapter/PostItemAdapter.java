@@ -37,7 +37,7 @@ public class PostItemAdapter {
         }
 
         AnimalDTO animalDTO = dto.getAnimalDTO();
-        AnimalEntity animalEntity  = AnimalAdapter.convertToEntity(animalDTO);
+        AnimalEntity animalEntity = AnimalAdapter.convertToEntity(animalDTO);
 
         UsurDTO usurDTO = dto.getUsurDTO();
         UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);

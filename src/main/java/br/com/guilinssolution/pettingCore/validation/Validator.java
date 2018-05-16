@@ -43,14 +43,6 @@ public class Validator {
         }
     }
 
-//    public <T> void entityNull(Optional<T> optional) {
-//        if (!optional.isPresent()) {
-//            String msg = "Entidade nula !";
-//            log.warn(msg);
-//            throw new ApplicationException(msg, HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
     public <T> void entityExist(Integer id, JpaRepository<T, Integer> repository) {
         if (id <= 0) {
             String msg = message.getMessage("id.not-acceptable");
