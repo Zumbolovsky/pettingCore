@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.controller;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
 import br.com.guilinssolution.pettingCore.services.PostItemService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
@@ -35,16 +36,16 @@ public class PostItemController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, PageDTO page) {
+    public ListResultDTO<PostItemDTO> findAll(PostItemExample example, PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
-        return this.service.findAll(dto, page);
+        return this.service.findAll(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page) {
+    public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example, PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
-        return this.service.findAllLite(dto, page);
+        return this.service.findAllLite(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")

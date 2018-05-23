@@ -12,6 +12,7 @@ import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.Size;
+import br.com.guilinssolution.pettingCore.model.example.PostAnimalExample;
 import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
@@ -54,18 +55,18 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
-    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalDTO dto, PageDTO page) {
+    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example, PageDTO page) {
 
-        BooleanExpression query = queryGeneration(dto);
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageDTO page) {
+    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example, PageDTO page) {
 
-        BooleanExpression query = queryGeneration(dto);
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.LITE);
@@ -150,18 +151,14 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         return new ListResultDTO<>(postAnimalEntityPages, postAnimalDTOS);
     }
 
-    private BooleanExpression queryGeneration(PostAnimalDTO dto) {
+    private BooleanExpression queryGeneration(PostAnimalExample example) {
         QPostAnimalEntity root = QPostAnimalEntity.postAnimalEntity;
 
-        Integer idPostAnimal = dto.getIdPostAnimal();
-        String descriptionPostAnimal = dto.getDescriptionPostAnimal();
-        Size sizePostAnimal = dto.getSizePostAnimal();
-        String titlePostAnimal = dto.getTitlePostAnimal();
+        String descriptionPostAnimal = example.getDescriptionPostAnimal();
+        Size sizePostAnimal = example.getSizePostAnimal();
+        String titlePostAnimal = example.getTitlePostAnimal();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
-        if (idPostAnimal != null) {
-            expressionsAnd.add(root.idPostAnimal.eq(idPostAnimal));
-        }
         if (StringUtils.isNotEmpty(descriptionPostAnimal)) {
             expressionsAnd.add(root.descriptionPostAnimal.like("%"+descriptionPostAnimal+"%"));
         }

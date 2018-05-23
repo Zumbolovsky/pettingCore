@@ -14,6 +14,7 @@ import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.State;
+import br.com.guilinssolution.pettingCore.model.example.UsurExample;
 import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
@@ -62,16 +63,16 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public ListResultDTO<UsurDTO> findAll(UsurDTO dto, PageDTO page) {
-        BooleanExpression query = queryGeneration(dto);
+    public ListResultDTO<UsurDTO> findAll(UsurExample example, PageDTO page) {
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<UsurDTO> findAllLite(UsurDTO dto, PageDTO page) {
-        BooleanExpression query = queryGeneration(dto);
+    public ListResultDTO<UsurDTO> findAllLite(UsurExample example, PageDTO page) {
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.LITE);
@@ -130,24 +131,20 @@ public class UsurServiceImpl implements UsurService {
         return new ListResultDTO<>(usurEntityPages, usurDTOS);
     }
 
-    private BooleanExpression queryGeneration(UsurDTO dto) {
+    private BooleanExpression queryGeneration(UsurExample example) {
         QUsurEntity root = QUsurEntity.usurEntity;
 
-        Integer idUsur = dto.getIdUsur();
-        String addressUsur = dto.getAddressUsur();
-        String cellphoneUsur = dto.getCellphoneUsur();
-        String cityUsur = dto.getCityUsur();
-        String cpfUsur = dto.getCpfUsur();
-        String emailUsur = dto.getEmailUsur();
-        String nameUsur = dto.getNameUsur();
-        String passwordUsur = dto.getPasswordUsur();
-        String phoneUsur = dto.getPhoneUsur();
-        State stateUsur = dto.getStateUsur();
+        String addressUsur = example.getAddressUsur();
+        String cellphoneUsur = example.getCellphoneUsur();
+        String cityUsur = example.getCityUsur();
+        String cpfUsur = example.getCpfUsur();
+        String emailUsur = example.getEmailUsur();
+        String nameUsur = example.getNameUsur();
+        String passwordUsur = example.getPasswordUsur();
+        String phoneUsur = example.getPhoneUsur();
+        State stateUsur = example.getStateUsur();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
-        if (idUsur != null) {
-            expressionsAnd.add(root.idUsur.eq(idUsur));
-        }
         if (StringUtils.isNotEmpty(addressUsur)) {
             expressionsAnd.add(root.addressUsur.like("%"+addressUsur+"%"));
         }

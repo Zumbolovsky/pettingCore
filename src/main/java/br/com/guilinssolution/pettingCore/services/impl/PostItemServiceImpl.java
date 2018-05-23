@@ -11,6 +11,7 @@ import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostItemEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
 import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
@@ -53,16 +54,16 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, PageDTO page) {
-        BooleanExpression query = queryGeneration(dto);
+    public ListResultDTO<PostItemDTO> findAll(PostItemExample example, PageDTO page) {
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page) {
-        BooleanExpression query = queryGeneration(dto);
+    public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example, PageDTO page) {
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.LITE);
@@ -147,17 +148,13 @@ public class PostItemServiceImpl implements PostItemService {
         return new ListResultDTO<>(postItemEntityPages, postItemDTOS);
     }
 
-    private BooleanExpression queryGeneration(PostItemDTO dto) {
+    private BooleanExpression queryGeneration(PostItemExample example) {
         QPostItemEntity root = QPostItemEntity.postItemEntity;
 
-        Integer idPostItem = dto.getIdPostItem();
-        String descriptionPostItem = dto.getDescriptionPostItem();
-        String titlePostItem = dto.getTitlePostItem();
+        String descriptionPostItem = example.getDescriptionPostItem();
+        String titlePostItem = example.getTitlePostItem();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
-        if (idPostItem != null) {
-            expressionsAnd.add(root.idPostItem.eq(idPostItem));
-        }
         if (StringUtils.isNotEmpty(descriptionPostItem)) {
             expressionsAnd.add(root.descriptionPostItem.like("%"+descriptionPostItem+"%"));
         }

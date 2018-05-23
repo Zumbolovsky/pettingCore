@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.controller;
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.UsurExample;
 import br.com.guilinssolution.pettingCore.services.UsurService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
@@ -35,16 +36,16 @@ public class UsurController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAll(UsurDTO dto, PageDTO page) {
+    public ListResultDTO<UsurDTO> findAll(UsurExample example, PageDTO page) {
         log.info("Listar todos os dados de Usuário");
-        return this.service.findAll(dto, page);
+        return this.service.findAll(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAllLite(UsurDTO dto, PageDTO page) {
+    public ListResultDTO<UsurDTO> findAllLite(UsurExample example, PageDTO page) {
         log.info("Listar todos os dados de Usuário");
-        return this.service.findAllLite(dto, page);
+        return this.service.findAllLite(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")

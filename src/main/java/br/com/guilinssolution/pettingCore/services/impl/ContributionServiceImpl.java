@@ -12,6 +12,7 @@ import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.example.ContributionExample;
 import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
@@ -54,16 +55,16 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page) {
-        BooleanExpression query = queryGeneration(dto);
+    public ListResultDTO<ContributionDTO> findAll(ContributionExample example, PageDTO page) {
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page) {
-        BooleanExpression query = queryGeneration(dto);
+    public ListResultDTO<ContributionDTO> findAllLite(ContributionExample example, PageDTO page) {
+        BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.LITE);
@@ -160,16 +161,12 @@ public class ContributionServiceImpl implements ContributionService {
         return new ListResultDTO<>(contributionEntityPages, contributionDTOS);
     }
 
-    private BooleanExpression queryGeneration(ContributionDTO dto) {
+    private BooleanExpression queryGeneration(ContributionExample example) {
         QContributionEntity root = QContributionEntity.contributionEntity;
 
-        Integer idContribution = dto.getIdContribution();
-        String descriptionContribution = dto.getDescriptionContribution();
+        String descriptionContribution = example.getDescriptionContribution();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
-        if (idContribution != null) {
-            expressionsAnd.add(root.idContribution.eq(idContribution));
-        }
         if (StringUtils.isNotEmpty(descriptionContribution)) {
             expressionsAnd.add(root.descriptionContribution.like("%"+descriptionContribution+"%"));
         }

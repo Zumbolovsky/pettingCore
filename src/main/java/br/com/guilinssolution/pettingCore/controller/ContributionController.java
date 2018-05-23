@@ -3,9 +3,13 @@ package br.com.guilinssolution.pettingCore.controller;
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
+import br.com.guilinssolution.pettingCore.model.example.ContributionExample;
 import br.com.guilinssolution.pettingCore.services.ContributionService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +39,16 @@ public class ContributionController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page) {
+    public ListResultDTO<ContributionDTO> findAll(ContributionExample example, PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
-        return this.service.findAll(dto, page);
+        return this.service.findAll(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page) {
+    public ListResultDTO<ContributionDTO> findAllLite(ContributionExample example, PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
-        return this.service.findAllLite(dto, page);
+        return this.service.findAllLite(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
