@@ -1,6 +1,5 @@
 package br.com.guilinssolution.pettingCore.services.impl;
 
-import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.ContributionAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
@@ -24,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

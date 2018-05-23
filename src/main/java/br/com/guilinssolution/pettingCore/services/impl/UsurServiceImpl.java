@@ -1,15 +1,10 @@
 package br.com.guilinssolution.pettingCore.services.impl;
 
-import br.com.guilinssolution.pettingCore.exception.ConstraintException;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
-import br.com.guilinssolution.pettingCore.model.adapter.ContributionAdapter;
-import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
-import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.*;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
-import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
@@ -26,12 +21,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 

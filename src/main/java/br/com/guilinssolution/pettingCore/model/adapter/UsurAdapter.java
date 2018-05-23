@@ -1,12 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.adapter;
 
-import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
-import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
-import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
-import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
-import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
-import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 

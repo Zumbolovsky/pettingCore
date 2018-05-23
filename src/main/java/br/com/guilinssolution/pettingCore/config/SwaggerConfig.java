@@ -1,6 +1,5 @@
 package br.com.guilinssolution.pettingCore.config;
 
-import com.google.common.base.Predicates;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
