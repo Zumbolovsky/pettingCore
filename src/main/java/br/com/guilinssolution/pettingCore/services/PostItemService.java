@@ -11,6 +11,7 @@ public interface PostItemService {
     PostItemDTO findOne(Integer id);
     PostItemDTO save(PostItemDTO dto, Integer idAnimal, Integer idUsur);
     PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idAnimal, Integer idUsur);
+    PostItemDTO quickUpdate(Integer currentId, PostItemDTO dto);
     void delete(Integer id);
 
 }

@@ -55,7 +55,6 @@ public class ContributionServiceImpl implements ContributionService {
 
     @Override
     public ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -64,7 +63,6 @@ public class ContributionServiceImpl implements ContributionService {
 
     @Override
     public ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -76,30 +74,30 @@ public class ContributionServiceImpl implements ContributionService {
         ContributionEntity contributionEntity = this.repository.getOne(id);
 
         this.validator.entityNull(contributionEntity);
+        this.validator.entityNotExist(id, this.repository);
 
         return ContributionAdapter.convertToDTO(contributionEntity);
     }
 
-    //todo: validar, se id (required = false) for nulo, setAtributoDTO(valorAnterior)
     @Override
     public ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem,
                                 Integer idUsurRequest, Integer idUsurDonator) {
-        this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
-        this.validator.entityNotExist(idPostItem, this.postItemRepository);
         this.validator.entityNotExist(idUsurRequest, this.usurRepository);
-        this.validator.entityNotExist(idUsurDonator, this.usurRepository);
-
-        dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
-        dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
         dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
-        dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
+
+        validateAndAddPosts(dto, idPostAnimal, idPostItem);
+
+        if(idUsurDonator != null) {
+            this.validator.entityNotExist(idUsurDonator, this.usurRepository);
+            dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
+        }
+
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(dto);
 
         contributionEntity = this.repository.save(contributionEntity);
         return ContributionAdapter.convertToDTO(contributionEntity);
     }
 
-    //todo: validar, se id (required = false) for nulo, setAtributoDTO(valorAnterior)
     @Override
     public ContributionDTO update(Integer currentId, ContributionDTO dto, Integer idPostAnimal,
                                   Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator) {
@@ -107,19 +105,15 @@ public class ContributionServiceImpl implements ContributionService {
 
         ContributionEntity vesselContributionEntity = this.repository.getOne(currentId);
 
-        this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
-        dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
-
-        this.validator.entityNotExist(idPostItem, this.postItemRepository);
-        dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
-
         this.validator.entityNotExist(idUsurRequest, this.usurRepository);
         dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
 
-        this.validator.entityNotExist(idUsurDonator, this.usurRepository);
-        dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
+        validateAndAddPosts(dto, idPostAnimal, idPostItem);
 
-        this.validator.entityNull(vesselContributionEntity);
+        if(idUsurDonator != null) {
+            this.validator.entityNotExist(idUsurDonator, this.usurRepository);
+            dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
+        }
 
         ContributionEntity newContributionEntity = ContributionAdapter.convertToEntity(dto);
         vesselContributionEntity.update(newContributionEntity);
@@ -129,21 +123,32 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
+    public ContributionDTO quickUpdate(Integer currentId, ContributionDTO dto) {
+        this.validator.entityNotExist(currentId, this.repository);
+
+        ContributionEntity vesselContributionEntity = this.repository.getOne(currentId);
+
+        ContributionEntity newContributionEntity = ContributionAdapter.convertToEntity(dto);
+        newContributionEntity.setPostAnimalEntity(vesselContributionEntity.getPostAnimalEntity());
+        newContributionEntity.setPostItemEntity(vesselContributionEntity.getPostItemEntity());
+        newContributionEntity.setUsurEntityByIdRequest(vesselContributionEntity.getUsurEntityByIdRequest());
+        newContributionEntity.setUsurEntityByIdDonator(vesselContributionEntity.getUsurEntityByIdDonator());
+        vesselContributionEntity.update(newContributionEntity);
+
+        newContributionEntity = this.repository.save(vesselContributionEntity);
+        return ContributionAdapter.convertToDTO(newContributionEntity);
+    }
+
+    @Override
     public void delete(Integer id) {
-        try {
-            ContributionEntity entity = this.repository.getOne(id);
+        ContributionEntity entity = this.repository.getOne(id);
 
-            this.validator.entityNull(entity);
+        this.validator.entityNotExist(id, this.repository);
 
-            this.repository.deleteById(id);
-        } catch (Exception e) {
-            String errorMessage = "Valor inválido para a constraint !";
-            throw new ConstraintException(errorMessage, HttpStatus.BAD_REQUEST);
-        }
+        this.repository.delete(entity);
     }
 
     private ListResultDTO<ContributionDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
-
         Page<ContributionEntity> contributionEntityPages = this.repository.findAll(query, page);
         List<ContributionDTO> contributionDTOS = new ArrayList<>();
 
@@ -156,7 +161,6 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     private BooleanExpression queryGeneration(ContributionDTO dto) {
-
         QContributionEntity root = QContributionEntity.contributionEntity;
 
         Integer idContribution = dto.getIdContribution();
@@ -171,6 +175,23 @@ public class ContributionServiceImpl implements ContributionService {
         }
 
         return addAnd(expressionsAnd);
+    }
+
+    private void validateAndAddPosts(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem) {
+        if (idPostAnimal == null && idPostItem == null) {
+            this.validator.entityNotExist(null, repository);
+        } else if (idPostAnimal == null) {
+            this.validator.entityNotExist(idPostItem, this.postItemRepository);
+            dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
+        } else if (idPostItem == null) {
+            this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
+            dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
+        } else {
+            this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
+            this.validator.entityNotExist(idPostItem, this.postItemRepository);
+            dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
+            dto.setPostItemDTO(PostItemAdapter.convertToDTO(this.postItemRepository.getOne(idPostItem)));
+        }
     }
 
 }

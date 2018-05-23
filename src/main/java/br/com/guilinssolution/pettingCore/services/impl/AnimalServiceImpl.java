@@ -43,7 +43,6 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public ListResultDTO<AnimalDTO> findAll(AnimalDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -52,7 +51,6 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public ListResultDTO<AnimalDTO> findAllLite(AnimalDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -64,6 +62,7 @@ public class AnimalServiceImpl implements AnimalService {
         Optional<AnimalEntity> animalEntity = this.repository.findById(id);
 
         this.validator.entityNull(animalEntity);
+        this.validator.entityNotExist(id, this.repository);
 
         return AnimalAdapter.convertToDTO(animalEntity.get());
     }
@@ -82,8 +81,6 @@ public class AnimalServiceImpl implements AnimalService {
 
         AnimalEntity vesselAnimalEntity = this.repository.getOne(currentId);
 
-        this.validator.entityNull(vesselAnimalEntity);
-
         AnimalEntity newAnimalEntity = AnimalAdapter.convertToEntity(dto);
         vesselAnimalEntity.update(newAnimalEntity);
 
@@ -93,20 +90,14 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public void delete(Integer id) {
-        try {
-            AnimalEntity entity = this.repository.getOne(id);
+        AnimalEntity entity = this.repository.getOne(id);
 
-            this.validator.entityNull(entity);
+        this.validator.entityNotExist(id, this.repository);
 
-            this.repository.deleteById(id);
-        } catch (Exception e) {
-            String errorMessage = "Valor inválido para a constraint !";
-            throw new ConstraintException(errorMessage, HttpStatus.BAD_REQUEST);
-        }
+        this.repository.delete(entity);
     }
 
     private ListResultDTO<AnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
-
         Page<AnimalEntity> animalEntityPages = this.repository.findAll(query, page);
         List<AnimalDTO> animalDTOS = new ArrayList<>();
 
@@ -119,7 +110,6 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     private BooleanExpression queryGeneration(AnimalDTO dto) {
-
         QAnimalEntity root = QAnimalEntity.animalEntity;
 
         Integer idAnimal = dto.getIdAnimal();

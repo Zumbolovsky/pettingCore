@@ -58,21 +58,35 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PostAnimalDTO> save(@Valid @RequestBody PostAnimalDTO dto, @RequestParam Integer idAnimal,
-                                              @RequestParam Integer idUsur, BindingResult result) {
+    public ResponseEntity<PostAnimalDTO> save(@Valid @RequestBody PostAnimalDTO dto,
+                                              @RequestParam Integer idAnimal,
+                                              @RequestParam Integer idUsur,
+                                              BindingResult result) {
         log.info("Cadastrando dados de um Publicação Animal");
         this.validator.hibernateException(result);
         return new ResponseEntity<>(this.service.save(dto, idAnimal, idUsur), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Atualiza dados no banco")
+    @ApiOperation(value = "Atualiza dados no banco (especificando relações)")
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
-    public ResponseEntity<PostAnimalDTO> update(@PathVariable Integer currentId, @Valid @RequestBody PostAnimalDTO dto,
-                                                @RequestParam Integer idAnimal, @RequestParam Integer idUsur,
+    public ResponseEntity<PostAnimalDTO> update(@PathVariable Integer currentId,
+                                                @Valid @RequestBody PostAnimalDTO dto,
+                                                @RequestParam Integer idAnimal,
+                                                @RequestParam Integer idUsur,
                                                 BindingResult result) {
-        log.info("Atualizando dados de um Publicação Animal");
+        log.info("Atualizando dados de um Publicação Animal e suas relações");
         this.validator.hibernateException(result);
         return new ResponseEntity<>(this.service.update(currentId, dto, idAnimal, idUsur), HttpStatus.ACCEPTED);
+    }
+
+    @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)")
+    @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
+    public ResponseEntity<PostAnimalDTO> quickUpdate(@PathVariable Integer currentId,
+                                                     @Valid @RequestBody PostAnimalDTO dto,
+                                                     BindingResult result) {
+        log.info("Atualizando dados de um Publicação Animal");
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

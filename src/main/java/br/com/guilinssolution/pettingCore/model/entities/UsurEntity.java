@@ -57,15 +57,15 @@ public class UsurEntity implements Serializable {
 	private String phoneUsur;
 
 	public void update(UsurEntity entity) {
-		this.setAddressUsur(entity.getAddressUsur());
-		this.setCellphoneUsur(entity.getCellphoneUsur());
-		this.setCityUsur(entity.getCityUsur());
-		this.setCpfUsur(entity.getCpfUsur());
-		this.setEmailUsur(entity.getEmailUsur());
 		this.setNameUsur(entity.getNameUsur());
+		this.setCpfUsur(entity.getCpfUsur());
+		this.setAddressUsur(entity.getAddressUsur());
+		this.setCityUsur(entity.getCityUsur());
+		this.setEmailUsur(entity.getEmailUsur());
 		this.setPasswordUsur(entity.getPasswordUsur());
-		this.setPhoneUsur(entity.getPhoneUsur());
 		this.setStateUsur(entity.getStateUsur());
+		this.setCellphoneUsur(entity.getCellphoneUsur());
+		this.setPhoneUsur(entity.getPhoneUsur());
 	}
 
 }

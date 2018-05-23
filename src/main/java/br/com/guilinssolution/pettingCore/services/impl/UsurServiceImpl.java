@@ -63,7 +63,6 @@ public class UsurServiceImpl implements UsurService {
 
     @Override
     public ListResultDTO<UsurDTO> findAll(UsurDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -72,7 +71,6 @@ public class UsurServiceImpl implements UsurService {
 
     @Override
     public ListResultDTO<UsurDTO> findAllLite(UsurDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -94,6 +92,7 @@ public class UsurServiceImpl implements UsurService {
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
         usurEntity = this.repository.save(usurEntity);
+
         return UsurAdapter.convertToDTO(usurEntity);
     }
 
@@ -102,8 +101,6 @@ public class UsurServiceImpl implements UsurService {
         this.validator.entityNotExist(currentId, this.repository);
 
         UsurEntity vesselUsurEntity = this.repository.getOne(currentId);
-
-        this.validator.entityNull(vesselUsurEntity);
 
         UsurEntity newUsurEntity = UsurAdapter.convertToEntity(dto);
         vesselUsurEntity.update(newUsurEntity);
@@ -114,16 +111,11 @@ public class UsurServiceImpl implements UsurService {
 
     @Override
     public void delete(Integer id) {
-        try {
-            UsurEntity entity = this.repository.getOne(id);
+        UsurEntity entity = this.repository.getOne(id);
 
-            this.validator.entityNull(entity);
+        this.validator.entityNotExist(id, this.repository);
 
-            this.repository.deleteById(id);
-        } catch (Exception e) {
-            String errorMessage = "ID do dado inexistente !";
-            throw new ConstraintException(errorMessage, HttpStatus.NOT_FOUND);
-        }
+        this.repository.delete(entity);
     }
 
     private ListResultDTO<UsurDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
@@ -148,6 +140,7 @@ public class UsurServiceImpl implements UsurService {
         String cpfUsur = dto.getCpfUsur();
         String emailUsur = dto.getEmailUsur();
         String nameUsur = dto.getNameUsur();
+        String passwordUsur = dto.getPasswordUsur();
         String phoneUsur = dto.getPhoneUsur();
         State stateUsur = dto.getStateUsur();
 
@@ -172,6 +165,9 @@ public class UsurServiceImpl implements UsurService {
         }
         if (StringUtils.isNotEmpty(nameUsur)) {
             expressionsAnd.add(root.nameUsur.like("%"+nameUsur+"%"));
+        }
+        if (StringUtils.isNotEmpty(passwordUsur)) {
+            expressionsAnd.add(root.passwordUsur.like("%" + passwordUsur + "%"));
         }
         if (StringUtils.isNotEmpty(phoneUsur)) {
             expressionsAnd.add(root.phoneUsur.like("%"+phoneUsur+"%"));

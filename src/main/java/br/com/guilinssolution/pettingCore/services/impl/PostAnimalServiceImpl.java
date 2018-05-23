@@ -76,6 +76,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         PostAnimalEntity postAnimalEntity = this.repository.getOne(id);
 
         this.validator.entityNull(postAnimalEntity);
+        this.validator.entityNotExist(id, this.repository);
 
         return PostAnimalAdapter.convertToDTO(postAnimalEntity);
     }
@@ -105,8 +106,6 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         this.validator.entityNotExist(idUsur, this.usurRepository);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
-        this.validator.entityNull(vesselPostAnimalEntity);
-
         PostAnimalEntity newPostAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
         vesselPostAnimalEntity.update(newPostAnimalEntity);
 
@@ -115,21 +114,31 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
+    public PostAnimalDTO quickUpdate(Integer currentId, PostAnimalDTO dto) {
+        this.validator.entityNotExist(currentId, this.repository);
+
+        PostAnimalEntity vesselPostAnimalEntity = this.repository.getOne(currentId);
+
+        PostAnimalEntity newPostAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
+        newPostAnimalEntity.setAnimalEntity(vesselPostAnimalEntity.getAnimalEntity());
+        newPostAnimalEntity.setUsurEntity(vesselPostAnimalEntity.getUsurEntity());
+        vesselPostAnimalEntity.update(newPostAnimalEntity);
+
+        newPostAnimalEntity = this.repository.save(vesselPostAnimalEntity);
+        return PostAnimalAdapter.convertToDTO(newPostAnimalEntity);
+    }
+
+
+    @Override
     public void delete(Integer id) {
-        try {
-            PostAnimalEntity entity = this.repository.getOne(id);
+        PostAnimalEntity entity = this.repository.getOne(id);
 
-            this.validator.entityNull(entity);
+        this.validator.entityNotExist(id, this.repository);
 
-            this.repository.deleteById(id);
-        } catch (Exception e) {
-            String errorMessage = "Valor inválido para a constraint !";
-            throw new ConstraintException(errorMessage, HttpStatus.BAD_REQUEST);
-        }
+        this.repository.delete(entity);
     }
 
     private ListResultDTO<PostAnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
-
         Page<PostAnimalEntity> postAnimalEntityPages = this.repository.findAll(query, page);
         List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
 
@@ -142,7 +151,6 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     private BooleanExpression queryGeneration(PostAnimalDTO dto) {
-
         QPostAnimalEntity root = QPostAnimalEntity.postAnimalEntity;
 
         Integer idPostAnimal = dto.getIdPostAnimal();

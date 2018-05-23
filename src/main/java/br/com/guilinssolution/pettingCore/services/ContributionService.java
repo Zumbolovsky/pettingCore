@@ -11,6 +11,7 @@ public interface ContributionService {
     ContributionDTO findOne(Integer id);
     ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator);
     ContributionDTO update(Integer currentId, ContributionDTO dto, Integer idPostAnimal, Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator);
+    ContributionDTO quickUpdate(Integer currentId, ContributionDTO dto);
     void delete(Integer id);
 
 }

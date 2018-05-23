@@ -54,7 +54,6 @@ public class PostItemServiceImpl implements PostItemService {
 
     @Override
     public ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -63,7 +62,6 @@ public class PostItemServiceImpl implements PostItemService {
 
     @Override
     public ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page) {
-
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -75,6 +73,7 @@ public class PostItemServiceImpl implements PostItemService {
         PostItemEntity postItemEntity = this.repository.getOne(id);
 
         this.validator.entityNull(postItemEntity);
+        this.validator.entityNotExist(id, this.repository);
 
         return PostItemAdapter.convertToDTO(postItemEntity);
     }
@@ -82,10 +81,11 @@ public class PostItemServiceImpl implements PostItemService {
     @Override
     public PostItemDTO save(PostItemDTO dto, Integer idAnimal, Integer idUsur) {
         this.validator.entityNotExist(idAnimal, this.animalRepository);
-        this.validator.entityNotExist(idUsur, this.usurRepository);
-
         dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
+
+        this.validator.entityNotExist(idUsur, this.usurRepository);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
+
         PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
 
         postItemEntity = this.repository.save(postItemEntity);
@@ -97,13 +97,12 @@ public class PostItemServiceImpl implements PostItemService {
         this.validator.entityNotExist(currentId, this.repository);
 
         PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
+
         this.validator.entityNotExist(idAnimal, this.animalRepository);
         dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
 
         this.validator.entityNotExist(idUsur, this.usurRepository);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
-
-        this.validator.entityNull(vesselPostItemEntity);
 
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
         vesselPostItemEntity.update(newPostItemEntity);
@@ -113,22 +112,30 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
+    public PostItemDTO quickUpdate(Integer currentId, PostItemDTO dto) {
+        this.validator.entityNotExist(currentId, this.repository);
+
+        PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
+
+        PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
+        newPostItemEntity.setAnimalEntity(vesselPostItemEntity.getAnimalEntity());
+        newPostItemEntity.setUsurEntity(vesselPostItemEntity.getUsurEntity());
+        vesselPostItemEntity.update(newPostItemEntity);
+
+        newPostItemEntity = this.repository.save(vesselPostItemEntity);
+        return PostItemAdapter.convertToDTO(newPostItemEntity);
+    }
+
+    @Override
     public void delete(Integer id) {
-        try {
-            PostItemEntity entity = this.repository.getOne(id);
+        PostItemEntity entity = this.repository.getOne(id);
 
-            this.validator.entityNull(entity);
+        this.validator.entityNotExist(id, this.repository);
 
-            this.repository.deleteById(id);
-        } catch (Exception e) {
-            String errorMessage = "Valor inválido para a constraint !";
-            throw new ConstraintException(errorMessage, HttpStatus.BAD_REQUEST);
-        }
-
+        this.repository.delete(entity);
     }
 
     private ListResultDTO<PostItemDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
-
         Page<PostItemEntity> postItemEntityPages = this.repository.findAll(query, page);
         List<PostItemDTO> postItemDTOS = new ArrayList<>();
 
@@ -141,7 +148,6 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     private BooleanExpression queryGeneration(PostItemDTO dto) {
-
         QPostItemEntity root = QPostItemEntity.postItemEntity;
 
         Integer idPostItem = dto.getIdPostItem();

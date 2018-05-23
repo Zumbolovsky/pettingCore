@@ -59,12 +59,11 @@ public class ContributionEntity implements Serializable {
 	private Date lastModifiedDatePostItem;
 
 	public void update(ContributionEntity entity) {
-		this.setDescriptionContribution(entity.getDescriptionContribution());
-		this.setIdContribution(entity.getIdContribution());
 		this.setPostAnimalEntity(entity.getPostAnimalEntity());
 		this.setPostItemEntity(entity.getPostItemEntity());
 		this.setUsurEntityByIdDonator(entity.getUsurEntityByIdDonator());
 		this.setUsurEntityByIdRequest(entity.getUsurEntityByIdRequest());
+		this.setDescriptionContribution(entity.getDescriptionContribution());
 	}
 
 }

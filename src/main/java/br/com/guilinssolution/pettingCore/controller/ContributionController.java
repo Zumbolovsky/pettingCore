@@ -35,7 +35,7 @@ public class ContributionController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAll(@Valid @RequestBody ContributionDTO dto, PageDTO page) {
+    public ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAll(dto, page);
     }
@@ -68,19 +68,29 @@ public class ContributionController {
                 HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Atualiza dados no banco")
+    @ApiOperation(value = "Atualiza dados no banco (especificando relações)")
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<ContributionDTO> update(@PathVariable Integer currentId,
                                                   @RequestParam(required = false) Integer idPostAnimal,
                                                   @RequestParam(required = false) Integer idPostItem,
-                                                  @RequestParam(required = false) Integer idUsurRequest,
+                                                  @RequestParam Integer idUsurRequest,
                                                   @RequestParam(required = false) Integer idUsurDonator,
                                                   @Valid @RequestBody ContributionDTO dto,
                                                   BindingResult result) {
-        log.info("Atualizando dados de uma Contribuição");
+        log.info("Atualizando dados de uma Contribuição e suas relações");
         this.validator.hibernateException(result);
         return new ResponseEntity<>(this.service.update(currentId, dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
                 HttpStatus.ACCEPTED);
+    }
+
+    @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)")
+    @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
+    public ResponseEntity<ContributionDTO> quickUpdate(@PathVariable Integer currentId,
+                                                       @Valid @RequestBody ContributionDTO dto,
+                                                       BindingResult result) {
+        log.info("Atualizando dados de uma Contribuição");
+        this.validator.hibernateException(result);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")

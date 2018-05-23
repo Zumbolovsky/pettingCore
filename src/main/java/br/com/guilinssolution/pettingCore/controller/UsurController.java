@@ -56,7 +56,8 @@ public class UsurController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto, BindingResult result) {
+    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto,
+                                        BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
         this.validator.hibernateException(result);
         return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
@@ -64,7 +65,8 @@ public class UsurController {
 
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
-    public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId, @Valid @RequestBody UsurDTO dto,
+    public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId,
+                                          @Valid @RequestBody UsurDTO dto,
                                           BindingResult result) {
         log.info("Atualizando dados de um Usuário");
         this.validator.hibernateException(result);
