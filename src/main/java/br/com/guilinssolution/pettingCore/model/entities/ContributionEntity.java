@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Entity
@@ -19,6 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"idContribution"})
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "contribution", schema = "dbo", catalog = "pettingdb")
 public class ContributionEntity implements Serializable {
 
@@ -29,19 +31,19 @@ public class ContributionEntity implements Serializable {
 	@Column(name = "id_contribution", unique = true, nullable = false)
 	private Integer idContribution;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_postAnimal")
 	private PostAnimalEntity postAnimalEntity;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_postItem")
 	private PostItemEntity postItemEntity;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_donator", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_donator")
 	private UsurEntity usurEntityByIdDonator;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_request", nullable = false)
 	private UsurEntity usurEntityByIdRequest;
 

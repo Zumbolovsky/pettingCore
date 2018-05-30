@@ -29,15 +29,15 @@ public class PostAnimalEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_postAnimal", unique = true)
+	@Column(name = "id_postAnimal", unique = true, nullable = false)
 	private Integer idPostAnimal;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_animal")
+	@JoinColumn(name = "id_animal", nullable = false)
 	private AnimalEntity animalEntity;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_usur")
+	@JoinColumn(name = "id_usur", nullable = false)
 	private UsurEntity usurEntity;
 
 	@Column(name = "title_postAnimal", nullable = false, length = 30)
@@ -55,12 +55,12 @@ public class PostAnimalEntity implements Serializable {
 
 	@CreatedDate
 	@Temporal(TemporalType.DATE)
-	@Column(name = "createdDate_postAnimal")
+	@Column(name = "createdDate_postAnimal", nullable = false)
 	private Date createdDatePostAnimal;
 
 	@LastModifiedDate
 	@Temporal(TemporalType.DATE)
-	@Column(name = "lastModifiedDate_postAnimal")
+	@Column(name = "lastModifiedDate_postAnimal", nullable = false)
 	private Date lastModifiedDatePostAnimal;
 
 	public void update(PostAnimalEntity entity) {

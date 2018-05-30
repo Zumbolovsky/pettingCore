@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Entity
@@ -20,6 +21,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"idPostItem"})
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "postItem", schema = "dbo", catalog = "pettingdb")
 public class PostItemEntity implements Serializable {
 
@@ -35,7 +37,7 @@ public class PostItemEntity implements Serializable {
 	private AnimalEntity animalEntity;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_usur")
+	@JoinColumn(name = "id_usur", nullable = false)
 	private UsurEntity usurEntity;
 
 	@Column(name = "title_postItem", nullable = false, length = 30)

@@ -26,7 +26,7 @@ public class AnimalEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_animal", unique = true)
+	@Column(name = "id_animal", unique = true, nullable = false)
 	private Integer idAnimal;
 
 	@Enumerated(EnumType.STRING)
