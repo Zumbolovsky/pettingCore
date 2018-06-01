@@ -29,7 +29,7 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
         Pageable pageable = PageHelper.getPage(pageDTO);
         QueryModifiers modifiers = new QueryModifiers(Integer.toUnsignedLong(pageable.getPageSize()), pageable.getOffset());
 
-        query = query//todo: resolver construtor
+        query = query//todo: construtor
                 .select(Projections.constructor(PostItemDTO.class,
                         postItem.idPostItem, postItem.titlePostItem,
                         postItem.descriptionPostItem, postItem.imagePostItem,
