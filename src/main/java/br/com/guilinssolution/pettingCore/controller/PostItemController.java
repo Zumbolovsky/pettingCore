@@ -96,7 +96,7 @@ public class PostItemController {
     }
 
     @ApiOperation("Lista por ID de usuário")
-    @RequestMapping(value = "all/{idUsur}", method = RequestMethod.GET)
+    @RequestMapping(value = "all/usur/{idUsur}", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> listByUsur(@PathVariable Integer idUsur, PageDTO pageDTO) {
         log.info("Listando Publicações Item por usuário");
         return this.service.listByUsur(idUsur, pageDTO);

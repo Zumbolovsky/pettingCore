@@ -147,6 +147,11 @@ public class ContributionServiceImpl implements ContributionService {
         this.repository.delete(entity);
     }
 
+    @Override
+    public ListResultDTO<ContributionDTO> listByDonator(Integer idUsur, PageDTO pageDTO) {
+        return this.repository.listByDonator(idUsur, pageDTO);
+    }
+
     private ListResultDTO<ContributionDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<ContributionEntity> contributionEntityPages = this.repository.findAll(query, page);
         List<ContributionDTO> contributionDTOS = new ArrayList<>();

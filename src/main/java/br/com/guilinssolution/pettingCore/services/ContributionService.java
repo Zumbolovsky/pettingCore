@@ -14,5 +14,5 @@ public interface ContributionService {
     ContributionDTO update(Integer currentId, ContributionDTO dto, Integer idPostAnimal, Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator);
     ContributionDTO quickUpdate(Integer currentId, ContributionDTO dto);
     void delete(Integer id);
-
+    ListResultDTO<ContributionDTO> listByDonator(Integer idUsur, PageDTO pageDTO);
 }

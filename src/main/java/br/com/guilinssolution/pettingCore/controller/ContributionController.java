@@ -107,4 +107,10 @@ public class ContributionController {
         this.service.delete(id);
     }
 
+    @ApiOperation("Lista por ID de usuário contribuinte")
+    @RequestMapping(value = "/all/donator/{idUsur}", method = RequestMethod.GET)
+    public ListResultDTO<ContributionDTO> listByDonator(@PathVariable Integer idUsur, PageDTO pageDTO) {
+        log.info("Listando Contribuições por usuário contribuinte");
+        return this.service.listByDonator(idUsur, pageDTO);
+    }
 }
