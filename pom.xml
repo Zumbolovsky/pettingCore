@@ -184,7 +184,7 @@
 				<properties.from>POM.XML</properties.from>
 
 				<!-- SQLSERVER -->
-				<datasource.url>jdbc:sqlserver://SQLEXPRESS:1433;database=pettingdb;serverName=DESKTOP-2HFI2IT</datasource.url>
+				<datasource.url>jdbc:sqlserver://SQLEXPRESS:1433;database=pettingdb;serverName=localhost</datasource.url>
 				<!--jdbc:sqlserver://[serverName[\instanceName][:portNumber]][;property=value[;property=value]]-->
 				<datasource.username>sa</datasource.username>
 				<datasource.password>SQLSenha</datasource.password>
