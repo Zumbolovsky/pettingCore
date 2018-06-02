@@ -1,17 +1,17 @@
 package br.com.guilinssolution.pettingCore.validation;
 
-import br.com.guilinssolution.pettingCore.exception.ApplicationException;
-import br.com.guilinssolution.pettingCore.services.MessageService;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import br.com.guilinssolution.pettingCore.exception.ApplicationException;
+import br.com.guilinssolution.pettingCore.services.MessageService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

@@ -1,16 +1,16 @@
 package br.com.guilinssolution.pettingCore.model.dto;
 
-import br.com.guilinssolution.pettingCore.model.enums.Species;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import br.com.guilinssolution.pettingCore.model.enums.Species;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
