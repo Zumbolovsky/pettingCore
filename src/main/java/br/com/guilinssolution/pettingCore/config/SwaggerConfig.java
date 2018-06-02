@@ -40,6 +40,7 @@ class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .pathMapping("/")
                 .select()
+                .apis(RequestHandlerSelectors.basePackage("br.com.guilinssolution.pettingCore.controller"))
                 .paths(PathSelectors.regex("/.*"))
                 .build();
 
