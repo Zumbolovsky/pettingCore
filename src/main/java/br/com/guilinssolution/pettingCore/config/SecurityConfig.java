@@ -5,18 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UsurService usurService;
 
     @Autowired
-    private SecurityConfig(UsurService usurService) {
+    public SecurityConfig(UsurService usurService) {
         this.usurService = usurService;
     }
 
@@ -29,7 +27,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.addFilter(CorsConfig)
+        http.authorizeRequests()
+                .regexMatchers(".*/secured/.*").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin().successForwardUrl("/secured/post-item/all").permitAll();
     }
 
     private PasswordEncoder getPasswordEncoder() {
@@ -41,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             @Override
             public boolean matches(CharSequence charSequence, String s) {
-                return true;
+                return charSequence.toString().equals(s);
             }
         };
     }

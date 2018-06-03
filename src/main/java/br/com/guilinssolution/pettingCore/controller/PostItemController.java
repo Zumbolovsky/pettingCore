@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/post-item")
+@RequestMapping(path = "/secured/post-item")
 @Api(value = "PostItemControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "PostItem Controller")
 public class PostItemController {
 
@@ -39,6 +39,13 @@ public class PostItemController {
     public ListResultDTO<PostItemDTO> findAll(PostItemExample example, PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
         return this.service.findAll(example, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (pós login)")
+    @RequestMapping(value = "/all", method = RequestMethod.POST)
+    public ListResultDTO<PostItemDTO> findAll() {
+        log.info("Listar todos os dados de Publicação Item (pós login)");
+        return this.service.findAll(new PostItemExample(), new PageDTO());
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")

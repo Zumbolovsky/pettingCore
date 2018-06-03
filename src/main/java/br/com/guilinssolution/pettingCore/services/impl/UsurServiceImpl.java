@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 
@@ -118,10 +117,12 @@ public class UsurServiceImpl implements UsurService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<UsurEntity> usurEntity = this.repository.findByEmail(email);
+        UsurEntity usurEntity = this.repository.findByEmail(email);
 
-        usurEntity.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return usurEntity.map(CustomUserDetails::new).get();
+        if (usurEntity == null) {
+            throw new UsernameNotFoundException("Username not found");
+        }
+        return new CustomUserDetails(usurEntity);
     }
 
     private ListResultDTO<UsurDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
