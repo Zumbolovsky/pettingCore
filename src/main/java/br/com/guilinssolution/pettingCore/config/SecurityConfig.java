@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .regexMatchers(".*/secured/.*").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .formLogin().successForwardUrl("/secured/post-item/all").permitAll();
+                .formLogin().permitAll();
     }
 
     private PasswordEncoder getPasswordEncoder() {
