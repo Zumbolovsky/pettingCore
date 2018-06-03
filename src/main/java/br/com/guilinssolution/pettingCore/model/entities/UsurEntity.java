@@ -62,7 +62,7 @@ public class UsurEntity implements Serializable {
 	@Column(name = "phone_usur", nullable = false, length = 15)
 	private String phoneUsur;
 
-	public void update(UsurEntity entity) {
+    public void update(UsurEntity entity) {
 		this.setNameUsur(entity.getNameUsur());
 		this.setCpfUsur(entity.getCpfUsur());
 		this.setAddressUsur(entity.getAddressUsur());
