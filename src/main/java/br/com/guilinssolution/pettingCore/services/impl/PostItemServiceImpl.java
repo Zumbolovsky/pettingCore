@@ -80,11 +80,10 @@ public class PostItemServiceImpl implements PostItemService {
     @Override
     public PostItemDTO save(PostItemDTO dto, Integer idAnimal, Integer idUsur) {
         this.validator.entityNotExist(idAnimal, this.animalRepository);
-        dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
-
         this.validator.entityNotExist(idUsur, this.usurRepository);
-        dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
+        dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
+        dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
 
         postItemEntity = this.repository.save(postItemEntity);
@@ -132,6 +131,11 @@ public class PostItemServiceImpl implements PostItemService {
         this.validator.entityNotExist(id, this.repository);
 
         this.repository.delete(entity);
+    }
+
+    @Override
+    public ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
+        return this.repository.listByUsur(idUsur, pageDTO);
     }
 
     private ListResultDTO<PostItemDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {

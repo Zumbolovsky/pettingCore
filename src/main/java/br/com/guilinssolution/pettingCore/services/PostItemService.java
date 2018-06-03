@@ -14,5 +14,5 @@ public interface PostItemService {
     PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idAnimal, Integer idUsur);
     PostItemDTO quickUpdate(Integer currentId, PostItemDTO dto);
     void delete(Integer id);
-
+    ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO);
 }

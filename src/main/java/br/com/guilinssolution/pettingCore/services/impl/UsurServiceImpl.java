@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.services.impl;
 
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
+import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.*;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
@@ -21,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -112,6 +115,16 @@ public class UsurServiceImpl implements UsurService {
         this.repository.delete(entity);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UsurEntity usurEntity = this.repository.findByEmail(email);
+
+        if (usurEntity == null) {
+            throw new UsernameNotFoundException("Username not found");
+        }
+        return new CustomUserDetails(usurEntity);
+    }
+
     private ListResultDTO<UsurDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<UsurEntity> usurEntityPages = this.repository.findAll(query, page);
         List<UsurDTO> usurDTOS = new ArrayList<>();
@@ -168,5 +181,4 @@ public class UsurServiceImpl implements UsurService {
 
         return addAnd(expressionsAnd);
     }
-
 }

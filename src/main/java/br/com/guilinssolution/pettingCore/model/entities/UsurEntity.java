@@ -1,16 +1,22 @@
 package br.com.guilinssolution.pettingCore.model.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import br.com.guilinssolution.pettingCore.model.enums.State;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @Entity
@@ -25,7 +31,7 @@ public class UsurEntity implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_usur", unique = true)
+	@Column(name = "id_usur", unique = true, nullable = false)
 	private Integer idUsur;
 
 	@Column(name = "name_usur", nullable = false, length = 30)
@@ -56,7 +62,7 @@ public class UsurEntity implements Serializable {
 	@Column(name = "phone_usur", nullable = false, length = 15)
 	private String phoneUsur;
 
-	public void update(UsurEntity entity) {
+    public void update(UsurEntity entity) {
 		this.setNameUsur(entity.getNameUsur());
 		this.setCpfUsur(entity.getCpfUsur());
 		this.setAddressUsur(entity.getAddressUsur());

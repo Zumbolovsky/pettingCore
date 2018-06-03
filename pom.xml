@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.0.RELEASE</version>
+		<version>2.0.2.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -52,7 +52,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<!-- SPRINGFOX -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -103,7 +106,6 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -184,7 +186,7 @@
 				<properties.from>POM.XML</properties.from>
 
 				<!-- SQLSERVER -->
-				<datasource.url>jdbc:sqlserver://SQLEXPRESS:1433;database=pettingdb;serverName=DESKTOP-2HFI2IT</datasource.url>
+				<datasource.url>jdbc:sqlserver://SQLEXPRESS:1433;database=pettingdb;serverName=localhost</datasource.url>
 				<!--jdbc:sqlserver://[serverName[\instanceName][:portNumber]][;property=value[;property=value]]-->
 				<datasource.username>sa</datasource.username>
 				<datasource.password>SQLSenha</datasource.password>

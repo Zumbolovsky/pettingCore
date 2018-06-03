@@ -2,10 +2,8 @@ package br.com.guilinssolution.pettingCore.exception;
 
 import org.springframework.http.HttpStatus;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
 @EqualsAndHashCode(callSuper = false)
 public class ConstraintException extends ApplicationException {
 

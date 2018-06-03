@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/post-item")
+@RequestMapping(path = "/secured/post-item")
 @Api(value = "PostItemControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "PostItem Controller")
 public class PostItemController {
 
@@ -39,6 +39,13 @@ public class PostItemController {
     public ListResultDTO<PostItemDTO> findAll(PostItemExample example, PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
         return this.service.findAll(example, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (pós login)")
+    @RequestMapping(value = "/all", method = RequestMethod.POST)
+    public ListResultDTO<PostItemDTO> findAll() {
+        log.info("Listar todos os dados de Publicação Item (pós login)");
+        return this.service.findAll(new PostItemExample(), new PageDTO());
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
@@ -93,6 +100,13 @@ public class PostItemController {
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Publicação Item");
         this.service.delete(id);
+    }
+
+    @ApiOperation("Lista por ID de usuário")
+    @RequestMapping(value = "all/usur/{idUsur}", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> listByUsur(@PathVariable Integer idUsur, PageDTO pageDTO) {
+        log.info("Listando Publicações Item por usuário");
+        return this.service.listByUsur(idUsur, pageDTO);
     }
 
 }
