@@ -88,6 +88,9 @@ public class UsurServiceImpl implements UsurService {
     public UsurDTO save(UsurDTO dto) {
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
+        this.validator.entityExistByEmailSave(dto.getEmailUsur(), this.repository);
+        this.validator.entityExistByEntitySave(usurEntity, this.repository);
+
         usurEntity = this.repository.save(usurEntity);
 
         return UsurAdapter.convertToDTO(usurEntity);
@@ -98,8 +101,10 @@ public class UsurServiceImpl implements UsurService {
         this.validator.entityNotExist(currentId, this.repository);
 
         UsurEntity vesselUsurEntity = this.repository.getOne(currentId);
-
         UsurEntity newUsurEntity = UsurAdapter.convertToEntity(dto);
+
+        this.validator.entityExistByEmailUpdate(newUsurEntity.getEmailUsur(), this.repository);
+        this.validator.entityExistByEntityUpdate(newUsurEntity, this.repository);
         vesselUsurEntity.update(newUsurEntity);
 
         newUsurEntity = this.repository.save(vesselUsurEntity);

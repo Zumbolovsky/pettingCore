@@ -25,4 +25,63 @@ public class UsurRepositoryCustomImpl implements UsurRepositoryCustom {
                 .fetchOne();
     }
 
+    @Override
+    public boolean existsByEmailSave(String email) {
+        JPAQuery<UsurEntity> query = new JPAQuery<>(this.entityManager);
+        QUsurEntity usurEntity = QUsurEntity.usurEntity;
+
+        return query
+                .from(usurEntity)
+                .where(usurEntity.emailUsur.eq(email))
+                .fetchOne() != null;
+    }
+
+    @Override
+    public boolean existsByEmailUpdate(String email) {
+        JPAQuery<UsurEntity> query = new JPAQuery<>(this.entityManager);
+        QUsurEntity usurEntity = QUsurEntity.usurEntity;
+
+        return query
+                .from(usurEntity)
+                .where(usurEntity.emailUsur.eq(email))
+                .fetch().size() > 1;
+    }
+
+    @Override
+    public boolean existsByEntitySave(UsurEntity entity) {
+        JPAQuery<UsurEntity> query = new JPAQuery<>(this.entityManager);
+        QUsurEntity usurEntity = QUsurEntity.usurEntity;
+
+        return query
+                .from(usurEntity)
+                .where(usurEntity.nameUsur.eq(entity.getNameUsur())
+                        .and(usurEntity.emailUsur.eq(entity.getEmailUsur())
+                        .and(usurEntity.passwordUsur.eq(entity.getPasswordUsur())
+                        .and(usurEntity.addressUsur.eq(entity.getAddressUsur())
+                        .and(usurEntity.cityUsur.eq(entity.getCityUsur())
+                        .and(usurEntity.cpfUsur.eq(entity.getCpfUsur())
+                        .and(usurEntity.cellphoneUsur.eq(entity.getCellphoneUsur())
+                        .and(usurEntity.phoneUsur.eq(entity.getPhoneUsur())
+                        .and(usurEntity.stateUsur.eq(entity.getStateUsur()))))))))))
+                .fetchOne() != null;
+    }
+
+    @Override
+    public boolean existsByEntityUpdate(UsurEntity entity) {
+        JPAQuery<UsurEntity> query = new JPAQuery<>(this.entityManager);
+        QUsurEntity usurEntity = QUsurEntity.usurEntity;
+
+        return query
+                .from(usurEntity)
+                .where(usurEntity.nameUsur.eq(entity.getNameUsur())
+                        .and(usurEntity.emailUsur.eq(entity.getEmailUsur())
+                        .and(usurEntity.passwordUsur.eq(entity.getPasswordUsur())
+                        .and(usurEntity.addressUsur.eq(entity.getAddressUsur())
+                        .and(usurEntity.cityUsur.eq(entity.getCityUsur())
+                        .and(usurEntity.cpfUsur.eq(entity.getCpfUsur())
+                        .and(usurEntity.cellphoneUsur.eq(entity.getCellphoneUsur())
+                        .and(usurEntity.phoneUsur.eq(entity.getPhoneUsur())
+                        .and(usurEntity.stateUsur.eq(entity.getStateUsur()))))))))))
+                .fetch().size() > 1;
+    }
 }
