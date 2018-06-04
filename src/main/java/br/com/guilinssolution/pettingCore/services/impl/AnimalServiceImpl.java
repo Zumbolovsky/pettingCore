@@ -69,7 +69,9 @@ public class AnimalServiceImpl implements AnimalService {
     public AnimalDTO save(AnimalDTO dto) {
         AnimalEntity animalEntity = AnimalAdapter.convertToEntity(dto);
 
+        this.validator.entityExistByEntitySave(animalEntity, this.repository);
         animalEntity = this.repository.save(animalEntity);
+
         return AnimalAdapter.convertToDTO(animalEntity);
     }
 
@@ -80,6 +82,7 @@ public class AnimalServiceImpl implements AnimalService {
         AnimalEntity vesselAnimalEntity = this.repository.getOne(currentId);
 
         AnimalEntity newAnimalEntity = AnimalAdapter.convertToEntity(dto);
+        this.validator.entityExistByEntityUpdate(newAnimalEntity, this.repository);
         vesselAnimalEntity.update(newAnimalEntity);
 
         newAnimalEntity = this.repository.save(vesselAnimalEntity);

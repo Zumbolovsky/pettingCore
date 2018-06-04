@@ -92,6 +92,7 @@ public class ContributionServiceImpl implements ContributionService {
         }
 
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(dto);
+        this.validator.entityExistByEntitySave(contributionEntity, this.repository);
 
         contributionEntity = this.repository.save(contributionEntity);
         return ContributionAdapter.convertToDTO(contributionEntity);
@@ -115,6 +116,8 @@ public class ContributionServiceImpl implements ContributionService {
         }
 
         ContributionEntity newContributionEntity = ContributionAdapter.convertToEntity(dto);
+        this.validator.entityExistByEntityUpdate(newContributionEntity, this.repository);
+
         vesselContributionEntity.update(newContributionEntity);
 
         newContributionEntity = this.repository.save(vesselContributionEntity);
@@ -132,6 +135,8 @@ public class ContributionServiceImpl implements ContributionService {
         newContributionEntity.setPostItemEntity(vesselContributionEntity.getPostItemEntity());
         newContributionEntity.setUsurEntityByIdRequest(vesselContributionEntity.getUsurEntityByIdRequest());
         newContributionEntity.setUsurEntityByIdDonator(vesselContributionEntity.getUsurEntityByIdDonator());
+
+        this.validator.entityExistByEntityUpdate(newContributionEntity, this.repository);
         vesselContributionEntity.update(newContributionEntity);
 
         newContributionEntity = this.repository.save(vesselContributionEntity);

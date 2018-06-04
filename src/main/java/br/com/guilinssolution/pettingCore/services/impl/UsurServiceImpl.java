@@ -125,7 +125,7 @@ public class UsurServiceImpl implements UsurService {
         UsurEntity usurEntity = this.repository.findByEmail(email);
 
         if (usurEntity == null) {
-            throw new UsernameNotFoundException("Username not found");
+            throw new UsernameNotFoundException("Nome de usuário não encontrado");
         }
         return new CustomUserDetails(usurEntity);
     }

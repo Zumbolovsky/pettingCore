@@ -89,6 +89,8 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
 
+
+
         postAnimalEntity = this.repository.save(postAnimalEntity);
         return PostAnimalAdapter.convertToDTO(postAnimalEntity);
     }

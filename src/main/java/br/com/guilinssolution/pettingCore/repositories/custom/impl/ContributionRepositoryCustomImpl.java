@@ -48,4 +48,26 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
         return new ListResultDTO<>(page, dtoList);
     }
 
+    @Override
+    public boolean existsByEntitySave(ContributionEntity entity) {
+        JPAQuery<ContributionEntity> query = new JPAQuery<>(this.entityManager);
+        QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
+
+        return query
+                .from(contributionEntity)
+                .where(contributionEntity.descriptionContribution.eq(entity.getDescriptionContribution()))
+                .fetchOne() != null;
+    }
+
+    @Override
+    public boolean existsByEntityUpdate(ContributionEntity entity) {
+        JPAQuery<ContributionEntity> query = new JPAQuery<>(this.entityManager);
+        QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
+
+        return query
+                .from(contributionEntity)
+                .where(contributionEntity.descriptionContribution.eq(entity.getDescriptionContribution()))
+                .fetch().size() > 1;
+    }
+
 }
