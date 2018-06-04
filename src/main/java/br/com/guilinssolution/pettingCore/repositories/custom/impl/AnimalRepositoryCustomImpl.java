@@ -14,7 +14,7 @@ public class AnimalRepositoryCustomImpl implements AnimalRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public boolean existsByEntitySave(AnimalEntity entity) {
+    public boolean existsByEntity(AnimalEntity entity) {
         JPAQuery<AnimalEntity> query = new JPAQuery<>(this.entityManager);
         QAnimalEntity animalEntity = QAnimalEntity.animalEntity;
 
@@ -25,15 +25,4 @@ public class AnimalRepositoryCustomImpl implements AnimalRepositoryCustom {
                 .fetchOne() != null;
     }
 
-    @Override
-    public boolean existsByEntityUpdate(AnimalEntity entity) {
-        JPAQuery<AnimalEntity> query = new JPAQuery<>(this.entityManager);
-        QAnimalEntity animalEntity = QAnimalEntity.animalEntity;
-
-        return query
-                .from(animalEntity)
-                .where(animalEntity.breedAnimal.eq(entity.getBreedAnimal())
-                        .and(animalEntity.speciesAnimal.eq(entity.getSpeciesAnimal())))
-                .fetch().size() > 1;
-    }
 }

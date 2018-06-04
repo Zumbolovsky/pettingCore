@@ -14,7 +14,7 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
     private EntityManager entityManager;
 
     @Override
-    public boolean existsByEntitySave(PostAnimalEntity entity) {
+    public boolean existsByEntity(PostAnimalEntity entity) {
         JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
         QPostAnimalEntity postAnimalEntity = QPostAnimalEntity.postAnimalEntity;
 
@@ -26,16 +26,4 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
                 .fetchOne() != null;
     }
 
-    @Override
-    public boolean existsByEntityUpdate(PostAnimalEntity entity) {
-        JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
-        QPostAnimalEntity postAnimalEntity = QPostAnimalEntity.postAnimalEntity;
-
-        return query
-                .from(postAnimalEntity)
-                .where(postAnimalEntity.titlePostAnimal.eq(entity.getTitlePostAnimal())
-                        .and(postAnimalEntity.descriptionPostAnimal.eq(entity.getDescriptionPostAnimal())
-                                .and(postAnimalEntity.sizePostAnimal.eq(entity.getSizePostAnimal()))))
-                .fetch().size() > 1;
-    }
 }

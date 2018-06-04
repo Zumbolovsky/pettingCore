@@ -15,6 +15,7 @@ import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
+import br.com.guilinssolution.pettingCore.services.MessageService;
 import br.com.guilinssolution.pettingCore.services.UsurService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -48,14 +49,17 @@ public class UsurServiceImpl implements UsurService {
 
     private final Validator validator;
 
+    private final MessageService message;
+
     @Autowired
-    public UsurServiceImpl(UsurRepository repository, Validator validator, ContributionRepository contributionRepository,
-                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository) {
+    public UsurServiceImpl(UsurRepository repository, ContributionRepository contributionRepository,
+                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository, Validator validator, MessageService message) {
         this.repository = repository;
-        this.validator = validator;
         this.contributionRepository = contributionRepository;
         this.postAnimalRepository = postAnimalRepository;
         this.postItemRepository = postItemRepository;
+        this.validator = validator;
+        this.message = message;
     }
 
     @Override
@@ -88,8 +92,8 @@ public class UsurServiceImpl implements UsurService {
     public UsurDTO save(UsurDTO dto) {
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
-        this.validator.entityExistByEmailSave(dto.getEmailUsur(), this.repository);
-        this.validator.entityExistByEntitySave(usurEntity, this.repository);
+        this.validator.entityExistByEmail(dto.getEmailUsur(), this.repository);
+        this.validator.entityExistByEntity(usurEntity, this.repository);
 
         usurEntity = this.repository.save(usurEntity);
 
@@ -103,8 +107,8 @@ public class UsurServiceImpl implements UsurService {
         UsurEntity vesselUsurEntity = this.repository.getOne(currentId);
         UsurEntity newUsurEntity = UsurAdapter.convertToEntity(dto);
 
-        this.validator.entityExistByEmailUpdate(newUsurEntity.getEmailUsur(), this.repository);
-        this.validator.entityExistByEntityUpdate(newUsurEntity, this.repository);
+        this.validator.entityExistByEmail(newUsurEntity.getEmailUsur(), this.repository);
+        this.validator.entityExistByEntity(newUsurEntity, this.repository);
         vesselUsurEntity.update(newUsurEntity);
 
         newUsurEntity = this.repository.save(vesselUsurEntity);
@@ -125,7 +129,7 @@ public class UsurServiceImpl implements UsurService {
         UsurEntity usurEntity = this.repository.findByEmail(email);
 
         if (usurEntity == null) {
-            throw new UsernameNotFoundException("Nome de usuário não encontrado");
+            throw new UsernameNotFoundException(this.message.getMessage("username.not-found"));
         }
         return new CustomUserDetails(usurEntity);
     }

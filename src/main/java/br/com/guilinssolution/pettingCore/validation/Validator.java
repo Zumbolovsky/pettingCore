@@ -3,7 +3,6 @@ package br.com.guilinssolution.pettingCore.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.entities.*;
 import br.com.guilinssolution.pettingCore.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,169 +45,78 @@ public class Validator {
         }
     }
 
-    public <T> void entityExist(Integer id, JpaRepository<T, Integer> repository) {
-        if (id <= 0) {
-            String msg = message.getMessage("id.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsById(id)) {
-            String msg = message.getMessage("id.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEntitySave(AnimalEntity entity, AnimalRepository repository) {
+    public void entityExistByEntity(AnimalEntity entity, AnimalRepository repository) {
         if (entity == null) {
             String msg = message.getMessage("entity.not-acceptable");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (repository.existsByEntitySave(entity)) {
+        if (repository.existsByEntity(entity)) {
             String msg = message.getMessage("entity.conflict");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.CONFLICT);
         }
     }
 
-    public void entityExistByEntityUpdate(AnimalEntity entity, AnimalRepository repository) {
+    public void entityExistByEntity(ContributionEntity entity, ContributionRepository repository) {
         if (entity == null) {
             String msg = message.getMessage("entity.not-acceptable");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (repository.existsByEntityUpdate(entity)) {
+        if (repository.existsByEntity(entity)) {
             String msg = message.getMessage("entity.conflict");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.CONFLICT);
         }
     }
 
-    public void entityExistByEntitySave(ContributionEntity entity, ContributionRepository repository) {
+    public void entityExistByEntity(PostAnimalEntity entity, PostAnimalRepository repository) {
         if (entity == null) {
             String msg = message.getMessage("entity.not-acceptable");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (repository.existsByEntitySave(entity)) {
+        if (repository.existsByEntity(entity)) {
             String msg = message.getMessage("entity.conflict");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.CONFLICT);
         }
     }
 
-    public void entityExistByEntityUpdate(ContributionEntity entity, ContributionRepository repository) {
+    public void entityExistByEntity(PostItemEntity entity, PostItemRepository repository) {
         if (entity == null) {
             String msg = message.getMessage("entity.not-acceptable");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (repository.existsByEntityUpdate(entity)) {
+        if (repository.existsByEntity(entity)) {
             String msg = message.getMessage("entity.conflict");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.CONFLICT);
         }
     }
 
-    public void entityExistByEntitySave(PostAnimalEntity entity, PostAnimalRepository repository) {
+    public void entityExistByEntity(UsurEntity entity, UsurRepository repository) {
         if (entity == null) {
             String msg = message.getMessage("entity.not-acceptable");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (repository.existsByEntitySave(entity)) {
+        if (repository.existsByEntity(entity)) {
             String msg = message.getMessage("entity.conflict");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.CONFLICT);
         }
     }
 
-    public void entityExistByEntityUpdate(PostAnimalEntity entity, PostAnimalRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntityUpdate(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEntitySave(PostItemEntity entity, PostItemRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntitySave(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEntityUpdate(PostItemEntity entity, PostItemRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntityUpdate(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEntitySave(UsurEntity entity, UsurRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntitySave(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEntityUpdate(UsurEntity entity, UsurRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntityUpdate(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEmailSave(String email, UsurRepository repository) {
+    public void entityExistByEmail(String email, UsurRepository repository) {
         if (email == null) {
             String msg = message.getMessage("email.not-acceptable");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (repository.existsByEmailSave(email)) {
-            String msg = message.getMessage("email.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEmailUpdate(String email, UsurRepository repository) {
-        if (email == null) {
-            String msg = message.getMessage("email.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEmailUpdate(email)) {
+        if (repository.existsByEmail(email)) {
             String msg = message.getMessage("email.conflict");
             log.warn(msg);
             throw new ApplicationException(msg, HttpStatus.CONFLICT);

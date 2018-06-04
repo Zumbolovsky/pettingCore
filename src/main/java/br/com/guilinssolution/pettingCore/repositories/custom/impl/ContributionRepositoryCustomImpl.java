@@ -49,7 +49,7 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
     }
 
     @Override
-    public boolean existsByEntitySave(ContributionEntity entity) {
+    public boolean existsByEntity(ContributionEntity entity) {
         JPAQuery<ContributionEntity> query = new JPAQuery<>(this.entityManager);
         QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
 
@@ -57,17 +57,6 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
                 .from(contributionEntity)
                 .where(contributionEntity.descriptionContribution.eq(entity.getDescriptionContribution()))
                 .fetchOne() != null;
-    }
-
-    @Override
-    public boolean existsByEntityUpdate(ContributionEntity entity) {
-        JPAQuery<ContributionEntity> query = new JPAQuery<>(this.entityManager);
-        QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
-
-        return query
-                .from(contributionEntity)
-                .where(contributionEntity.descriptionContribution.eq(entity.getDescriptionContribution()))
-                .fetch().size() > 1;
     }
 
 }

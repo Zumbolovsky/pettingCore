@@ -85,7 +85,7 @@ public class PostItemServiceImpl implements PostItemService {
         dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntitySave(postItemEntity, this.repository);
+        this.validator.entityExistByEntity(postItemEntity, this.repository);
 
         postItemEntity = this.repository.save(postItemEntity);
         return PostItemAdapter.convertToDTO(postItemEntity);
@@ -104,7 +104,7 @@ public class PostItemServiceImpl implements PostItemService {
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntityUpdate(newPostItemEntity, this.repository);
+        this.validator.entityExistByEntity(newPostItemEntity, this.repository);
         vesselPostItemEntity.update(newPostItemEntity);
 
         newPostItemEntity = this.repository.save(vesselPostItemEntity);
@@ -121,7 +121,7 @@ public class PostItemServiceImpl implements PostItemService {
         newPostItemEntity.setAnimalEntity(vesselPostItemEntity.getAnimalEntity());
         newPostItemEntity.setUsurEntity(vesselPostItemEntity.getUsurEntity());
 
-        this.validator.entityExistByEntityUpdate(newPostItemEntity, this.repository);
+        this.validator.entityExistByEntity(newPostItemEntity, this.repository);
         vesselPostItemEntity.update(newPostItemEntity);
 
         newPostItemEntity = this.repository.save(vesselPostItemEntity);

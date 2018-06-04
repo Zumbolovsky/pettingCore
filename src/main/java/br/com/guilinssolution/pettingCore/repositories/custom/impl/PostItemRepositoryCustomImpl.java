@@ -50,7 +50,7 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
     }
 
     @Override
-    public boolean existsByEntitySave(PostItemEntity entity) {
+    public boolean existsByEntity(PostItemEntity entity) {
         JPAQuery<PostItemEntity> query = new JPAQuery<>(this.entityManager);
         QPostItemEntity postItemEntity = QPostItemEntity.postItemEntity;
 
@@ -59,18 +59,6 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
                 .where(postItemEntity.titlePostItem.eq(entity.getTitlePostItem())
                 .and(postItemEntity.descriptionPostItem.eq(entity.getDescriptionPostItem())))
                 .fetchOne() != null;
-    }
-
-    @Override
-    public boolean existsByEntityUpdate(PostItemEntity entity) {
-        JPAQuery<PostItemEntity> query = new JPAQuery<>(this.entityManager);
-        QPostItemEntity postItemEntity = QPostItemEntity.postItemEntity;
-
-        return query
-                .from(postItemEntity)
-                .where(postItemEntity.titlePostItem.eq(entity.getTitlePostItem())
-                        .and(postItemEntity.descriptionPostItem.eq(entity.getDescriptionPostItem())))
-                .fetch().size() > 1;
     }
 
 }

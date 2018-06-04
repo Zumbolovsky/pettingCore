@@ -44,12 +44,12 @@ public class ContributionServiceImpl implements ContributionService {
     private final Validator validator;
 
     @Autowired
-    public ContributionServiceImpl(ContributionRepository repository, Validator validator, PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository, UsurRepository usurRepository) {
+    public ContributionServiceImpl(ContributionRepository repository, PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository, UsurRepository usurRepository, Validator validator) {
         this.repository = repository;
-        this.validator = validator;
         this.postAnimalRepository = postAnimalRepository;
         this.postItemRepository = postItemRepository;
         this.usurRepository = usurRepository;
+        this.validator = validator;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ContributionServiceImpl implements ContributionService {
         }
 
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntitySave(contributionEntity, this.repository);
+        this.validator.entityExistByEntity(contributionEntity, this.repository);
 
         contributionEntity = this.repository.save(contributionEntity);
         return ContributionAdapter.convertToDTO(contributionEntity);
@@ -116,7 +116,7 @@ public class ContributionServiceImpl implements ContributionService {
         }
 
         ContributionEntity newContributionEntity = ContributionAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntityUpdate(newContributionEntity, this.repository);
+        this.validator.entityExistByEntity(newContributionEntity, this.repository);
 
         vesselContributionEntity.update(newContributionEntity);
 
@@ -136,7 +136,7 @@ public class ContributionServiceImpl implements ContributionService {
         newContributionEntity.setUsurEntityByIdRequest(vesselContributionEntity.getUsurEntityByIdRequest());
         newContributionEntity.setUsurEntityByIdDonator(vesselContributionEntity.getUsurEntityByIdDonator());
 
-        this.validator.entityExistByEntityUpdate(newContributionEntity, this.repository);
+        this.validator.entityExistByEntity(newContributionEntity, this.repository);
         vesselContributionEntity.update(newContributionEntity);
 
         newContributionEntity = this.repository.save(vesselContributionEntity);

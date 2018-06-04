@@ -8,7 +8,6 @@ import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 public interface PostItemRepositoryCustom {
 
     ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO);
-    boolean existsByEntitySave(PostItemEntity entity);
-    boolean existsByEntityUpdate(PostItemEntity entity);
+    boolean existsByEntity(PostItemEntity entity);
 
 }

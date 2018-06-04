@@ -86,7 +86,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntitySave(postAnimalEntity, this.repository);
+        this.validator.entityExistByEntity(postAnimalEntity, this.repository);
 
         postAnimalEntity = this.repository.save(postAnimalEntity);
         return PostAnimalAdapter.convertToDTO(postAnimalEntity);
@@ -105,7 +105,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
         PostAnimalEntity newPostAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntityUpdate(newPostAnimalEntity, this.repository);
+        this.validator.entityExistByEntity(newPostAnimalEntity, this.repository);
         vesselPostAnimalEntity.update(newPostAnimalEntity);
 
         newPostAnimalEntity = this.repository.save(vesselPostAnimalEntity);
@@ -122,7 +122,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         newPostAnimalEntity.setAnimalEntity(vesselPostAnimalEntity.getAnimalEntity());
         newPostAnimalEntity.setUsurEntity(vesselPostAnimalEntity.getUsurEntity());
 
-        this.validator.entityExistByEntityUpdate(newPostAnimalEntity, this.repository);
+        this.validator.entityExistByEntity(newPostAnimalEntity, this.repository);
         vesselPostAnimalEntity.update(newPostAnimalEntity);
 
         newPostAnimalEntity = this.repository.save(vesselPostAnimalEntity);
