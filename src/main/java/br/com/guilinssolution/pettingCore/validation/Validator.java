@@ -4,14 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
-import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
-import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
-import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
-import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
-import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
-import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
-import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
-import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
+import br.com.guilinssolution.pettingCore.model.entities.*;
+import br.com.guilinssolution.pettingCore.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -131,6 +125,32 @@ public class Validator {
     }
 
     public void entityExistByEntityUpdate(PostAnimalEntity entity, PostAnimalRepository repository) {
+        if (entity == null) {
+            String msg = message.getMessage("entity.not-acceptable");
+            log.warn(msg);
+            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
+        }
+        if (repository.existsByEntityUpdate(entity)) {
+            String msg = message.getMessage("entity.conflict");
+            log.warn(msg);
+            throw new ApplicationException(msg, HttpStatus.CONFLICT);
+        }
+    }
+
+    public void entityExistByEntitySave(PostItemEntity entity, PostItemRepository repository) {
+        if (entity == null) {
+            String msg = message.getMessage("entity.not-acceptable");
+            log.warn(msg);
+            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
+        }
+        if (repository.existsByEntitySave(entity)) {
+            String msg = message.getMessage("entity.conflict");
+            log.warn(msg);
+            throw new ApplicationException(msg, HttpStatus.CONFLICT);
+        }
+    }
+
+    public void entityExistByEntityUpdate(PostItemEntity entity, PostItemRepository repository) {
         if (entity == null) {
             String msg = message.getMessage("entity.not-acceptable");
             log.warn(msg);

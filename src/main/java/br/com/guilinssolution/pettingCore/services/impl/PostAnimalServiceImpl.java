@@ -45,16 +45,15 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     private final Validator validator;
 
     @Autowired
-    public PostAnimalServiceImpl(PostAnimalRepository repository, AnimalRepository animalRepository, Validator validator, UsurRepository usurRepository) {
+    public PostAnimalServiceImpl(PostAnimalRepository repository, AnimalRepository animalRepository, UsurRepository usurRepository, Validator validator) {
         this.repository = repository;
         this.animalRepository = animalRepository;
-        this.validator = validator;
         this.usurRepository = usurRepository;
+        this.validator = validator;
     }
 
     @Override
     public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example, PageDTO page) {
-
         BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -63,7 +62,6 @@ public class PostAnimalServiceImpl implements PostAnimalService {
 
     @Override
     public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example, PageDTO page) {
-
         BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -88,8 +86,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostAnimalEntity postAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
-
-
+        this.validator.entityExistByEntitySave(postAnimalEntity, this.repository);
 
         postAnimalEntity = this.repository.save(postAnimalEntity);
         return PostAnimalAdapter.convertToDTO(postAnimalEntity);
@@ -108,6 +105,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
         PostAnimalEntity newPostAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
+        this.validator.entityExistByEntityUpdate(newPostAnimalEntity, this.repository);
         vesselPostAnimalEntity.update(newPostAnimalEntity);
 
         newPostAnimalEntity = this.repository.save(vesselPostAnimalEntity);
@@ -123,6 +121,8 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         PostAnimalEntity newPostAnimalEntity = PostAnimalAdapter.convertToEntity(dto);
         newPostAnimalEntity.setAnimalEntity(vesselPostAnimalEntity.getAnimalEntity());
         newPostAnimalEntity.setUsurEntity(vesselPostAnimalEntity.getUsurEntity());
+
+        this.validator.entityExistByEntityUpdate(newPostAnimalEntity, this.repository);
         vesselPostAnimalEntity.update(newPostAnimalEntity);
 
         newPostAnimalEntity = this.repository.save(vesselPostAnimalEntity);

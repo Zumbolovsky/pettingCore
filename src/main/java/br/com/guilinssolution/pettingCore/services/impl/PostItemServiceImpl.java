@@ -44,11 +44,11 @@ public class PostItemServiceImpl implements PostItemService {
     private final Validator validator;
 
     @Autowired
-    public PostItemServiceImpl(PostItemRepository repository, Validator validator, AnimalRepository animalRepository, UsurRepository usurRepository) {
+    public PostItemServiceImpl(PostItemRepository repository, AnimalRepository animalRepository, UsurRepository usurRepository, Validator validator) {
         this.repository = repository;
-        this.validator = validator;
         this.animalRepository = animalRepository;
         this.usurRepository = usurRepository;
+        this.validator = validator;
     }
 
     @Override
@@ -85,6 +85,7 @@ public class PostItemServiceImpl implements PostItemService {
         dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
+        this.validator.entityExistByEntitySave(postItemEntity, this.repository);
 
         postItemEntity = this.repository.save(postItemEntity);
         return PostItemAdapter.convertToDTO(postItemEntity);
@@ -103,6 +104,7 @@ public class PostItemServiceImpl implements PostItemService {
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
+        this.validator.entityExistByEntityUpdate(newPostItemEntity, this.repository);
         vesselPostItemEntity.update(newPostItemEntity);
 
         newPostItemEntity = this.repository.save(vesselPostItemEntity);
@@ -118,6 +120,8 @@ public class PostItemServiceImpl implements PostItemService {
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
         newPostItemEntity.setAnimalEntity(vesselPostItemEntity.getAnimalEntity());
         newPostItemEntity.setUsurEntity(vesselPostItemEntity.getUsurEntity());
+
+        this.validator.entityExistByEntityUpdate(newPostItemEntity, this.repository);
         vesselPostItemEntity.update(newPostItemEntity);
 
         newPostItemEntity = this.repository.save(vesselPostItemEntity);

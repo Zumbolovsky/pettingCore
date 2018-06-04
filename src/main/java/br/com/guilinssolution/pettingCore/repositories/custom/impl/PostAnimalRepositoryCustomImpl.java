@@ -16,17 +16,26 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
     @Override
     public boolean existsByEntitySave(PostAnimalEntity entity) {
         JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
-        QPostAnimalEntity postAnimalEntity = QPostAnimalEntity.contributionEntity;
+        QPostAnimalEntity postAnimalEntity = QPostAnimalEntity.postAnimalEntity;
 
         return query
-                .from(contributionEntity)
-                .where(contributionEntity.descriptionContribution.eq(entity.getDescriptionContribution()))
+                .from(postAnimalEntity)
+                .where(postAnimalEntity.titlePostAnimal.eq(entity.getTitlePostAnimal())
+                        .and(postAnimalEntity.descriptionPostAnimal.eq(entity.getDescriptionPostAnimal())
+                        .and(postAnimalEntity.sizePostAnimal.eq(entity.getSizePostAnimal()))))
                 .fetchOne() != null;
-
     }
 
     @Override
     public boolean existsByEntityUpdate(PostAnimalEntity entity) {
-        return false;
+        JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
+        QPostAnimalEntity postAnimalEntity = QPostAnimalEntity.postAnimalEntity;
+
+        return query
+                .from(postAnimalEntity)
+                .where(postAnimalEntity.titlePostAnimal.eq(entity.getTitlePostAnimal())
+                        .and(postAnimalEntity.descriptionPostAnimal.eq(entity.getDescriptionPostAnimal())
+                                .and(postAnimalEntity.sizePostAnimal.eq(entity.getSizePostAnimal()))))
+                .fetch().size() > 1;
     }
 }
