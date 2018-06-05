@@ -1,5 +1,18 @@
 package br.com.guilinssolution.pettingCore.controller;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
@@ -9,14 +22,6 @@ import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -56,21 +61,21 @@ public class UsurController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(value = "/usur", method = RequestMethod.POST)
-    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto,
+    public ResponseEntity<UsurDTO> save(MultipartFile file, @Valid UsurDTO dto,
                                         BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.service.save(dto, file), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/secured/usur/{currentId}", method = RequestMethod.PUT)
-    public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId,
-                                          @Valid @RequestBody UsurDTO dto,
+    public ResponseEntity<UsurDTO> update(MultipartFile file, Integer currentId,
+                                          @Valid UsurDTO dto,
                                           BindingResult result) {
         log.info("Atualizando dados de um Usuário");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, dto, file), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation("Exclui dados no banco")
@@ -79,6 +84,6 @@ public class UsurController {
         log.info("Deletando dados de um Usuário");
         this.service.delete(id);
     }
-
+    
 }
 

@@ -1,9 +1,28 @@
 package br.com.guilinssolution.pettingCore.services.impl;
 
+import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
+
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
-import br.com.guilinssolution.pettingCore.model.dto.*;
+import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
@@ -16,21 +35,9 @@ import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.MessageService;
+import br.com.guilinssolution.pettingCore.services.StorageService;
 import br.com.guilinssolution.pettingCore.services.UsurService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 
 /////////////////////////////////////////
 // TODO: Implementar serviço para imagem
@@ -46,14 +53,20 @@ public class UsurServiceImpl implements UsurService {
     private final PostItemRepository postItemRepository;
 
     private final UsurRepository repository;
+    
+    private final StorageService storageService;
 
     private final Validator validator;
 
     private final MessageService message;
+    
+    @Value("${folder.path.usur}")
+	private Path usurFileFolderPath;
 
     @Autowired
-    public UsurServiceImpl(UsurRepository repository, ContributionRepository contributionRepository,
+    public UsurServiceImpl(StorageService storageService, UsurRepository repository, ContributionRepository contributionRepository,
                            PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository, Validator validator, MessageService message) {
+    	this.storageService = storageService;
         this.repository = repository;
         this.contributionRepository = contributionRepository;
         this.postAnimalRepository = postAnimalRepository;
@@ -89,19 +102,26 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO save(UsurDTO dto) {
+    public UsurDTO save(UsurDTO dto, MultipartFile file) {
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
         this.validator.entityExistByEmail(dto.getEmailUsur(), this.repository);
         this.validator.entityExistByEntity(usurEntity, this.repository);
 
+        if (file != null) {
+        	usurEntity.setImageUsur(this.usurFileFolderPath.resolve(usurEntity.getNameUsur()
+					+ usurEntity.getCpfUsur()).toString()
+					+ Objects.requireNonNull(file.getContentType()).replace("image/", "."));
+        	storageService.storeFile(file, usurEntity);
+		}
+        
         usurEntity = this.repository.save(usurEntity);
 
         return UsurAdapter.convertToDTO(usurEntity);
     }
 
     @Override
-    public UsurDTO update(Integer currentId, UsurDTO dto) {
+    public UsurDTO update(Integer currentId, UsurDTO dto, MultipartFile file) {
         this.validator.entityNotExist(currentId, this.repository);
 
         UsurEntity vesselUsurEntity = this.repository.getOne(currentId);
@@ -109,6 +129,9 @@ public class UsurServiceImpl implements UsurService {
 
         this.validator.entityExistByEmail(newUsurEntity.getEmailUsur(), this.repository);
         this.validator.entityExistByEntity(newUsurEntity, this.repository);
+        if (file != null) {
+        	storageService.storeFile(file, newUsurEntity);
+		}
         vesselUsurEntity.update(newUsurEntity);
 
         newUsurEntity = this.repository.save(vesselUsurEntity);
