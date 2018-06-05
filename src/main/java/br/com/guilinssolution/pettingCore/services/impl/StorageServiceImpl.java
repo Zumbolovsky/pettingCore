@@ -69,21 +69,10 @@ public class StorageServiceImpl implements StorageService {
 			if (usurEntity.getImageUsur() != null) {
 				Files.delete(Paths.get(usurEntity.getImageUsur()));
 			}
-			usurEntity.setImageUsur(this.usurFileFolderPath.toString() + "\\"
-					+ usurEntity.getNameUsur() + usurEntity.getCpfUsur()
-					+ Objects.requireNonNull(file.getContentType()).replace(image, "."));
-			Files.copy(file.getInputStream(), this.usurFileFolderPath.resolve(file.getOriginalFilename()),
-					StandardCopyOption.REPLACE_EXISTING);
-			File oldfile = new File(this.usurFileFolderPath.resolve(file.getOriginalFilename()).toString());
-			File newfile = new File(this.usurFileFolderPath.resolve(usurEntity.getNameUsur()
-					+ usurEntity.getCpfUsur()).toString()
-					+ file.getContentType().replace(image, "."));
-
-			boolean validFileRename = oldfile.renameTo(newfile);
-			toUseBoolean(validFileRename);
 		} catch (Exception e) {
 			throw new ApplicationException(this.message.getMessage("storage.store-error"), HttpStatus.BAD_REQUEST);
 		}
+		storeFile(file, usurEntity);
 	}
 
 	@Override
@@ -110,21 +99,14 @@ public class StorageServiceImpl implements StorageService {
 			if (postAnimalEntity.getImagePostAnimal() != null) {
 				Files.delete(Paths.get(postAnimalEntity.getImagePostAnimal()));
 			}
-			postAnimalEntity.setImagePostAnimal(this.postAnimalFileFolderPath.toString() + "\\"
+			/*postAnimalEntity.setImagePostAnimal(this.postAnimalFileFolderPath.toString() + "\\"
 					+ postAnimalEntity.getTitlePostAnimal() + postAnimalEntity.getIdPostAnimal().toString()
 					+ Objects.requireNonNull(file.getContentType()).replace(image, "."));
-			Files.copy(file.getInputStream(), this.postAnimalFileFolderPath.resolve(file.getOriginalFilename()),
-					StandardCopyOption.REPLACE_EXISTING);
-			File oldfile = new File(this.postAnimalFileFolderPath.resolve(file.getOriginalFilename()).toString());
-			File newfile = new File(this.postAnimalFileFolderPath.resolve(postAnimalEntity.getTitlePostAnimal()
-					+ postAnimalEntity.getIdPostAnimal()).toString()
-					+ file.getContentType().replace(image, "."));
-
-			boolean validFileRename = oldfile.renameTo(newfile);
-			toUseBoolean(validFileRename);
+			*/
 		} catch (Exception e) {
 			throw new ApplicationException(this.message.getMessage("storage.store-error"), HttpStatus.BAD_REQUEST);
 		}
+		storeFile(file, postAnimalEntity);
 	}
 
 	@Override
@@ -151,21 +133,14 @@ public class StorageServiceImpl implements StorageService {
 			if (postItemEntity.getImagePostItem() != null) {
 				Files.delete(Paths.get(postItemEntity.getImagePostItem()));
 			}
-			postItemEntity.setImagePostItem(this.postItemFileFolderPath.toString() + "\\" + postItemEntity.getTitlePostItem()
+			/*postItemEntity.setImagePostItem(this.postItemFileFolderPath.toString() + "\\" + postItemEntity.getTitlePostItem()
 					+ postItemEntity.getTypePostItem().toString() + postItemEntity.getIdPostItem().toString()
 					+ Objects.requireNonNull(file.getContentType()).replace(image, "."));
-			Files.copy(file.getInputStream(), this.postItemFileFolderPath.resolve(file.getOriginalFilename()),
-					StandardCopyOption.REPLACE_EXISTING);
-			File oldfile = new File(this.postItemFileFolderPath.resolve(file.getOriginalFilename()).toString());
-			File newfile = new File(this.postItemFileFolderPath.resolve(postItemEntity.getTitlePostItem()
-					+ postItemEntity.getTypePostItem()).toString() + postItemEntity.getIdPostItem()
-					+ file.getContentType().replace(image, "."));
-
-			boolean validFileRename = oldfile.renameTo(newfile);
-			toUseBoolean(validFileRename);
+			*/
 		} catch (Exception e) {
 			throw new ApplicationException(this.message.getMessage("storage.store-error"), HttpStatus.BAD_REQUEST);
 		}
+		storeFile(file, postItemEntity);
 	}
 
 	@Override

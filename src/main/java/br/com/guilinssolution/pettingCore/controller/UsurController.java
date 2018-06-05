@@ -59,21 +59,23 @@ public class UsurController {
         return new ResponseEntity<>(this.service.findOne(id), HttpStatus.FOUND);
     }
 
+    //todo: testar
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(value = "/usur", method = RequestMethod.POST)
-    public ResponseEntity<UsurDTO> save(MultipartFile file, @Valid UsurDTO dto,
+    public ResponseEntity<UsurDTO> save(@Valid UsurDTO dto, MultipartFile file,
                                         BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
+        this.validator.fileTypeValidation(file);
         this.validator.hibernateException(result);
         return new ResponseEntity<>(this.service.save(dto, file), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/secured/usur/{currentId}", method = RequestMethod.PUT)
-    public ResponseEntity<UsurDTO> update(MultipartFile file, Integer currentId,
-                                          @Valid UsurDTO dto,
-                                          BindingResult result) {
+    public ResponseEntity<UsurDTO> update(Integer currentId, @Valid UsurDTO dto,
+                                          MultipartFile file, BindingResult result) {
         log.info("Atualizando dados de um Usuário");
+        this.validator.fileTypeValidation(file);
         this.validator.hibernateException(result);
         return new ResponseEntity<>(this.service.update(currentId, dto, file), HttpStatus.ACCEPTED);
     }

@@ -53,26 +53,27 @@ public class UsurServiceImpl implements UsurService {
     private final PostItemRepository postItemRepository;
 
     private final UsurRepository repository;
-    
-    private final StorageService storageService;
 
     private final Validator validator;
 
     private final MessageService message;
-    
+
+    private final StorageService storageService;
+
     @Value("${folder.path.usur}")
 	private Path usurFileFolderPath;
 
     @Autowired
-    public UsurServiceImpl(StorageService storageService, UsurRepository repository, ContributionRepository contributionRepository,
-                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository, Validator validator, MessageService message) {
-    	this.storageService = storageService;
+    public UsurServiceImpl(UsurRepository repository, ContributionRepository contributionRepository,
+                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository,
+                           Validator validator, MessageService message, StorageService storageService) {
         this.repository = repository;
         this.contributionRepository = contributionRepository;
         this.postAnimalRepository = postAnimalRepository;
         this.postItemRepository = postItemRepository;
         this.validator = validator;
         this.message = message;
+        this.storageService = storageService;
     }
 
     @Override
@@ -130,7 +131,7 @@ public class UsurServiceImpl implements UsurService {
         this.validator.entityExistByEmail(newUsurEntity.getEmailUsur(), this.repository);
         this.validator.entityExistByEntity(newUsurEntity, this.repository);
         if (file != null) {
-        	storageService.storeFile(file, newUsurEntity);
+        	storageService.updateFile(file, newUsurEntity);
 		}
         vesselUsurEntity.update(newUsurEntity);
 

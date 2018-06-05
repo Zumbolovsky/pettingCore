@@ -35,7 +35,4 @@ public class PostAnimalDTO {
 
 	private Size sizePostAnimal;
 
-	@Length(max = 50, message = "{length.fifty}")
-	private String imagePostAnimal;
-
 }
