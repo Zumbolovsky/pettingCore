@@ -13,7 +13,8 @@ public class CustomUserDetails extends UsurEntity implements UserDetails {
                 usurEntity.getCpfUsur(), usurEntity.getAddressUsur(),
                 usurEntity.getCityUsur(), usurEntity.getEmailUsur(),
                 usurEntity.getPasswordUsur(), usurEntity.getStateUsur(),
-                usurEntity.getCellphoneUsur(), usurEntity.getPhoneUsur());
+                usurEntity.getCellphoneUsur(), usurEntity.getPhoneUsur(),
+                usurEntity.getImageUsur());
     }
 
     @Override

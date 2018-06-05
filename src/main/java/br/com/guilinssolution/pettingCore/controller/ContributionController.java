@@ -2,13 +2,14 @@ package br.com.guilinssolution.pettingCore.controller;
 
 import javax.validation.Valid;
 
+import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,14 +43,16 @@ public class ContributionController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAll(ContributionExample example, PageDTO page) {
+    public ListResultDTO<ContributionDTO> findAll(ContributionExample example,
+                                                  PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAll(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAllLite(ContributionExample example, PageDTO page) {
+    public ListResultDTO<ContributionDTO> findAllLite(ContributionExample example,
+                                                      PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAllLite(example, page);
     }
@@ -63,7 +66,7 @@ public class ContributionController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ContributionDTO> save(@Valid @RequestBody ContributionDTO dto,
+    public ResponseEntity<ContributionDTO> save(@Valid ContributionDTO dto,
                                                 @RequestParam(required = false) Integer idPostAnimal,
                                                 @RequestParam(required = false) Integer idPostItem,
                                                 @RequestParam Integer idUsurRequest,
@@ -82,7 +85,7 @@ public class ContributionController {
                                                   @RequestParam(required = false) Integer idPostItem,
                                                   @RequestParam Integer idUsurRequest,
                                                   @RequestParam(required = false) Integer idUsurDonator,
-                                                  @Valid @RequestBody ContributionDTO dto,
+                                                  @Valid ContributionDTO dto,
                                                   BindingResult result) {
         log.info("Atualizando dados de uma Contribuição e suas relações");
         this.validator.hibernateException(result);
@@ -93,7 +96,7 @@ public class ContributionController {
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)")
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<ContributionDTO> quickUpdate(@PathVariable Integer currentId,
-                                                       @Valid @RequestBody ContributionDTO dto,
+                                                       @Valid ContributionDTO dto,
                                                        BindingResult result) {
         log.info("Atualizando dados de uma Contribuição");
         this.validator.hibernateException(result);
@@ -108,9 +111,10 @@ public class ContributionController {
     }
 
     @ApiOperation("Lista por ID de usuário contribuinte")
-    @RequestMapping(value = "/all/donator/{idUsur}", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> listByDonator(@PathVariable Integer idUsur, PageDTO pageDTO) {
+    @RequestMapping(value = "/all/donator", method = RequestMethod.GET)
+    public ListResultDTO<ContributionDTO> listByDonator(PageDTO pageDTO) {
         log.info("Listando Contribuições por usuário contribuinte");
-        return this.service.listByDonator(idUsur, pageDTO);
+        CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByDonator(principal.getIdUsur(), pageDTO);
     }
 }

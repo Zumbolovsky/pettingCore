@@ -139,6 +139,11 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         this.repository.delete(entity);
     }
 
+    @Override
+    public ListResultDTO<PostAnimalDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
+        return this.repository.listByUsur(idUsur, pageDTO);
+    }
+
     private ListResultDTO<PostAnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<PostAnimalEntity> postAnimalEntityPages = this.repository.findAll(query, page);
         List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();

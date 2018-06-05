@@ -35,14 +35,16 @@ public class UsurController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/secured/usur/all", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAll(UsurExample example, PageDTO page) {
+    public ListResultDTO<UsurDTO> findAll(UsurExample example,
+                                          PageDTO page) {
         log.info("Listar todos os dados de Usuário");
         return this.service.findAll(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/secured/usur/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAllLite(UsurExample example, PageDTO page) {
+    public ListResultDTO<UsurDTO> findAllLite(UsurExample example,
+                                              PageDTO page) {
         log.info("Listar todos os dados de Usuário");
         return this.service.findAllLite(example, page);
     }
@@ -56,7 +58,7 @@ public class UsurController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(value = "/usur", method = RequestMethod.POST)
-    public ResponseEntity<UsurDTO> save(@Valid @RequestBody UsurDTO dto,
+    public ResponseEntity<UsurDTO> save(@Valid UsurDTO dto,
                                         BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
         this.validator.hibernateException(result);
@@ -66,7 +68,7 @@ public class UsurController {
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/secured/usur/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId,
-                                          @Valid @RequestBody UsurDTO dto,
+                                          @Valid UsurDTO dto,
                                           BindingResult result) {
         log.info("Atualizando dados de um Usuário");
         this.validator.hibernateException(result);

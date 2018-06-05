@@ -1,5 +1,6 @@
 package br.com.guilinssolution.pettingCore.controller;
 
+import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +38,8 @@ public class PostItemController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAll(PostItemExample example, PageDTO page) {
+    public ListResultDTO<PostItemDTO> findAll(PostItemExample example,
+                                              PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
         return this.service.findAll(example, page);
     }
@@ -50,7 +53,8 @@ public class PostItemController {
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example, PageDTO page) {
+    public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example,
+                                                  PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
         return this.service.findAllLite(example, page);
     }
@@ -64,7 +68,7 @@ public class PostItemController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PostItemDTO> save(@Valid @RequestBody PostItemDTO dto,
+    public ResponseEntity<PostItemDTO> save(@Valid PostItemDTO dto,
                                             @RequestParam Integer idAnimal,
                                             @RequestParam Integer idUsur,
                                             BindingResult result) {
@@ -76,7 +80,7 @@ public class PostItemController {
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)")
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> update(@PathVariable Integer currentId,
-                                              @Valid @RequestBody PostItemDTO dto,
+                                              @Valid PostItemDTO dto,
                                               @RequestParam Integer idAnimal,
                                               @RequestParam Integer idUsur,
                                               BindingResult result) {
@@ -88,7 +92,7 @@ public class PostItemController {
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)")
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> quickUpdate(@PathVariable Integer currentId,
-                                                   @Valid @RequestBody PostItemDTO dto,
+                                                   @Valid PostItemDTO dto,
                                                    BindingResult result) {
         log.info("Atualizando dados de um Publicação Item");
         this.validator.hibernateException(result);
@@ -103,10 +107,11 @@ public class PostItemController {
     }
 
     @ApiOperation("Lista por ID de usuário")
-    @RequestMapping(value = "all/usur/{idUsur}", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> listByUsur(@PathVariable Integer idUsur, PageDTO pageDTO) {
+    @RequestMapping(value = "all/usur", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> listByUsur(PageDTO pageDTO) {
         log.info("Listando Publicações Item por usuário");
-        return this.service.listByUsur(idUsur, pageDTO);
+        CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByUsur(principal.getIdUsur(), pageDTO);
     }
 
 }

@@ -2,13 +2,14 @@ package br.com.guilinssolution.pettingCore.controller;
 
 import javax.validation.Valid;
 
+import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,14 +43,16 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example, PageDTO page) {
+    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example,
+                                                PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAll(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example, PageDTO page) {
+    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example,
+                                                    PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAllLite(example, page);
     }
@@ -63,7 +66,7 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PostAnimalDTO> save(@Valid @RequestBody PostAnimalDTO dto,
+    public ResponseEntity<PostAnimalDTO> save(@Valid PostAnimalDTO dto,
                                               @RequestParam Integer idAnimal,
                                               @RequestParam Integer idUsur,
                                               BindingResult result) {
@@ -75,7 +78,7 @@ public class PostAnimalController {
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)")
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostAnimalDTO> update(@PathVariable Integer currentId,
-                                                @Valid @RequestBody PostAnimalDTO dto,
+                                                @Valid PostAnimalDTO dto,
                                                 @RequestParam Integer idAnimal,
                                                 @RequestParam Integer idUsur,
                                                 BindingResult result) {
@@ -87,7 +90,7 @@ public class PostAnimalController {
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)")
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostAnimalDTO> quickUpdate(@PathVariable Integer currentId,
-                                                     @Valid @RequestBody PostAnimalDTO dto,
+                                                     @Valid PostAnimalDTO dto,
                                                      BindingResult result) {
         log.info("Atualizando dados de um Publicação Animal");
         this.validator.hibernateException(result);
@@ -99,6 +102,14 @@ public class PostAnimalController {
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Publicação Animal");
         this.service.delete(id);
+    }
+
+    @ApiOperation("Lista por ID de usuário")
+    @RequestMapping(value = "all/usur", method = RequestMethod.GET)
+    public ListResultDTO<PostAnimalDTO> listByUsur(PageDTO pageDTO) {
+        log.info("Listando Publicações Animal por usuário");
+        CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByUsur(principal.getIdUsur(), pageDTO);
     }
 
 }

@@ -35,14 +35,16 @@ public class AnimalController {
 
     @ApiOperation(value = "Lista de todos dados")
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<AnimalDTO> findAll(AnimalDTO dto, PageDTO page) {
+    public ListResultDTO<AnimalDTO> findAll(AnimalDTO dto,
+                                            PageDTO page) {
         log.info("Listar todos os dados de Animal");
         return this.service.findAll(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador")
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<AnimalDTO> findAllLite(AnimalDTO dto, PageDTO page) {
+    public ListResultDTO<AnimalDTO> findAllLite(AnimalDTO dto,
+                                                PageDTO page) {
         log.info("Listar todos os dados de Animal");
         return this.service.findAllLite(dto, page);
     }
@@ -56,7 +58,7 @@ public class AnimalController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<AnimalDTO> save(@Valid @RequestBody AnimalDTO dto,
+    public ResponseEntity<AnimalDTO> save(@Valid AnimalDTO dto,
                                           BindingResult result) {
         log.info("Cadastrando dados de um Animal");
         this.validator.hibernateException(result);
@@ -66,7 +68,7 @@ public class AnimalController {
     @ApiOperation(value = "Atualiza dados no banco")
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<AnimalDTO> update(@PathVariable Integer currentId,
-                                            @Valid @RequestBody AnimalDTO dto,
+                                            @Valid AnimalDTO dto,
                                             BindingResult result) {
         log.info("Atualizando dados de um Animal");
         this.validator.hibernateException(result);
