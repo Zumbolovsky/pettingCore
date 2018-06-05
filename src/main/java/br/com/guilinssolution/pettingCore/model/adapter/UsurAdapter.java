@@ -21,6 +21,7 @@ public class UsurAdapter {
                 .cityUsur(entity.getCityUsur())
                 .cpfUsur(entity.getCpfUsur())
                 .emailUsur(entity.getEmailUsur())
+                .imageUsur(entity.getImageUsur())
                 .nameUsur(entity.getNameUsur())
                 .passwordUsur(entity.getPasswordUsur())
                 .phoneUsur(entity.getPhoneUsur())
@@ -40,6 +41,7 @@ public class UsurAdapter {
                 .cityUsur(dto.getCityUsur())
                 .cpfUsur(dto.getCpfUsur())
                 .emailUsur(dto.getEmailUsur())
+                .imageUsur(dto.getImageUsur())
                 .nameUsur(dto.getNameUsur())
                 .passwordUsur(dto.getPasswordUsur())
                 .phoneUsur(dto.getPhoneUsur())
@@ -47,6 +49,7 @@ public class UsurAdapter {
                 .build();
     }
 
+    //todo: clean if necessary
     public static List<UsurDTO> convertToDTOLite(List<UsurEntity> entities) {
         if(entities == null) {
             return null;
@@ -73,46 +76,11 @@ public class UsurAdapter {
                 .build();
     }
 
-    public static List<UsurEntity> convertToEntityLite(List<UsurDTO> dtos) {
-        if(dtos == null) {
-            return null;
-        }
-        List<UsurEntity> entities = new ArrayList<>();
-
-        for (UsurDTO dto : dtos) {
-            UsurEntity entity = convertToEntityLite(dto);
-            if(entity != null) {
-                dtos.add(dto);
-            }
-        }
-
-        return entities;
-    }
-
-    public static UsurEntity convertToEntityLite(UsurDTO dto) {
-        if(dto == null) {
-            return null;
-        }
-
-        return UsurEntity.builder()
-                .idUsur(dto.getIdUsur())
-                .build();
-    }
-
     public static UsurDTO convertToDTO(UsurEntity entity, ConvertType convertType) {
         if(convertType == ConvertType.LITE) {
             return convertToDTOLite(entity);
         } else if(convertType == ConvertType.NORMAL) {
             return convertToDTO(entity);
-        }
-        return null;
-    }
-
-    public static UsurEntity convertToEntity(UsurDTO dto, ConvertType convertType) {
-        if(convertType == ConvertType.LITE) {
-            return convertToEntityLite(dto);
-        } else if(convertType == ConvertType.NORMAL) {
-            return convertToEntity(dto);
         }
         return null;
     }

@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import br.com.guilinssolution.pettingCore.exception.ApplicationException;
 import br.com.guilinssolution.pettingCore.services.MessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -34,6 +35,20 @@ public class Validator {
             String msg = message.getMessage("error.list")
                     + erros.toString().substring(1, erros.toString().length() - 1);
             throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    public void fileTypeValidation(MultipartFile file) {
+        if (file != null) {
+            String type = file.getContentType();
+            if (type != null) {
+                if (type.contains("jpeg") || type.contains("png") || type.contains("jpg")) {
+                    log.warn(message.getMessage("image.valid-type"));
+                } else {
+                    log.warn(message.getMessage("image.invalid-type"));
+                    throw new ApplicationException(this.message.getMessage("image.invalid-type"), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+                }
+            }
         }
     }
 

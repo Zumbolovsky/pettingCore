@@ -33,3 +33,9 @@ info:
   encoding: "@project.build.sourceEncoding@"
   java:
     version: "@java.version@"
+
+folder:
+  path:
+    usur: src\main\resources\imagens\usur
+    post-animal: src\main\resources\imagens\post-animal
+    post-item: src\main\resources\imagens\post-item

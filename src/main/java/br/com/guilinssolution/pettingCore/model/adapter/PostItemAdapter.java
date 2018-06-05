@@ -53,6 +53,7 @@ public class PostItemAdapter {
                 .build();
     }
 
+    //todo: clean if necessary
     public static List<PostItemDTO> convertToDTOLite(List<PostItemEntity> entities) {
         if(entities == null) {
             return null;
@@ -79,46 +80,11 @@ public class PostItemAdapter {
                 .build();
     }
 
-    public static List<PostItemEntity> convertToEntityLite(List<PostItemDTO> dtos) {
-        if(dtos == null) {
-            return null;
-        }
-        List<PostItemEntity> entities = new ArrayList<>();
-
-        for (PostItemDTO dto : dtos) {
-            PostItemEntity entity = convertToEntityLite(dto);
-            if(entity != null) {
-                dtos.add(dto);
-            }
-        }
-
-        return entities;
-    }
-
-    public static PostItemEntity convertToEntityLite(PostItemDTO dto) {
-        if(dto == null) {
-            return null;
-        }
-
-        return PostItemEntity.builder()
-                .idPostItem(dto.getIdPostItem())
-                .build();
-    }
-
     public static PostItemDTO convertToDTO(PostItemEntity entity, ConvertType convertType) {
         if(convertType == ConvertType.LITE) {
             return convertToDTOLite(entity);
         } else if(convertType == ConvertType.NORMAL) {
             return convertToDTO(entity);
-        }
-        return null;
-    }
-
-    public static PostItemEntity convertToEntity(PostItemDTO dto, ConvertType convertType) {
-        if(convertType == ConvertType.LITE) {
-            return convertToEntityLite(dto);
-        } else if(convertType == ConvertType.NORMAL) {
-            return convertToEntity(dto);
         }
         return null;
     }

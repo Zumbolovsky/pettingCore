@@ -51,7 +51,8 @@ public class UsurRepositoryCustomImpl implements UsurRepositoryCustom {
                         .and(usurEntity.cpfUsur.eq(entity.getCpfUsur())
                         .and(usurEntity.cellphoneUsur.eq(entity.getCellphoneUsur())
                         .and(usurEntity.phoneUsur.eq(entity.getPhoneUsur())
-                        .and(usurEntity.stateUsur.eq(entity.getStateUsur()))))))))))
+                        .and(usurEntity.imageUsur.eq(entity.getImageUsur())
+                        .and(usurEntity.stateUsur.eq(entity.getStateUsur())))))))))))
                 .fetchOne() != null;
     }
 

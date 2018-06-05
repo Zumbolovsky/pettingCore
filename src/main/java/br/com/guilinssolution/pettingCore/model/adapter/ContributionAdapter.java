@@ -69,6 +69,7 @@ public class ContributionAdapter {
                 .build();
     }
 
+    //todo: clean if necessary
     public static List<ContributionDTO> convertToDTOLite(List<ContributionEntity> entities) {
         if(entities == null) {
             return null;
@@ -95,46 +96,12 @@ public class ContributionAdapter {
                 .build();
     }
 
-    public static List<ContributionEntity> convertToEntityLite(List<ContributionDTO> dtos) {
-        if(dtos == null) {
-            return null;
-        }
-        List<ContributionEntity> entities = new ArrayList<>();
-
-        for (ContributionDTO dto : dtos) {
-            ContributionEntity entity = convertToEntityLite(dto);
-            if(entity != null) {
-                dtos.add(dto);
-            }
-        }
-
-        return entities;
-    }
-
-    public static ContributionEntity convertToEntityLite(ContributionDTO dto) {
-        if(dto == null) {
-            return null;
-        }
-
-        return ContributionEntity.builder()
-                .idContribution(dto.getIdContribution())
-                .build();
-    }
 
     public static ContributionDTO convertToDTO(ContributionEntity entity, ConvertType convertType) {
         if(convertType == ConvertType.LITE) {
             return convertToDTOLite(entity);
         } else if(convertType == ConvertType.NORMAL) {
             return convertToDTO(entity);
-        }
-        return null;
-    }
-
-    public static ContributionEntity convertToEntity(ContributionDTO dto, ConvertType convertType) {
-        if(convertType == ConvertType.LITE) {
-            return convertToEntityLite(dto);
-        } else if(convertType == ConvertType.NORMAL) {
-            return convertToEntity(dto);
         }
         return null;
     }

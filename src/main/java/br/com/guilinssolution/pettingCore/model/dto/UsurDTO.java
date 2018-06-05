@@ -47,4 +47,7 @@ public class UsurDTO {
 	@Length(max = 15, message = "{length.phone}")
 	private String phoneUsur;
 
+	@Length(max = 50, message = "{length.fifty}")
+	private String imageUsur;
+
 }

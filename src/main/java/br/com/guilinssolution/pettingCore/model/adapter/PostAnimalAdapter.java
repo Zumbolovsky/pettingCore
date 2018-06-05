@@ -57,6 +57,7 @@ public class PostAnimalAdapter {
                 .build();
     }
 
+    //todo: clean if necessary
     public static List<PostAnimalDTO> convertToDTOLite(List<PostAnimalEntity> entities) {
         if(entities == null) {
             return null;
@@ -83,46 +84,11 @@ public class PostAnimalAdapter {
                 .build();
     }
 
-    public static List<PostAnimalEntity> convertToEntityLite(List<PostAnimalDTO> dtos) {
-        if(dtos == null) {
-            return null;
-        }
-        List<PostAnimalEntity> entities = new ArrayList<>();
-
-        for (PostAnimalDTO dto : dtos) {
-            PostAnimalEntity entity = convertToEntityLite(dto);
-            if(entity != null) {
-                dtos.add(dto);
-            }
-        }
-
-        return entities;
-    }
-
-    public static PostAnimalEntity convertToEntityLite(PostAnimalDTO dto) {
-        if(dto == null) {
-            return null;
-        }
-
-        return PostAnimalEntity.builder()
-                .idPostAnimal(dto.getIdPostAnimal())
-                .build();
-    }
-
     public static PostAnimalDTO convertToDTO(PostAnimalEntity entity, ConvertType convertType) {
         if(convertType == ConvertType.LITE) {
             return convertToDTOLite(entity);
         } else if(convertType == ConvertType.NORMAL) {
             return convertToDTO(entity);
-        }
-        return null;
-    }
-
-    public static PostAnimalEntity convertToEntity(PostAnimalDTO dto, ConvertType convertType) {
-        if(convertType == ConvertType.LITE) {
-            return convertToEntityLite(dto);
-        } else if(convertType == ConvertType.NORMAL) {
-            return convertToEntity(dto);
         }
         return null;
     }
