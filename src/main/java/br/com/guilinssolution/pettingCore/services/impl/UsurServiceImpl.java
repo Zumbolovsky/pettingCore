@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -51,15 +52,19 @@ public class UsurServiceImpl implements UsurService {
 
     private final MessageService message;
 
+    private final BCryptPasswordEncoder encoder;
+
     @Autowired
     public UsurServiceImpl(UsurRepository repository, ContributionRepository contributionRepository,
-                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository, Validator validator, MessageService message) {
+                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository,
+                           Validator validator, MessageService message, BCryptPasswordEncoder encoder) {
         this.repository = repository;
         this.contributionRepository = contributionRepository;
         this.postAnimalRepository = postAnimalRepository;
         this.postItemRepository = postItemRepository;
         this.validator = validator;
         this.message = message;
+        this.encoder = encoder;
     }
 
     @Override
@@ -94,6 +99,8 @@ public class UsurServiceImpl implements UsurService {
 
         this.validator.entityExistByEmail(dto.getEmailUsur(), this.repository);
         this.validator.entityExistByEntity(usurEntity, this.repository);
+
+        usurEntity.setPasswordUsur(this.encoder.encode(usurEntity.getPasswordUsur()));
 
         usurEntity = this.repository.save(usurEntity);
 

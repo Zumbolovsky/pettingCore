@@ -12,6 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,15 +32,21 @@ public class PostItemDTO {
 	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTO;
 
+	@NotEmpty(message = "Título {empty}")
 	@Length(max = 30, message = "{length.thirty}")
 	private String titlePostItem;
 
+	@NotEmpty(message = "Descrição {empty}")
 	@Length(max = 100, message = "{length.hundred}")
 	private String descriptionPostItem;
 
+	//todo: só tirar NotEmpty e colocar ApiModelProperty se tiver imagem Multipart
+	@NotEmpty(message = "Imagem {empty}")
+	//@ApiModelProperty(hidden = true)
 	@Length(max = 50, message = "{length.fifty}")
 	private String imagePostItem;
 
+	@NotNull(message = "Tipo {empty}")
 	private Type typePostItem;
 
 }

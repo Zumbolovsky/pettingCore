@@ -12,6 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,8 +26,10 @@ public class AnimalDTO {
 	@ApiModelProperty(hidden = true)
 	private Integer idAnimal;
 
+	@NotNull(message = "Espécie {empty}")
 	private Species speciesAnimal;
 
+	@NotEmpty(message = "Raça {empty}")
 	@Length(max = 30, message = "{length.thirty}")
 	private String breedAnimal;
 

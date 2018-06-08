@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -34,6 +36,7 @@ public class ContributionDTO {
 	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTOByIdRequest;
 
+	@NotEmpty(message = "Descrição {empty}")
 	@Length(max = 100, message = "{length.hundred}")
 	private String descriptionContribution;
 
