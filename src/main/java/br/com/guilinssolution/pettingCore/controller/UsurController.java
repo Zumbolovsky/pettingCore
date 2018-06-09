@@ -36,7 +36,7 @@ public class UsurController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/all", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAll(UsurExample example,
+    public ListResultDTO<UsurDTO> findAll(@RequestBody UsurExample example,
                                           PageDTO page) {
         log.info("Listar todos os dados de Usuário");
         return this.service.findAll(example, page);
@@ -44,7 +44,7 @@ public class UsurController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAllLite(UsurExample example,
+    public ListResultDTO<UsurDTO> findAllLite(@RequestBody UsurExample example,
                                               PageDTO page) {
         log.info("Listar todos os dados de Usuário");
         return this.service.findAllLite(example, page);
@@ -59,7 +59,7 @@ public class UsurController {
 
     @ApiOperation(value = "Cadastra dados no banco")
     @RequestMapping(value = "/usur", method = RequestMethod.POST)
-    public ResponseEntity<UsurDTO> save(@Valid UsurDTO dto,
+    public ResponseEntity<UsurDTO> save(@Valid @RequestBody  UsurDTO dto,
                                         BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
         this.validator.hibernateException(result);
@@ -69,7 +69,7 @@ public class UsurController {
     @ApiOperation(value = "Atualiza dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId,
-                                          @Valid UsurDTO dto,
+                                          @Valid @RequestBody UsurDTO dto,
                                           BindingResult result) {
         log.info("Atualizando dados de um Usuário");
         this.validator.hibernateException(result);

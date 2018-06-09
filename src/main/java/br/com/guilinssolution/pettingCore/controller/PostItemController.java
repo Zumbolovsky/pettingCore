@@ -54,7 +54,7 @@ public class PostItemController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example,
+    public ListResultDTO<PostItemDTO> findAllLite(@RequestBody PostItemExample example,
                                                   PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
         return this.service.findAllLite(example, page);
@@ -69,7 +69,7 @@ public class PostItemController {
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PostItemDTO> save(@Valid PostItemDTO dto,
+    public ResponseEntity<PostItemDTO> save(@Valid @RequestBody PostItemDTO dto,
                                             @RequestParam Integer idAnimal,
                                             @RequestParam Integer idUsur,
                                             BindingResult result) {
@@ -81,7 +81,7 @@ public class PostItemController {
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> update(@PathVariable Integer currentId,
-                                              @Valid PostItemDTO dto,
+                                              @Valid @RequestBody PostItemDTO dto,
                                               @RequestParam Integer idAnimal,
                                               @RequestParam Integer idUsur,
                                               BindingResult result) {
@@ -93,7 +93,7 @@ public class PostItemController {
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> quickUpdate(@PathVariable Integer currentId,
-                                                   @Valid PostItemDTO dto,
+                                                   @Valid @RequestBody PostItemDTO dto,
                                                    BindingResult result) {
         log.info("Atualizando dados de um Publicação Item");
         this.validator.hibernateException(result);

@@ -36,7 +36,7 @@ public class AnimalController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<AnimalDTO> findAll(AnimalDTO dto,
+    public ListResultDTO<AnimalDTO> findAll(@RequestBody AnimalDTO dto,
                                             PageDTO page) {
         log.info("Listar todos os dados de Animal");
         return this.service.findAll(dto, page);
@@ -44,7 +44,7 @@ public class AnimalController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<AnimalDTO> findAllLite(AnimalDTO dto,
+    public ListResultDTO<AnimalDTO> findAllLite(@RequestBody AnimalDTO dto,
                                                 PageDTO page) {
         log.info("Listar todos os dados de Animal");
         return this.service.findAllLite(dto, page);
@@ -59,7 +59,7 @@ public class AnimalController {
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<AnimalDTO> save(@Valid AnimalDTO dto,
+    public ResponseEntity<AnimalDTO> save(@Valid @RequestBody AnimalDTO dto,
                                           BindingResult result) {
         log.info("Cadastrando dados de um Animal");
         this.validator.hibernateException(result);
@@ -69,7 +69,7 @@ public class AnimalController {
     @ApiOperation(value = "Atualiza dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<AnimalDTO> update(@PathVariable Integer currentId,
-                                            @Valid AnimalDTO dto,
+                                            @Valid @RequestBody AnimalDTO dto,
                                             BindingResult result) {
         log.info("Atualizando dados de um Animal");
         this.validator.hibernateException(result);

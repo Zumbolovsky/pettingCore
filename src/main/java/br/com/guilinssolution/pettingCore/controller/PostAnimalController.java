@@ -10,11 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
@@ -44,7 +40,7 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example,
+    public ListResultDTO<PostAnimalDTO> findAll(@RequestBody PostAnimalExample example,
                                                 PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAll(example, page);
@@ -52,7 +48,7 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example,
+    public ListResultDTO<PostAnimalDTO> findAllLite(@RequestBody PostAnimalExample example,
                                                     PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
         return this.service.findAllLite(example, page);
@@ -67,7 +63,7 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PostAnimalDTO> save(@Valid PostAnimalDTO dto,
+    public ResponseEntity<PostAnimalDTO> save(@Valid @RequestBody PostAnimalDTO dto,
                                               @RequestParam Integer idAnimal,
                                               @RequestParam Integer idUsur,
                                               BindingResult result) {
@@ -79,7 +75,7 @@ public class PostAnimalController {
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostAnimalDTO> update(@PathVariable Integer currentId,
-                                                @Valid PostAnimalDTO dto,
+                                                @Valid @RequestBody PostAnimalDTO dto,
                                                 @RequestParam Integer idAnimal,
                                                 @RequestParam Integer idUsur,
                                                 BindingResult result) {
@@ -91,7 +87,7 @@ public class PostAnimalController {
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostAnimalDTO> quickUpdate(@PathVariable Integer currentId,
-                                                     @Valid PostAnimalDTO dto,
+                                                     @Valid @RequestBody PostAnimalDTO dto,
                                                      BindingResult result) {
         log.info("Atualizando dados de um Publicação Animal");
         this.validator.hibernateException(result);

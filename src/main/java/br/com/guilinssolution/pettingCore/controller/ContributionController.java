@@ -10,11 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
@@ -44,7 +40,7 @@ public class ContributionController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAll(ContributionExample example,
+    public ListResultDTO<ContributionDTO> findAll(@RequestBody ContributionExample example,
                                                   PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAll(example, page);
@@ -52,7 +48,7 @@ public class ContributionController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAllLite(ContributionExample example,
+    public ListResultDTO<ContributionDTO> findAllLite(@RequestBody ContributionExample example,
                                                       PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
         return this.service.findAllLite(example, page);
@@ -67,7 +63,7 @@ public class ContributionController {
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ContributionDTO> save(@Valid ContributionDTO dto,
+    public ResponseEntity<ContributionDTO> save(@Valid @RequestBody ContributionDTO dto,
                                                 @RequestParam(required = false) Integer idPostAnimal,
                                                 @RequestParam(required = false) Integer idPostItem,
                                                 @RequestParam Integer idUsurRequest,
@@ -86,7 +82,7 @@ public class ContributionController {
                                                   @RequestParam(required = false) Integer idPostItem,
                                                   @RequestParam Integer idUsurRequest,
                                                   @RequestParam(required = false) Integer idUsurDonator,
-                                                  @Valid ContributionDTO dto,
+                                                  @Valid @RequestBody ContributionDTO dto,
                                                   BindingResult result) {
         log.info("Atualizando dados de uma Contribuição e suas relações");
         this.validator.hibernateException(result);
@@ -97,7 +93,7 @@ public class ContributionController {
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<ContributionDTO> quickUpdate(@PathVariable Integer currentId,
-                                                       @Valid ContributionDTO dto,
+                                                       @Valid @RequestBody ContributionDTO dto,
                                                        BindingResult result) {
         log.info("Atualizando dados de uma Contribuição");
         this.validator.hibernateException(result);
