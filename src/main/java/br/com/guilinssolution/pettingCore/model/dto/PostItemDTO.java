@@ -41,10 +41,10 @@ public class PostItemDTO {
 	private String descriptionPostItem;
 
 	//todo: só tirar NotEmpty e colocar ApiModelProperty se tiver imagem Multipart
-	@NotEmpty(message = "Imagem {empty}")
 	//@ApiModelProperty(hidden = true)
-	@Length(max = 50, message = "{length.fifty}")
-	private String imagePostItem;
+//	@NotEmpty(message = "Imagem {empty}")
+//	@Length(max = 50, message = "{length.fifty}")
+//	private String imagePostItem;
 
 	@NotNull(message = "Tipo {empty}")
 	private Type typePostItem;

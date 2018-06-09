@@ -68,9 +68,9 @@ public class UsurDTO {
 
 	//todo: só tirar NotEmpty e colocar ApiModelProperty se tiver imagem Multipart
 	//@ApiModelProperty(hidden = true)
-	@NotEmpty(message = "Imagem {empty}")
-	@Length(max = 50, message = "{length.fifty}")
-	private String imageUsur;
+//	@NotEmpty(message = "Imagem {empty}")
+//	@Length(max = 50, message = "{length.fifty}")
+//	private String imageUsur;
 
 
 }

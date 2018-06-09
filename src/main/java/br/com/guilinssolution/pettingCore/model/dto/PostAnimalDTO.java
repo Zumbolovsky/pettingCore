@@ -42,9 +42,9 @@ public class PostAnimalDTO {
 	private Size sizePostAnimal;
 
 	//todo: só tirar NotEmpty e colocar ApiModelProperty se tiver imagem Multipart
-	@NotEmpty(message = "Imagem {empty}")
 	//@ApiModelProperty(hidden = true)
-	@Length(max = 50, message = "{length.fifty}")
-	private String imagePostAnimal;
+//	@NotEmpty(message = "Imagem {empty}")
+//	@Length(max = 50, message = "{length.fifty}")
+//	private String imagePostAnimal;
 
 }

@@ -62,7 +62,7 @@ public class UsurEntity implements Serializable {
 	@Column(name = "phone_usur", nullable = false, length = 15)
 	private String phoneUsur;
 
-	@Column(name = "image_usur", nullable = false, length = 50)
+	@Column(name = "image_usur", length = 50)
 	private String imageUsur;
 
     public void update(UsurEntity entity) {

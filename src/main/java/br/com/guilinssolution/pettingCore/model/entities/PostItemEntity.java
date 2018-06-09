@@ -46,7 +46,7 @@ public class PostItemEntity implements Serializable {
 	@Column(name = "description_postItem", nullable = false, length = 100)
 	private String descriptionPostItem;
 
-	@Column(name = "image_postItem", nullable = false, length = 50)
+	@Column(name = "image_postItem", length = 50)
 	private String imagePostItem;
 
 	@Enumerated(EnumType.STRING)

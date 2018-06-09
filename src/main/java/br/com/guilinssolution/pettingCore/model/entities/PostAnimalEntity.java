@@ -50,7 +50,7 @@ public class PostAnimalEntity implements Serializable {
 	@Column(name = "size_postAnimal", nullable = false, length = 7)
 	private Size sizePostAnimal;
 
-	@Column(name = "image_postAnimal", nullable = false, length = 50)
+	@Column(name = "image_postAnimal", length = 50)
 	private String imagePostAnimal;
 
 	@CreatedDate

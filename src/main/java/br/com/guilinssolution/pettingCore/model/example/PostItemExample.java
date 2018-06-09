@@ -21,8 +21,8 @@ public class PostItemExample {
     @Length(max = 100, message = "{length.hundred}")
     private String descriptionPostItem;
 
-    @Length(max = 50, message = "{length.fifty}")
-    private String imagePostItem;
+//    @Length(max = 50, message = "{length.fifty}")
+//    private String imagePostItem;
 
     private Type typePostItem;
 
