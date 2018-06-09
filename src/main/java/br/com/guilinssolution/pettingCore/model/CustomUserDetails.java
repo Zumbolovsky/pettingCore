@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.model;
 
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
+import net.bytebuddy.matcher.FilterableList;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,17 +10,12 @@ import java.util.Collection;
 public class CustomUserDetails extends UsurEntity implements UserDetails {
 
     public CustomUserDetails(final UsurEntity usurEntity) {
-        super(usurEntity.getIdUsur(), usurEntity.getNameUsur(),
-                usurEntity.getCpfUsur(), usurEntity.getAddressUsur(),
-                usurEntity.getCityUsur(), usurEntity.getEmailUsur(),
-                usurEntity.getPasswordUsur(), usurEntity.getStateUsur(),
-                usurEntity.getCellphoneUsur(), usurEntity.getPhoneUsur(),
-                usurEntity.getImageUsur());
+        super(usurEntity.getEmailUsur(), usurEntity.getPasswordUsur());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return new FilterableList.Empty<>();
     }
 
     @Override

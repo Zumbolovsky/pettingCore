@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.controller;
 import javax.validation.Valid;
 
 import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,7 +42,7 @@ public class PostAnimalController {
         this.validator = validator;
     }
 
-    @ApiOperation(value = "Lista de todos dados")
+    @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example,
                                                 PageDTO page) {
@@ -49,7 +50,7 @@ public class PostAnimalController {
         return this.service.findAll(example, page);
     }
 
-    @ApiOperation(value = "Busca dados pelo identificador")
+    @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
     public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example,
                                                     PageDTO page) {
@@ -57,14 +58,14 @@ public class PostAnimalController {
         return this.service.findAllLite(example, page);
     }
 
-    @ApiOperation(value = "Busca dados pelo identificador")
+    @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PostAnimalDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Publicação Animal");
         return new ResponseEntity<>(this.service.findOne(id), HttpStatus.FOUND);
     }
 
-    @ApiOperation(value = "Cadastra dados no banco")
+    @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<PostAnimalDTO> save(@Valid PostAnimalDTO dto,
                                               @RequestParam Integer idAnimal,
@@ -75,7 +76,7 @@ public class PostAnimalController {
         return new ResponseEntity<>(this.service.save(dto, idAnimal, idUsur), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Atualiza dados no banco (especificando relações)")
+    @ApiOperation(value = "Atualiza dados no banco (especificando relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostAnimalDTO> update(@PathVariable Integer currentId,
                                                 @Valid PostAnimalDTO dto,
@@ -87,7 +88,7 @@ public class PostAnimalController {
         return new ResponseEntity<>(this.service.update(currentId, dto, idAnimal, idUsur), HttpStatus.ACCEPTED);
     }
 
-    @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)")
+    @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostAnimalDTO> quickUpdate(@PathVariable Integer currentId,
                                                      @Valid PostAnimalDTO dto,
@@ -97,19 +98,19 @@ public class PostAnimalController {
         return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
     }
 
-    @ApiOperation("Exclui dados no banco")
+    @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Publicação Animal");
         this.service.delete(id);
     }
 
-    @ApiOperation("Lista por ID de usuário")
+    @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "all/usur", method = RequestMethod.GET)
     public ListResultDTO<PostAnimalDTO> listByUsur(PageDTO pageDTO) {
         log.info("Listando Publicações Animal por usuário");
-        CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByUsur(principal.getIdUsur(), pageDTO);
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByUsur(Integer.parseInt(principal), pageDTO);
     }
 
 }

@@ -8,6 +8,7 @@ import br.com.guilinssolution.pettingCore.services.UsurService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class UsurController {
         this.validator = validator;
     }
 
-    @ApiOperation(value = "Lista de todos dados")
+    @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/all", method = RequestMethod.GET)
     public ListResultDTO<UsurDTO> findAll(UsurExample example,
                                           PageDTO page) {
@@ -41,7 +42,7 @@ public class UsurController {
         return this.service.findAll(example, page);
     }
 
-    @ApiOperation(value = "Busca dados pelo identificador")
+    @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/all-lite", method = RequestMethod.GET)
     public ListResultDTO<UsurDTO> findAllLite(UsurExample example,
                                               PageDTO page) {
@@ -49,7 +50,7 @@ public class UsurController {
         return this.service.findAllLite(example, page);
     }
 
-    @ApiOperation(value = "Busca dados pelo identificador")
+    @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.GET)
     public ResponseEntity<UsurDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Usuário");
@@ -65,7 +66,7 @@ public class UsurController {
         return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Atualiza dados no banco")
+    @ApiOperation(value = "Atualiza dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId,
                                           @Valid UsurDTO dto,
@@ -75,7 +76,7 @@ public class UsurController {
         return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.ACCEPTED);
     }
 
-    @ApiOperation("Exclui dados no banco")
+    @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Usuário");

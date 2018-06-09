@@ -78,4 +78,9 @@ public class UsurEntity implements Serializable {
 		this.setImageUsur(entity.getImageUsur());
 	}
 
+	public UsurEntity(String emailUsur, String passwordUsur) {
+		this.setEmailUsur(emailUsur);
+		this.setPasswordUsur(passwordUsur);
+	}
+
 }

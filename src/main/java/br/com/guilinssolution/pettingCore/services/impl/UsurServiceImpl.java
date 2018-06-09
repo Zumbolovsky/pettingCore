@@ -52,19 +52,16 @@ public class UsurServiceImpl implements UsurService {
 
     private final MessageService message;
 
-    private final BCryptPasswordEncoder encoder;
-
     @Autowired
     public UsurServiceImpl(UsurRepository repository, ContributionRepository contributionRepository,
                            PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository,
-                           Validator validator, MessageService message, BCryptPasswordEncoder encoder) {
+                           Validator validator, MessageService message) {
         this.repository = repository;
         this.contributionRepository = contributionRepository;
         this.postAnimalRepository = postAnimalRepository;
         this.postItemRepository = postItemRepository;
         this.validator = validator;
         this.message = message;
-        this.encoder = encoder;
     }
 
     @Override
@@ -99,8 +96,6 @@ public class UsurServiceImpl implements UsurService {
 
         this.validator.entityExistByEmail(dto.getEmailUsur(), this.repository);
         this.validator.entityExistByEntity(usurEntity, this.repository);
-
-        usurEntity.setPasswordUsur(this.encoder.encode(usurEntity.getPasswordUsur()));
 
         usurEntity = this.repository.save(usurEntity);
 
