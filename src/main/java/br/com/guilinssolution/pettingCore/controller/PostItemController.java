@@ -4,6 +4,7 @@ import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.enums.Type;
 import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
 import br.com.guilinssolution.pettingCore.services.PostItemService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -40,16 +41,25 @@ public class PostItemController {
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAll(PostItemExample example,
-                                              PageDTO page) {
+                                                      PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
-        return this.service.findAll(example, page);
+        return this.service.findAll(example, example.getTypePostItem(), page);
     }
 
-    @ApiOperation(value = "Lista de todos dados (pós login)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/all", method = RequestMethod.POST)
-    public ListResultDTO<PostItemDTO> findAll() {
-        log.info("Listar todos os dados de Publicação Item (pós login)");
-        return this.service.findAll(new PostItemExample(), new PageDTO());
+    @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-medicine", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> findAllMedicine(PostItemExample example,
+                                                      PageDTO page) {
+        log.info("Listar todos os dados de Publicação Item");
+        return this.service.findAll(example, Type.REMEDIO, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-product", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> findAllProduct(PostItemExample example,
+                                              PageDTO page) {
+        log.info("Listar todos os dados de Publicação Item");
+        return this.service.findAll(example, Type.PRODUTO, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })

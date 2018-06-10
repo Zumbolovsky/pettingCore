@@ -10,6 +10,7 @@ import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostItemEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.Type;
 import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
 import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
@@ -52,7 +53,8 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public ListResultDTO<PostItemDTO> findAll(PostItemExample example, PageDTO page) {
+    public ListResultDTO<PostItemDTO> findAll(PostItemExample example, Type type, PageDTO page) {
+        example.setTypePostItem(type);
         BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
 
