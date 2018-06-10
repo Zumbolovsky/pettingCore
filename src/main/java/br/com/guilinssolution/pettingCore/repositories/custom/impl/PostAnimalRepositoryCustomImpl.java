@@ -58,7 +58,8 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
                 .from(postAnimalEntity)
                 .where(postAnimalEntity.titlePostAnimal.eq(entity.getTitlePostAnimal())
                         .and(postAnimalEntity.descriptionPostAnimal.eq(entity.getDescriptionPostAnimal())
-                        .and(postAnimalEntity.sizePostAnimal.eq(entity.getSizePostAnimal()))))
+                        .and(postAnimalEntity.sizePostAnimal.eq(entity.getSizePostAnimal()))
+                        .and(postAnimalEntity.speciesPostAnimal.eq(entity.getSpeciesPostAnimal()))))
                 .fetchOne() != null;
     }
 

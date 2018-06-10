@@ -14,9 +14,6 @@ public class PostItemAdapter {
             return null;
         }
 
-        AnimalEntity animalEntity = entity.getAnimalEntity();
-        AnimalDTO animalDTO = AnimalAdapter.convertToDTO(animalEntity);
-
         UsurEntity usurEntity = entity.getUsurEntity();
         UsurDTO usurDTO = UsurAdapter.convertToDTO(usurEntity);
 
@@ -26,7 +23,7 @@ public class PostItemAdapter {
 //                .imagePostItem(entity.getImagePostItem())
                 .titlePostItem(entity.getTitlePostItem())
                 .typePostItem(entity.getTypePostItem())
-                .animalDTO(animalDTO)
+                .speciesPostItem(entity.getSpeciesPostItem())
                 .usurDTO(usurDTO)
                 .build();
     }
@@ -35,9 +32,6 @@ public class PostItemAdapter {
         if(dto == null) {
             return null;
         }
-
-        AnimalDTO animalDTO = dto.getAnimalDTO();
-        AnimalEntity animalEntity = AnimalAdapter.convertToEntity(animalDTO);
 
         UsurDTO usurDTO = dto.getUsurDTO();
         UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);
@@ -48,7 +42,7 @@ public class PostItemAdapter {
 //                .imagePostItem(dto.getImagePostItem())
                 .titlePostItem(dto.getTitlePostItem())
                 .typePostItem(dto.getTypePostItem())
-                .animalEntity(animalEntity)
+                .speciesPostItem(dto.getSpeciesPostItem())
                 .usurEntity(usurEntity)
                 .build();
     }

@@ -12,8 +12,8 @@ public interface PostItemService {
     ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO);
     ListResultDTO<PostItemDTO> findAllLite(PostItemExample example, PageDTO page);
     PostItemDTO findOne(Integer id);
-    PostItemDTO save(PostItemDTO dto, Integer idAnimal, Integer idUsur);
-    PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idAnimal, Integer idUsur);
+    PostItemDTO save(PostItemDTO dto, Integer idUsur);
+    PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idUsur);
     PostItemDTO quickUpdate(Integer currentId, PostItemDTO dto);
     void delete(Integer id);
 }

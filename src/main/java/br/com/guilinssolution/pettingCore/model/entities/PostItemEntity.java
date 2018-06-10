@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.model.enums.Type;
 import lombok.Data;
 import lombok.Builder;
@@ -33,10 +34,6 @@ public class PostItemEntity implements Serializable {
 	private Integer idPostItem;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_animal", nullable = false)
-	private AnimalEntity animalEntity;
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usur", nullable = false)
 	private UsurEntity usurEntity;
 
@@ -53,6 +50,10 @@ public class PostItemEntity implements Serializable {
 	@Column(name = "type_postItem", nullable = false, length = 7)
 	private Type typePostItem;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "species_postItem", nullable = false, length = 8)
+	private Species speciesPostItem;
+
 	@CreatedDate
 	@Temporal(TemporalType.DATE)
 	@Column(name = "createdDate_postItem", nullable = false)
@@ -64,7 +65,6 @@ public class PostItemEntity implements Serializable {
 	private Date lastModifiedDatePostItem;
 
 	public void update(PostItemEntity entity) {
-		this.setAnimalEntity(entity.getAnimalEntity());
 		this.setUsurEntity(entity.getUsurEntity());
 		this.setTitlePostItem(entity.getTitlePostItem());
 		this.setDescriptionPostItem(entity.getDescriptionPostItem());

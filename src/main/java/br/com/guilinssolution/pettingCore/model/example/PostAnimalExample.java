@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.model.example;
 
 import br.com.guilinssolution.pettingCore.model.enums.Size;
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +27,5 @@ public class PostAnimalExample {
 //    @Length(max = 50, message = "{length.fifty}")
 //    private String imagePostAnimal;
 
+    private Species speciesPostAnimal;
 }

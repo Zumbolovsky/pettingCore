@@ -1,7 +1,6 @@
 package br.com.guilinssolution.pettingCore.services.impl;
 
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
-import br.com.guilinssolution.pettingCore.model.adapter.AnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
@@ -10,9 +9,9 @@ import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostItemEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.model.enums.Type;
 import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
-import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.PostItemService;
@@ -38,16 +37,13 @@ public class PostItemServiceImpl implements PostItemService {
 
     private final PostItemRepository repository;
 
-    private final AnimalRepository animalRepository;
-
     private final UsurRepository usurRepository;
 
     private final Validator validator;
 
     @Autowired
-    public PostItemServiceImpl(PostItemRepository repository, AnimalRepository animalRepository, UsurRepository usurRepository, Validator validator) {
+    public PostItemServiceImpl(PostItemRepository repository, UsurRepository usurRepository, Validator validator) {
         this.repository = repository;
-        this.animalRepository = animalRepository;
         this.usurRepository = usurRepository;
         this.validator = validator;
     }
@@ -85,11 +81,9 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO save(PostItemDTO dto, Integer idAnimal, Integer idUsur) {
-        this.validator.entityNotExist(idAnimal, this.animalRepository);
+    public PostItemDTO save(PostItemDTO dto, Integer idUsur) {
         this.validator.entityNotExist(idUsur, this.usurRepository);
 
-        dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
         this.validator.entityExistByEntity(postItemEntity, this.repository);
@@ -99,13 +93,10 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idAnimal, Integer idUsur) {
+    public PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idUsur) {
         this.validator.entityNotExist(currentId, this.repository);
 
         PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
-
-        this.validator.entityNotExist(idAnimal, this.animalRepository);
-        dto.setAnimalDTO(AnimalAdapter.convertToDTO(this.animalRepository.getOne(idAnimal)));
 
         this.validator.entityNotExist(idUsur, this.usurRepository);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
@@ -125,7 +116,6 @@ public class PostItemServiceImpl implements PostItemService {
         PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
 
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
-        newPostItemEntity.setAnimalEntity(vesselPostItemEntity.getAnimalEntity());
         newPostItemEntity.setUsurEntity(vesselPostItemEntity.getUsurEntity());
 
         this.validator.entityExistByEntity(newPostItemEntity, this.repository);
@@ -161,6 +151,7 @@ public class PostItemServiceImpl implements PostItemService {
 
         String descriptionPostItem = example.getDescriptionPostItem();
         String titlePostItem = example.getTitlePostItem();
+        Species speciesPostItem = example.getSpeciesPostItem();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
         if (StringUtils.isNotEmpty(descriptionPostItem)) {
@@ -168,6 +159,9 @@ public class PostItemServiceImpl implements PostItemService {
         }
         if (StringUtils.isNotEmpty(titlePostItem)) {
             expressionsAnd.add(root.titlePostItem.like("%"+titlePostItem+"%"));
+        }
+        if (speciesPostItem != null) {
+            expressionsAnd.add(root.speciesPostItem.eq(speciesPostItem));
         }
 
         return addAnd(expressionsAnd);

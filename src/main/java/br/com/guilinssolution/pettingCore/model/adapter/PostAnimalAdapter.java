@@ -1,9 +1,7 @@
 package br.com.guilinssolution.pettingCore.model.adapter;
 
-import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
-import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
@@ -18,9 +16,6 @@ public class PostAnimalAdapter {
             return null;
         }
 
-        AnimalEntity animalEntity = entity.getAnimalEntity();
-        AnimalDTO animalDTO = AnimalAdapter.convertToDTO(animalEntity);
-
         UsurEntity usurEntity = entity.getUsurEntity();
         UsurDTO usurDTO = UsurAdapter.convertToDTO(usurEntity);
 
@@ -30,7 +25,7 @@ public class PostAnimalAdapter {
 //                .imagePostAnimal(entity.getImagePostAnimal())
                 .sizePostAnimal(entity.getSizePostAnimal())
                 .titlePostAnimal(entity.getTitlePostAnimal())
-                .animalDTO(animalDTO)
+                .speciesPostAnimal(entity.getSpeciesPostAnimal())
                 .usurDTO(usurDTO)
                 .build();
     }
@@ -39,9 +34,6 @@ public class PostAnimalAdapter {
         if(dto == null) {
             return null;
         }
-
-        AnimalDTO animalDTO = dto.getAnimalDTO();
-        AnimalEntity animalEntity  = AnimalAdapter.convertToEntity(animalDTO);
 
         UsurDTO usurDTO = dto.getUsurDTO();
         UsurEntity usurEntity = UsurAdapter.convertToEntity(usurDTO);
@@ -52,7 +44,7 @@ public class PostAnimalAdapter {
 //                .imagePostAnimal(dto.getImagePostAnimal())
                 .sizePostAnimal(dto.getSizePostAnimal())
                 .titlePostAnimal(dto.getTitlePostAnimal())
-                .animalEntity(animalEntity)
+                .speciesPostAnimal(dto.getSpeciesPostAnimal())
                 .usurEntity(usurEntity)
                 .build();
     }

@@ -1,5 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.example;
 
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.model.enums.Type;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -26,4 +29,5 @@ public class PostItemExample {
 
     private Type typePostItem;
 
+    private Species speciesPostItem;
 }

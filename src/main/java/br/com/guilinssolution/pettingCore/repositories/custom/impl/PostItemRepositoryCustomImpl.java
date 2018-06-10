@@ -57,7 +57,8 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
         return query
                 .from(postItemEntity)
                 .where(postItemEntity.titlePostItem.eq(entity.getTitlePostItem())
-                .and(postItemEntity.descriptionPostItem.eq(entity.getDescriptionPostItem())))
+                        .and(postItemEntity.descriptionPostItem.eq(entity.getDescriptionPostItem()))
+                        .and(postItemEntity.speciesPostItem.eq(entity.getSpeciesPostItem())))
                 .fetchOne() != null;
     }
 

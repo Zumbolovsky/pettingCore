@@ -12,8 +12,8 @@ public interface PostAnimalService {
     ListResultDTO<PostAnimalDTO> listByUsur(Integer idUsur, PageDTO pageDTO);
     ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example, PageDTO page);
     PostAnimalDTO findOne(Integer id);
-    PostAnimalDTO save(PostAnimalDTO dto, Integer idAnimal, Integer idUsur);
-    PostAnimalDTO update(Integer currentId, PostAnimalDTO dto, Integer idAnimal, Integer idUsur);
+    PostAnimalDTO save(PostAnimalDTO dto, Integer idUsur);
+    PostAnimalDTO update(Integer currentId, PostAnimalDTO dto, Integer idUsur);
     PostAnimalDTO quickUpdate(Integer currentId, PostAnimalDTO dto);
     void delete(Integer id);
 

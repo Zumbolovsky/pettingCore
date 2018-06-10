@@ -1,5 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.dto;
 
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -27,9 +28,6 @@ public class PostItemDTO {
 	private Integer idPostItem;
 
 	@ApiModelProperty(hidden = true)
-	private AnimalDTO animalDTO;
-
-	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTO;
 
 	@NotEmpty(message = "Título {empty}")
@@ -49,4 +47,6 @@ public class PostItemDTO {
 	@NotNull(message = "Tipo {empty}")
 	private Type typePostItem;
 
+	@NotNull(message = "Espécie {empty}")
+	private Species speciesPostItem;
 }

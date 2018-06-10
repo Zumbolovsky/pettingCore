@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.model.dto;
 
 import br.com.guilinssolution.pettingCore.model.enums.Size;
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,9 +26,6 @@ public class PostAnimalDTO {
 	private Integer idPostAnimal;
 
 	@ApiModelProperty(hidden = true)
-	private AnimalDTO animalDTO;
-
-	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTO;
 
 	@NotEmpty(message = "Título {empty}")
@@ -47,4 +45,6 @@ public class PostAnimalDTO {
 //	@Length(max = 50, message = "{length.fifty}")
 //	private String imagePostAnimal;
 
+	@NotNull(message = "Espécie {empty}")
+	private Species speciesPostAnimal;
 }

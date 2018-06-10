@@ -1,7 +1,5 @@
 package br.com.guilinssolution.pettingCore.controller;
 
-import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
-import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
@@ -89,35 +87,32 @@ public class PostItemController {
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<PostItemDTO> save(@Valid @RequestBody PostItemDTO dto,
-                                            @RequestParam Integer idAnimal,
                                             @RequestParam Integer idUsur,
                                             BindingResult result) {
         log.info("Cadastrando dados de um Publicação Item");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(dto, idAnimal, idUsur), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.service.save(dto, idUsur), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Cadastra dados no banco (usuário da sessão)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/usur", method = RequestMethod.POST)
     public ResponseEntity<PostItemDTO> saveSessionUser(@Valid @RequestBody PostItemDTO dto,
-                                                       @RequestParam Integer idAnimal,
                                                        BindingResult result) {
         log.info("Cadastrando dados de um Publicação Item (sessão)");
         this.validator.hibernateException(result);
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new ResponseEntity<>(this.service.save(dto, Integer.parseInt(principal), idAnimal), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.service.save(dto, Integer.parseInt(principal)), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> update(@PathVariable Integer currentId,
                                               @Valid @RequestBody PostItemDTO dto,
-                                              @RequestParam Integer idAnimal,
                                               @RequestParam Integer idUsur,
                                               BindingResult result) {
         log.info("Atualizando dados de um Publicação Item e suas relações");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, dto, idAnimal, idUsur), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idUsur), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
