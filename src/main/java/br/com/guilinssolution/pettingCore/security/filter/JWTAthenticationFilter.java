@@ -47,7 +47,7 @@ public class JWTAthenticationFilter extends UsernamePasswordAuthenticationFilter
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            final byte[] content = IOUtils.toByteArray(request.getReader(), "UTF-8");
+            final byte[] content = IOUtils.toByteArray(request.getInputStream());
             String jsonString = new String(content, StandardCharsets.UTF_8);
             jsonString = jsonString.replace("username", "emailUsur").replace("password", "passwordUsur");
             UsurEntity credentials = new ObjectMapper().readValue(jsonString, UsurEntity.class);
