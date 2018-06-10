@@ -11,6 +11,7 @@ import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.Size;
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.model.example.PostAnimalExample;
 import br.com.guilinssolution.pettingCore.repositories.AnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
@@ -53,8 +54,8 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
-    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example, PageDTO page) {
-        BooleanExpression query = queryGeneration(example);
+    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalExample example, Species species, PageDTO page) {
+        BooleanExpression query = queryGeneration(example, species);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.NORMAL);
@@ -62,7 +63,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
 
     @Override
     public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example, PageDTO page) {
-        BooleanExpression query = queryGeneration(example);
+        BooleanExpression query = queryGeneration(example, null);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.LITE);
@@ -156,7 +157,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         return new ListResultDTO<>(postAnimalEntityPages, postAnimalDTOS);
     }
 
-    private BooleanExpression queryGeneration(PostAnimalExample example) {
+    private BooleanExpression queryGeneration(PostAnimalExample example, Species species) {
         QPostAnimalEntity root = QPostAnimalEntity.postAnimalEntity;
 
         String descriptionPostAnimal = example.getDescriptionPostAnimal();
@@ -172,6 +173,9 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         }
         if (StringUtils.isNotEmpty(titlePostAnimal)) {
             expressionsAnd.add(root.titlePostAnimal.like("%"+titlePostAnimal+"%"));
+        }
+        if (species != null) {
+            expressionsAnd.add(root.animalEntity.speciesAnimal.eq(species));
         }
 
         return addAnd(expressionsAnd);

@@ -41,12 +41,12 @@ public class PostItemController {
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAll(PostItemExample example,
-                                                      PageDTO page) {
+                                              PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
         return this.service.findAll(example, example.getTypePostItem(), page);
     }
 
-    @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
+    @ApiOperation(value = "Lista de todos dados (para remédios)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-medicine", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAllMedicine(PostItemExample example,
                                                       PageDTO page) {
@@ -54,10 +54,10 @@ public class PostItemController {
         return this.service.findAll(example, Type.REMEDIO, page);
     }
 
-    @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
+    @ApiOperation(value = "Lista de todos dados (para produtos)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-product", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAllProduct(PostItemExample example,
-                                              PageDTO page) {
+                                                     PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
         return this.service.findAll(example, Type.PRODUTO, page);
     }

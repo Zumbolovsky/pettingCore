@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.controller;
 import javax.validation.Valid;
 
 import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,47 @@ public class PostAnimalController {
     public ListResultDTO<PostAnimalDTO> findAll(@RequestBody PostAnimalExample example,
                                                 PageDTO page) {
         log.info("Listar todos os dados de Publicação Animal");
-        return this.service.findAll(example, page);
+        return this.service.findAll(example, null, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (para cachorros)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-dog", method = RequestMethod.GET)
+    public ListResultDTO<PostAnimalDTO> findAllDog(@RequestBody PostAnimalExample example,
+                                                   PageDTO page) {
+        log.info("Listar todos os dados de Publicação Animal (tipo cachorro)");
+        return this.service.findAll(example, Species.CACHORRO, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (para gatos)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-cat", method = RequestMethod.GET)
+    public ListResultDTO<PostAnimalDTO> findAllCat(@RequestBody PostAnimalExample example,
+                                                   PageDTO page) {
+        log.info("Listar todos os dados de Publicação Animal (tipo gato)");
+        return this.service.findAll(example, Species.GATO, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (para pássaros)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-bird", method = RequestMethod.GET)
+    public ListResultDTO<PostAnimalDTO> findAllBird(@RequestBody PostAnimalExample example,
+                                                    PageDTO page) {
+        log.info("Listar todos os dados de Publicação Animal (tipo pássaro)");
+        return this.service.findAll(example, Species.PASSARO, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (para roedores)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-rodent", method = RequestMethod.GET)
+    public ListResultDTO<PostAnimalDTO> findAllRodent(@RequestBody PostAnimalExample example,
+                                                      PageDTO page) {
+        log.info("Listar todos os dados de Publicação Animal (tipo roedor)");
+        return this.service.findAll(example, Species.ROEDOR, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (para outros)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-other", method = RequestMethod.GET)
+    public ListResultDTO<PostAnimalDTO> findAllOther(@RequestBody PostAnimalExample example,
+                                                     PageDTO page) {
+        log.info("Listar todos os dados de Publicação Animal (tipo outros)");
+        return this.service.findAll(example, Species.OUTROS, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
