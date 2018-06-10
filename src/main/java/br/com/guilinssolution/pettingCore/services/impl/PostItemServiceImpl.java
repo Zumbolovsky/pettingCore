@@ -62,6 +62,11 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
+    public ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
+        return this.repository.listByUsur(idUsur, pageDTO);
+    }
+
+    @Override
     public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example, PageDTO page) {
         BooleanExpression query = queryGeneration(example);
         Pageable pageable = PageHelper.getPage(page);
@@ -137,11 +142,6 @@ public class PostItemServiceImpl implements PostItemService {
         this.validator.entityNotExist(id, this.repository);
 
         this.repository.delete(entity);
-    }
-
-    @Override
-    public ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
-        return this.repository.listByUsur(idUsur, pageDTO);
     }
 
     private ListResultDTO<PostItemDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {

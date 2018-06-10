@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.controller;
 
 import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
+import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
@@ -46,6 +47,14 @@ public class PostItemController {
         return this.service.findAll(example, example.getTypePostItem(), page);
     }
 
+    @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all/usur", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> listByUsur(PageDTO pageDTO) {
+        log.info("Listando Publicações Item por usuário");
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByUsur(Integer.parseInt(principal), pageDTO);
+    }
+
     @ApiOperation(value = "Lista de todos dados (para remédios)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-medicine", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAllMedicine(PostItemExample example,
@@ -88,6 +97,17 @@ public class PostItemController {
         return new ResponseEntity<>(this.service.save(dto, idAnimal, idUsur), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Cadastra dados no banco (usuário da sessão)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/usur", method = RequestMethod.POST)
+    public ResponseEntity<PostItemDTO> saveSessionUser(@Valid @RequestBody PostItemDTO dto,
+                                                       @RequestParam Integer idAnimal,
+                                                       BindingResult result) {
+        log.info("Cadastrando dados de um Publicação Item (sessão)");
+        this.validator.hibernateException(result);
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new ResponseEntity<>(this.service.save(dto, Integer.parseInt(principal), idAnimal), HttpStatus.CREATED);
+    }
+
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> update(@PathVariable Integer currentId,
@@ -115,14 +135,6 @@ public class PostItemController {
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Publicação Item");
         this.service.delete(id);
-    }
-
-    @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "all/usur", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> listByUsur(PageDTO pageDTO) {
-        log.info("Listando Publicações Item por usuário");
-        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByUsur(Integer.parseInt(principal), pageDTO);
     }
 
 }

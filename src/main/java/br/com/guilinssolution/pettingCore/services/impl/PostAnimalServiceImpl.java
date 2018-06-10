@@ -62,6 +62,11 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
+    public ListResultDTO<PostAnimalDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
+        return this.repository.listByUsur(idUsur, pageDTO);
+    }
+
+    @Override
     public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalExample example, PageDTO page) {
         BooleanExpression query = queryGeneration(example, null);
         Pageable pageable = PageHelper.getPage(page);
@@ -130,7 +135,6 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         return PostAnimalAdapter.convertToDTO(newPostAnimalEntity);
     }
 
-
     @Override
     public void delete(Integer id) {
         PostAnimalEntity entity = this.repository.getOne(id);
@@ -138,11 +142,6 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         this.validator.entityNotExist(id, this.repository);
 
         this.repository.delete(entity);
-    }
-
-    @Override
-    public ListResultDTO<PostAnimalDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
-        return this.repository.listByUsur(idUsur, pageDTO);
     }
 
     private ListResultDTO<PostAnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
