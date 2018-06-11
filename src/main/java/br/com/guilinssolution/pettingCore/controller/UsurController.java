@@ -35,7 +35,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/usur/all", method = RequestMethod.GET)
     public ListResultDTO<UsurDTO> findAll(@RequestBody UsurExample example,
                                           PageDTO page) {
         log.info("Listar todos os dados de Usuário");
@@ -43,7 +43,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur/all-lite", method = RequestMethod.GET)
+    @RequestMapping(value = "/usur/all-lite", method = RequestMethod.GET)
     public ListResultDTO<UsurDTO> findAllLite(@RequestBody UsurExample example,
                                               PageDTO page) {
         log.info("Listar todos os dados de Usuário");
@@ -51,7 +51,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/usur/{id}", method = RequestMethod.GET)
     public ResponseEntity<UsurDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Usuário");
         return new ResponseEntity<>(this.service.findOne(id), HttpStatus.FOUND);
@@ -67,7 +67,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Atualiza dados no banco", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur/{currentId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/usur/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<UsurDTO> update(@PathVariable Integer currentId,
                                           @Valid @RequestBody UsurDTO dto,
                                           BindingResult result) {
@@ -77,7 +77,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/usur/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Usuário");
         this.service.delete(id);

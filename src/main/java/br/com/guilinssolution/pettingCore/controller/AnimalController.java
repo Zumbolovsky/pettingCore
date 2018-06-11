@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/secured/animal")
+@RequestMapping(path = "/animal")
 @Api(value = "AnimalControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "Animal Controller")
 public class AnimalController {
 

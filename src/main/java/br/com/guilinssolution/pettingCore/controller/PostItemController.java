@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/secured/post-item")
+@RequestMapping(path = "/post-item")
 @Api(value = "PostItemControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "PostItem Controller")
 public class PostItemController {
 
