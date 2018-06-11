@@ -66,6 +66,7 @@ public class JWTAthenticationFilter extends UsernamePasswordAuthenticationFilter
                 .setSubject(this.usurRepository.findByEmail(((CustomUserDetails) authResult.getPrincipal()).getUsername()).getIdUsur().toString())
                 .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
                 .compact();
-        response.addHeader(HEADER_STRING, token);
+        response.setContentType("application/json");
+        response.getWriter().write("{ \"" + HEADER_STRING + "\": \"" + token + "\" }");
     }
 }
