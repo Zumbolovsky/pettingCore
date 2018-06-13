@@ -2,7 +2,6 @@ package br.com.guilinssolution.pettingCore.controller;
 
 import javax.validation.Valid;
 
-import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/contribution")
+@RequestMapping(path = "/secured/contribution")
 @Api(value = "ContributionControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "Contribution Controller")
 public class ContributionController {
 
@@ -63,7 +62,7 @@ public class ContributionController {
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ContributionDTO> save(@Valid @RequestBody ContributionDTO dto,
+    public ResponseEntity<ContributionDTO> save(@Valid @RequestBody ContributionExample example,
                                                 @RequestParam(required = false) Integer idPostAnimal,
                                                 @RequestParam(required = false) Integer idPostItem,
                                                 @RequestParam Integer idUsurRequest,
@@ -71,7 +70,7 @@ public class ContributionController {
                                                 BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+        return new ResponseEntity<>(this.service.save(example, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
                 HttpStatus.CREATED);
     }
 
@@ -82,22 +81,22 @@ public class ContributionController {
                                                   @RequestParam(required = false) Integer idPostItem,
                                                   @RequestParam Integer idUsurRequest,
                                                   @RequestParam(required = false) Integer idUsurDonator,
-                                                  @Valid @RequestBody ContributionDTO dto,
+                                                  @Valid @RequestBody ContributionExample example,
                                                   BindingResult result) {
         log.info("Atualizando dados de uma Contribuição e suas relações");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+        return new ResponseEntity<>(this.service.update(currentId, example, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
                 HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<ContributionDTO> quickUpdate(@PathVariable Integer currentId,
-                                                       @Valid @RequestBody ContributionDTO dto,
+                                                       @Valid @RequestBody ContributionExample example,
                                                        BindingResult result) {
         log.info("Atualizando dados de uma Contribuição");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, example), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })

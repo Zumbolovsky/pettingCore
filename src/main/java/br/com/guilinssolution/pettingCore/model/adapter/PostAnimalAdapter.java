@@ -6,9 +6,6 @@ import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PostAnimalAdapter {
 
     public static PostAnimalDTO convertToDTO(PostAnimalEntity entity) {
@@ -49,23 +46,7 @@ public class PostAnimalAdapter {
                 .build();
     }
 
-    public static List<PostAnimalDTO> convertToDTOLite(List<PostAnimalEntity> entities) {
-        if(entities == null) {
-            return null;
-        }
-        List<PostAnimalDTO> dtos = new ArrayList<>();
-
-        for (PostAnimalEntity entity : entities) {
-            PostAnimalDTO dto = convertToDTOLite(entity);
-            if(dto != null) {
-                dtos.add(dto);
-            }
-        }
-
-        return dtos;
-    }
-
-    public static PostAnimalDTO convertToDTOLite(PostAnimalEntity entity) {
+    private static PostAnimalDTO convertToDTOLite(PostAnimalEntity entity) {
         if(entity == null) {
             return null;
         }
@@ -75,46 +56,11 @@ public class PostAnimalAdapter {
                 .build();
     }
 
-    public static List<PostAnimalEntity> convertToEntityLite(List<PostAnimalDTO> dtos) {
-        if(dtos == null) {
-            return null;
-        }
-        List<PostAnimalEntity> entities = new ArrayList<>();
-
-        for (PostAnimalDTO dto : dtos) {
-            PostAnimalEntity entity = convertToEntityLite(dto);
-            if(entity != null) {
-                dtos.add(dto);
-            }
-        }
-
-        return entities;
-    }
-
-    public static PostAnimalEntity convertToEntityLite(PostAnimalDTO dto) {
-        if(dto == null) {
-            return null;
-        }
-
-        return PostAnimalEntity.builder()
-                .idPostAnimal(dto.getIdPostAnimal())
-                .build();
-    }
-
     public static PostAnimalDTO convertToDTO(PostAnimalEntity entity, ConvertType convertType) {
         if(convertType == ConvertType.LITE) {
             return convertToDTOLite(entity);
         } else if(convertType == ConvertType.NORMAL) {
             return convertToDTO(entity);
-        }
-        return null;
-    }
-
-    public static PostAnimalEntity convertToEntity(PostAnimalDTO dto, ConvertType convertType) {
-        if(convertType == ConvertType.LITE) {
-            return convertToEntityLite(dto);
-        } else if(convertType == ConvertType.NORMAL) {
-            return convertToEntity(dto);
         }
         return null;
     }

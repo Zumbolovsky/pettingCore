@@ -33,7 +33,7 @@ public enum State {
     TO(26);
 
     @Getter
-    public Integer stateValue;
+    public final Integer stateValue;
 
     State(Integer value) {
         this.stateValue = value;

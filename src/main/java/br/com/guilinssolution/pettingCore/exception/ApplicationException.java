@@ -27,7 +27,7 @@ public class ApplicationException extends RuntimeException {
         this.code = code;
     }
 
-    ApplicationException(String message, Throwable cause, HttpStatus code) {
+    ApplicationException(String message, Throwable cause) {
         super(message, cause);
     }
 

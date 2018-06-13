@@ -23,7 +23,6 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsurDTO {
 
-    @ApiModelProperty(hidden = true)
 	private Integer idUsur;
 
 	@NotEmpty(message = "Nome {empty}")

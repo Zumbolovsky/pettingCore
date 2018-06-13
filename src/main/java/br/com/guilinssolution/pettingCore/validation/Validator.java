@@ -58,45 +58,6 @@ public class Validator {
         }
     }
 
-    public void entityExistByEntity(ContributionEntity entity, ContributionRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntity(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEntity(PostAnimalEntity entity, PostAnimalRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntity(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
-    public void entityExistByEntity(PostItemEntity entity, PostItemRepository repository) {
-        if (entity == null) {
-            String msg = message.getMessage("entity.not-acceptable");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (repository.existsByEntity(entity)) {
-            String msg = message.getMessage("entity.conflict");
-            log.warn(msg);
-            throw new ApplicationException(msg, HttpStatus.CONFLICT);
-        }
-    }
-
     public void entityExistByEntity(UsurEntity entity, UsurRepository repository) {
         if (entity == null) {
             String msg = message.getMessage("entity.not-acceptable");

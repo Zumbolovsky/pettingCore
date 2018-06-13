@@ -11,9 +11,6 @@ import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.State;
 import br.com.guilinssolution.pettingCore.model.example.UsurExample;
-import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
-import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
-import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.MessageService;
 import br.com.guilinssolution.pettingCore.services.UsurService;
@@ -25,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,12 +36,6 @@ import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 @Service
 public class UsurServiceImpl implements UsurService {
 
-    private final ContributionRepository contributionRepository;
-
-    private final PostAnimalRepository postAnimalRepository;
-
-    private final PostItemRepository postItemRepository;
-
     private final UsurRepository repository;
 
     private final Validator validator;
@@ -53,13 +43,8 @@ public class UsurServiceImpl implements UsurService {
     private final MessageService message;
 
     @Autowired
-    public UsurServiceImpl(UsurRepository repository, ContributionRepository contributionRepository,
-                           PostAnimalRepository postAnimalRepository, PostItemRepository postItemRepository,
-                           Validator validator, MessageService message) {
+    public UsurServiceImpl(UsurRepository repository, Validator validator, MessageService message) {
         this.repository = repository;
-        this.contributionRepository = contributionRepository;
-        this.postAnimalRepository = postAnimalRepository;
-        this.postItemRepository = postItemRepository;
         this.validator = validator;
         this.message = message;
     }
@@ -75,7 +60,7 @@ public class UsurServiceImpl implements UsurService {
     @Override
     public ListResultDTO<UsurDTO> findAllLite(UsurExample example, PageDTO page) {
         BooleanExpression query = queryGeneration(example);
-        Pageable pageable = PageHelper.getPage(page);
+        Pageable pageable = PageHelper.getPageLite(page);
 
         return findAll(query, pageable, ConvertType.LITE);
     }
@@ -91,7 +76,8 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO save(UsurDTO dto) {
+    public UsurDTO save(UsurExample example) {
+        UsurDTO dto = buildDTO(example);
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
         this.validator.entityExistByEmail(dto.getEmailUsur(), this.repository);
@@ -103,10 +89,11 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO update(Integer currentId, UsurDTO dto) {
+    public UsurDTO update(Integer currentId, UsurExample example) {
         this.validator.entityNotExist(currentId, this.repository);
 
         UsurEntity vesselUsurEntity = this.repository.getOne(currentId);
+        UsurDTO dto = buildDTO(example);
         UsurEntity newUsurEntity = UsurAdapter.convertToEntity(dto);
 
         this.validator.entityExistByEmail(newUsurEntity.getEmailUsur(), this.repository);
@@ -192,4 +179,20 @@ public class UsurServiceImpl implements UsurService {
 
         return addAnd(expressionsAnd);
     }
+
+    private UsurDTO buildDTO(UsurExample example) {
+        return UsurDTO.builder()
+                .idUsur(null)
+                .nameUsur(example.getNameUsur())
+                .cpfUsur(example.getCpfUsur())
+                .emailUsur(example.getEmailUsur())
+                .passwordUsur(example.getPasswordUsur())
+                .phoneUsur(example.getPhoneUsur())
+                .cellphoneUsur(example.getCellphoneUsur())
+                .cityUsur(example.getCityUsur())
+                .addressUsur(example.getAddressUsur())
+                .stateUsur(example.getStateUsur())
+                .build();
+    }
+
 }

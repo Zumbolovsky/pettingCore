@@ -49,18 +49,4 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
         return new ListResultDTO<>(page, dtoList);
     }
 
-    @Override
-    public boolean existsByEntity(PostAnimalEntity entity) {
-        JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
-        QPostAnimalEntity postAnimalEntity = QPostAnimalEntity.postAnimalEntity;
-
-        return query
-                .from(postAnimalEntity)
-                .where(postAnimalEntity.titlePostAnimal.eq(entity.getTitlePostAnimal())
-                        .and(postAnimalEntity.descriptionPostAnimal.eq(entity.getDescriptionPostAnimal())
-                        .and(postAnimalEntity.sizePostAnimal.eq(entity.getSizePostAnimal()))
-                        .and(postAnimalEntity.speciesPostAnimal.eq(entity.getSpeciesPostAnimal()))))
-                .fetchOne() != null;
-    }
-
 }

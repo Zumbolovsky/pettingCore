@@ -65,7 +65,7 @@ public class PostItemServiceImpl implements PostItemService {
     @Override
     public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example, PageDTO page) {
         BooleanExpression query = queryGeneration(example);
-        Pageable pageable = PageHelper.getPage(page);
+        Pageable pageable = PageHelper.getPageLite(page);
 
         return findAll(query, pageable, ConvertType.LITE);
     }
@@ -81,28 +81,28 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO save(PostItemDTO dto, Integer idUsur) {
+    public PostItemDTO save(PostItemExample example, Integer idUsur) {
         this.validator.entityNotExist(idUsur, this.usurRepository);
 
+        PostItemDTO dto = buildDTO(example);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntity(postItemEntity, this.repository);
 
         postItemEntity = this.repository.save(postItemEntity);
         return PostItemAdapter.convertToDTO(postItemEntity);
     }
 
     @Override
-    public PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idUsur) {
+    public PostItemDTO update(Integer currentId, PostItemExample example, Integer idUsur) {
         this.validator.entityNotExist(currentId, this.repository);
 
         PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
 
+        PostItemDTO dto = buildDTO(example);
         this.validator.entityNotExist(idUsur, this.usurRepository);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
-        this.validator.entityExistByEntity(newPostItemEntity, this.repository);
         vesselPostItemEntity.update(newPostItemEntity);
 
         newPostItemEntity = this.repository.save(vesselPostItemEntity);
@@ -110,15 +110,15 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO quickUpdate(Integer currentId, PostItemDTO dto) {
+    public PostItemDTO quickUpdate(Integer currentId, PostItemExample example) {
         this.validator.entityNotExist(currentId, this.repository);
 
         PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
 
+        PostItemDTO dto = buildDTO(example);
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
         newPostItemEntity.setUsurEntity(vesselPostItemEntity.getUsurEntity());
 
-        this.validator.entityExistByEntity(newPostItemEntity, this.repository);
         vesselPostItemEntity.update(newPostItemEntity);
 
         newPostItemEntity = this.repository.save(vesselPostItemEntity);
@@ -165,6 +165,17 @@ public class PostItemServiceImpl implements PostItemService {
         }
 
         return addAnd(expressionsAnd);
+    }
+
+    private PostItemDTO buildDTO(PostItemExample example) {
+        return PostItemDTO.builder()
+                .idPostItem(null)
+                .titlePostItem(example.getTitlePostItem())
+                .descriptionPostItem(example.getDescriptionPostItem())
+                .typePostItem(example.getTypePostItem())
+                .speciesPostItem(example.getSpeciesPostItem())
+                .usurDTO(null)
+                .build();
     }
 
 }

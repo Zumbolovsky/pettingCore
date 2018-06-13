@@ -8,7 +8,7 @@ public enum Type {
     PRODUTO(1);
 
     @Getter
-    public Integer typeValue;
+    public final Integer typeValue;
 
     Type(Integer value) {
         this.typeValue = value;

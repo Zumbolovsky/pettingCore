@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.guilinssolution.pettingCore.model.enums.Type;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,10 +23,8 @@ import javax.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PostItemDTO {
 
-	@ApiModelProperty(hidden = true)
 	private Integer idPostItem;
 
-	@ApiModelProperty(hidden = true)
 	private UsurDTO usurDTO;
 
 	@NotEmpty(message = "Título {empty}")

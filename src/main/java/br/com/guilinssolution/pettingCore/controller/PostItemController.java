@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping("/secured/post-item")
 @Api(value = "PostItemControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "PostItem Controller")
 public class PostItemController {
 
@@ -38,7 +38,7 @@ public class PostItemController {
     }
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/post-item/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAll(PostItemExample example,
                                               PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
@@ -46,7 +46,7 @@ public class PostItemController {
     }
 
     @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item/all/usur", method = RequestMethod.GET)
+    @RequestMapping(value = "/all/usur", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> listByUsur(PageDTO pageDTO) {
         log.info("Listando Publicações Item por usuário");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -54,7 +54,7 @@ public class PostItemController {
     }
 
     @ApiOperation(value = "Lista de todos dados (para remédios)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/post-item/all-medicine", method = RequestMethod.GET)
+    @RequestMapping(value = "/all-medicine", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAllMedicine(PostItemExample example,
                                                       PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
@@ -62,7 +62,7 @@ public class PostItemController {
     }
 
     @ApiOperation(value = "Lista de todos dados (para produtos)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/post-item/all-product", method = RequestMethod.GET)
+    @RequestMapping(value = "/all-product", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAllProduct(PostItemExample example,
                                                      PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
@@ -70,7 +70,7 @@ public class PostItemController {
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item/all-lite", method = RequestMethod.GET)
+    @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
     public ListResultDTO<PostItemDTO> findAllLite(@RequestBody PostItemExample example,
                                                   PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
@@ -78,55 +78,55 @@ public class PostItemController {
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PostItemDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Publicação Item");
         return ResponseEntity.ok(this.service.findOne(id));
     }
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item", method = RequestMethod.POST)
-    public ResponseEntity<PostItemDTO> save(@Valid @RequestBody PostItemDTO dto,
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<PostItemDTO> save(@Valid @RequestBody PostItemExample example,
                                             @RequestParam Integer idUsur,
                                             BindingResult result) {
         log.info("Cadastrando dados de um Publicação Item");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(dto, idUsur), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.service.save(example, idUsur), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Cadastra dados no banco (usuário da sessão)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item/usur", method = RequestMethod.POST)
-    public ResponseEntity<PostItemDTO> saveSessionUser(@Valid @RequestBody PostItemDTO dto,
+    @RequestMapping(value = "/usur", method = RequestMethod.POST)
+    public ResponseEntity<PostItemDTO> saveSessionUser(@Valid @RequestBody PostItemExample example,
                                                        BindingResult result) {
         log.info("Cadastrando dados de um Publicação Item (sessão)");
         this.validator.hibernateException(result);
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new ResponseEntity<>(this.service.save(dto, Integer.parseInt(principal)), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.service.save(example, Integer.parseInt(principal)), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item/{currentId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> update(@PathVariable Integer currentId,
-                                              @Valid @RequestBody PostItemDTO dto,
+                                              @Valid @RequestBody PostItemExample example,
                                               @RequestParam Integer idUsur,
                                               BindingResult result) {
         log.info("Atualizando dados de um Publicação Item e suas relações");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, dto, idUsur), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, example, idUsur), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item/quick/{currentId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/quick/{currentId}", method = RequestMethod.PUT)
     public ResponseEntity<PostItemDTO> quickUpdate(@PathVariable Integer currentId,
-                                                   @Valid @RequestBody PostItemDTO dto,
+                                                   @Valid @RequestBody PostItemExample example,
                                                    BindingResult result) {
         log.info("Atualizando dados de um Publicação Item");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, example), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/post-item/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Publicação Item");
         this.service.delete(id);

@@ -9,7 +9,7 @@ public enum Size {
     GRANDE(2);
 
     @Getter
-    public Integer sizeValue;
+    public final Integer sizeValue;
 
     Size(Integer value) {
         this.sizeValue = value;

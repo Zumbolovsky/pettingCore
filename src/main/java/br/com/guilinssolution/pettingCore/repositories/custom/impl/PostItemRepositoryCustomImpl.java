@@ -49,17 +49,4 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
         return new ListResultDTO<>(page, dtoList);
     }
 
-    @Override
-    public boolean existsByEntity(PostItemEntity entity) {
-        JPAQuery<PostItemEntity> query = new JPAQuery<>(this.entityManager);
-        QPostItemEntity postItemEntity = QPostItemEntity.postItemEntity;
-
-        return query
-                .from(postItemEntity)
-                .where(postItemEntity.titlePostItem.eq(entity.getTitlePostItem())
-                        .and(postItemEntity.descriptionPostItem.eq(entity.getDescriptionPostItem()))
-                        .and(postItemEntity.speciesPostItem.eq(entity.getSpeciesPostItem())))
-                .fetchOne() != null;
-    }
-
 }

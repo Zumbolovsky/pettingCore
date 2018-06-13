@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AnimalExample {
+class AnimalExample {
 
     private Species speciesAnimal;
 

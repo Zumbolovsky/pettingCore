@@ -11,7 +11,7 @@ public enum Species {
     OUTROS(4);
 
     @Getter
-    public Integer speciesValue;
+    public final Integer speciesValue;
 
     Species(Integer value) {
         this.speciesValue = value;

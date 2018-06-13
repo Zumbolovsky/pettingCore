@@ -11,8 +11,8 @@ public interface UsurService extends UserDetailsService {
     ListResultDTO<UsurDTO> findAll(UsurExample example, PageDTO page);
     ListResultDTO<UsurDTO> findAllLite(UsurExample example, PageDTO page);
     UsurDTO findOne(Integer id);
-    UsurDTO save(UsurDTO dto);
-    UsurDTO update(Integer currentId, UsurDTO dto);
+    UsurDTO save(UsurExample example);
+    UsurDTO update(Integer currentId, UsurExample example);
     void delete(Integer id);
 
 }

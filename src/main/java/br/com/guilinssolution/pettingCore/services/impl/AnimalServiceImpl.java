@@ -50,7 +50,7 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public ListResultDTO<AnimalDTO> findAllLite(AnimalDTO dto, PageDTO page) {
         BooleanExpression query = queryGeneration(dto);
-        Pageable pageable = PageHelper.getPage(page);
+        Pageable pageable = PageHelper.getPageLite(page);
 
         return findAll(query, pageable, ConvertType.LITE);
     }
