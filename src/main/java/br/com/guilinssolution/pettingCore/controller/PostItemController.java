@@ -1,8 +1,10 @@
 package br.com.guilinssolution.pettingCore.controller;
 
+import br.com.guilinssolution.pettingCore.model.dto.custom.PostItemCustomDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Type;
 import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
 import br.com.guilinssolution.pettingCore.services.PostItemService;
@@ -42,7 +44,53 @@ public class PostItemController {
     public ListResultDTO<PostItemDTO> findAll(PostItemExample example,
                                               PageDTO page) {
         log.info("Listar todos os dados de Publicação Item");
-        return this.service.findAll(example, example.getTypePostItem(), page);
+        PostItemDTO dto = buildDTO(example);
+        return this.service.findAll(dto, example.getTypePostItem(), Custom.NORMAL, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (para remédios)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-medicine", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> findAllMedicine(PostItemExample example,
+                                                      PageDTO page) {
+        log.info("Listar todos os dados de Publicação Item");
+        PostItemDTO dto = buildDTO(example);
+        return this.service.findAll(dto, Type.REMEDIO, Custom.NORMAL, page);
+    }
+
+    @ApiOperation(value = "Lista de dados customizados (para remédios)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-medicine-custom", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> findAllMedicineCustom(PostItemExample example,
+                                                            PageDTO page) {
+        log.info("Listar dados customizados de Publicação Item");
+        PostItemDTO dto = buildDTO(example);
+        return this.service.findAll(dto, Type.REMEDIO, Custom.CUSTOM, page);
+    }
+
+    @ApiOperation(value = "Lista de todos dados (para produtos)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-product", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> findAllProduct(PostItemExample example,
+                                                     PageDTO page) {
+        log.info("Listar todos os dados de Publicação Item");
+        PostItemDTO dto = buildDTO(example);
+        return this.service.findAll(dto, Type.PRODUTO, Custom.NORMAL, page);
+    }
+
+    @ApiOperation(value = "Lista de dados customizados (para produtos)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-product-custom", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> findAllProductCustom(PostItemExample example,
+                                                                 PageDTO page) {
+        log.info("Listar dados customizados de Publicação Item");
+        PostItemDTO dto = buildDTO(example);
+        return this.service.findAll(dto, Type.PRODUTO, Custom.CUSTOM, page);
+    }
+
+    @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
+    public ListResultDTO<PostItemDTO> findAllLite(@RequestBody PostItemExample example,
+                                                  PageDTO page) {
+        log.info("Listar todos os dados de Publicação Item");
+        PostItemDTO dto = buildDTO(example);
+        return this.service.findAllLite(dto, page);
     }
 
     @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
@@ -51,30 +99,6 @@ public class PostItemController {
         log.info("Listando Publicações Item por usuário");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return this.service.listByUsur(Integer.parseInt(principal), pageDTO);
-    }
-
-    @ApiOperation(value = "Lista de todos dados (para remédios)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/all-medicine", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllMedicine(PostItemExample example,
-                                                      PageDTO page) {
-        log.info("Listar todos os dados de Publicação Item");
-        return this.service.findAll(example, Type.REMEDIO, page);
-    }
-
-    @ApiOperation(value = "Lista de todos dados (para produtos)", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/all-product", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllProduct(PostItemExample example,
-                                                     PageDTO page) {
-        log.info("Listar todos os dados de Publicação Item");
-        return this.service.findAll(example, Type.PRODUTO, page);
-    }
-
-    @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllLite(@RequestBody PostItemExample example,
-                                                  PageDTO page) {
-        log.info("Listar todos os dados de Publicação Item");
-        return this.service.findAllLite(example, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -91,7 +115,8 @@ public class PostItemController {
                                             BindingResult result) {
         log.info("Cadastrando dados de um Publicação Item");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(example, idUsur), HttpStatus.CREATED);
+        PostItemDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.save(dto, idUsur), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Cadastra dados no banco (usuário da sessão)", authorizations = { @Authorization(value="apiKey") })
@@ -101,7 +126,8 @@ public class PostItemController {
         log.info("Cadastrando dados de um Publicação Item (sessão)");
         this.validator.hibernateException(result);
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new ResponseEntity<>(this.service.save(example, Integer.parseInt(principal)), HttpStatus.CREATED);
+        PostItemDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.save(dto, Integer.parseInt(principal)), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (especificando relações)", authorizations = { @Authorization(value="apiKey") })
@@ -112,7 +138,8 @@ public class PostItemController {
                                               BindingResult result) {
         log.info("Atualizando dados de um Publicação Item e suas relações");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, example, idUsur), HttpStatus.ACCEPTED);
+        PostItemDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idUsur), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
@@ -122,7 +149,8 @@ public class PostItemController {
                                                    BindingResult result) {
         log.info("Atualizando dados de um Publicação Item");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.quickUpdate(currentId, example), HttpStatus.ACCEPTED);
+        PostItemDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
@@ -130,6 +158,17 @@ public class PostItemController {
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Publicação Item");
         this.service.delete(id);
+    }
+
+    private PostItemDTO buildDTO(PostItemExample example) {
+        return PostItemDTO.builder()
+                .idPostItem(null)
+                .titlePostItem(example.getTitlePostItem())
+                .descriptionPostItem(example.getDescriptionPostItem())
+                .typePostItem(example.getTypePostItem())
+                .speciesPostItem(example.getSpeciesPostItem())
+                .usurDTO(null)
+                .build();
     }
 
 }

@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+//////////////////////////
+// TODO: Não implementado
+//////////////////////////
+
 @Slf4j
 @RestController
 @RequestMapping(path = "/secured/animal")

@@ -9,9 +9,9 @@ import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostItemEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.model.enums.Type;
-import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.PostItemService;
@@ -20,11 +20,13 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 
@@ -49,25 +51,31 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public ListResultDTO<PostItemDTO> findAll(PostItemExample example, Type type, PageDTO page) {
-        example.setTypePostItem(type);
-        BooleanExpression query = queryGeneration(example);
+    public ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, Type type, Custom custom, PageDTO page) {
+        dto.setTypePostItem(type);
+        BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
+        if (custom.equals(Custom.CUSTOM)) {
+            ListResultDTO<PostItemDTO> listResultDTO = findAll(query, pageable, ConvertType.NORMAL);
+            List<PostItemDTO> customList = buildCustomList(listResultDTO);
+            Page<PostItemDTO> customPage = new PageImpl<>(customList, pageable, pageable.getPageSize());
+            return new ListResultDTO<>(customPage, customList);
+        }
         return findAll(query, pageable, ConvertType.NORMAL);
+    }
+
+    @Override
+    public ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page) {
+        BooleanExpression query = queryGeneration(dto);
+        Pageable pageable = PageHelper.getPageLite(page);
+
+        return findAll(query, pageable, ConvertType.LITE);
     }
 
     @Override
     public ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
         return this.repository.listByUsur(idUsur, pageDTO);
-    }
-
-    @Override
-    public ListResultDTO<PostItemDTO> findAllLite(PostItemExample example, PageDTO page) {
-        BooleanExpression query = queryGeneration(example);
-        Pageable pageable = PageHelper.getPageLite(page);
-
-        return findAll(query, pageable, ConvertType.LITE);
     }
 
     @Override
@@ -81,10 +89,9 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO save(PostItemExample example, Integer idUsur) {
+    public PostItemDTO save(PostItemDTO dto, Integer idUsur) {
         this.validator.entityNotExist(idUsur, this.usurRepository);
 
-        PostItemDTO dto = buildDTO(example);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
         PostItemEntity postItemEntity = PostItemAdapter.convertToEntity(dto);
 
@@ -93,12 +100,11 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO update(Integer currentId, PostItemExample example, Integer idUsur) {
+    public PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idUsur) {
         this.validator.entityNotExist(currentId, this.repository);
 
         PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
 
-        PostItemDTO dto = buildDTO(example);
         this.validator.entityNotExist(idUsur, this.usurRepository);
         dto.setUsurDTO(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsur)));
 
@@ -110,12 +116,11 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO quickUpdate(Integer currentId, PostItemExample example) {
+    public PostItemDTO quickUpdate(Integer currentId, PostItemDTO dto) {
         this.validator.entityNotExist(currentId, this.repository);
 
         PostItemEntity vesselPostItemEntity = this.repository.getOne(currentId);
 
-        PostItemDTO dto = buildDTO(example);
         PostItemEntity newPostItemEntity = PostItemAdapter.convertToEntity(dto);
         newPostItemEntity.setUsurEntity(vesselPostItemEntity.getUsurEntity());
 
@@ -146,12 +151,12 @@ public class PostItemServiceImpl implements PostItemService {
         return new ListResultDTO<>(postItemEntityPages, postItemDTOS);
     }
 
-    private BooleanExpression queryGeneration(PostItemExample example) {
+    private BooleanExpression queryGeneration(PostItemDTO dto) {
         QPostItemEntity root = QPostItemEntity.postItemEntity;
 
-        String descriptionPostItem = example.getDescriptionPostItem();
-        String titlePostItem = example.getTitlePostItem();
-        Species speciesPostItem = example.getSpeciesPostItem();
+        String descriptionPostItem = dto.getDescriptionPostItem();
+        String titlePostItem = dto.getTitlePostItem();
+        Species speciesPostItem = dto.getSpeciesPostItem();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
         if (StringUtils.isNotEmpty(descriptionPostItem)) {
@@ -167,15 +172,14 @@ public class PostItemServiceImpl implements PostItemService {
         return addAnd(expressionsAnd);
     }
 
-    private PostItemDTO buildDTO(PostItemExample example) {
-        return PostItemDTO.builder()
-                .idPostItem(null)
-                .titlePostItem(example.getTitlePostItem())
-                .descriptionPostItem(example.getDescriptionPostItem())
-                .typePostItem(example.getTypePostItem())
-                .speciesPostItem(example.getSpeciesPostItem())
-                .usurDTO(null)
-                .build();
+    private List<PostItemDTO> buildCustomList(ListResultDTO<PostItemDTO> listResultDTO) {
+        return listResultDTO.getContent().stream()
+                .map(item -> PostItemDTO.builder()
+                        .idPostItem(item.getIdPostItem())
+                        .titlePostItem(item.getTitlePostItem())
+                        .descriptionPostItem(item.getDescriptionPostItem())
+                        .speciesPostItem(item.getSpeciesPostItem()).build())
+                .collect(Collectors.toList());
     }
 
 }

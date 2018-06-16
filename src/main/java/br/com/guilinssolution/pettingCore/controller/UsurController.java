@@ -39,7 +39,8 @@ public class UsurController {
     public ListResultDTO<UsurDTO> findAll(@RequestBody UsurExample example,
                                           PageDTO page) {
         log.info("Listar todos os dados de Usuário");
-        return this.service.findAll(example, page);
+        UsurDTO dto = buildDTO(example);
+        return this.service.findAll(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -47,7 +48,8 @@ public class UsurController {
     public ListResultDTO<UsurDTO> findAllLite(@RequestBody UsurExample example,
                                               PageDTO page) {
         log.info("Listar todos os dados de Usuário");
-        return this.service.findAllLite(example, page);
+        UsurDTO dto = buildDTO(example);
+        return this.service.findAllLite(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -63,7 +65,8 @@ public class UsurController {
                                         BindingResult result) {
         log.info("Cadastrando dados de um Usuário");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(example), HttpStatus.CREATED);
+        UsurDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.save(dto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Atualiza dados no banco", authorizations = { @Authorization(value="apiKey") })
@@ -73,7 +76,8 @@ public class UsurController {
                                           BindingResult result) {
         log.info("Atualizando dados de um Usuário");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, example), HttpStatus.ACCEPTED);
+        UsurDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
@@ -81,6 +85,21 @@ public class UsurController {
     public void delete(@PathVariable Integer id) {
         log.info("Deletando dados de um Usuário");
         this.service.delete(id);
+    }
+
+    private UsurDTO buildDTO(UsurExample example) {
+        return UsurDTO.builder()
+                .idUsur(null)
+                .nameUsur(example.getNameUsur())
+                .cpfUsur(example.getCpfUsur())
+                .emailUsur(example.getEmailUsur())
+                .passwordUsur(example.getPasswordUsur())
+                .phoneUsur(example.getPhoneUsur())
+                .cellphoneUsur(example.getCellphoneUsur())
+                .cityUsur(example.getCityUsur())
+                .addressUsur(example.getAddressUsur())
+                .stateUsur(example.getStateUsur())
+                .build();
     }
 
 }

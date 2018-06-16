@@ -11,7 +11,6 @@ import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
-import br.com.guilinssolution.pettingCore.model.example.ContributionExample;
 import br.com.guilinssolution.pettingCore.repositories.ContributionRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostAnimalRepository;
 import br.com.guilinssolution.pettingCore.repositories.PostItemRepository;
@@ -53,16 +52,16 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ListResultDTO<ContributionDTO> findAll(ContributionExample example, PageDTO page) {
-        BooleanExpression query = queryGeneration(example);
+    public ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page) {
+        BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<ContributionDTO> findAllLite(ContributionExample example, PageDTO page) {
-        BooleanExpression query = queryGeneration(example);
+    public ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page) {
+        BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.LITE);
@@ -79,11 +78,10 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ContributionDTO save(ContributionExample example, Integer idPostAnimal, Integer idPostItem,
+    public ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem,
                                 Integer idUsurRequest, Integer idUsurDonator) {
         this.validator.entityNotExist(idUsurRequest, this.usurRepository);
 
-        ContributionDTO dto = buildDTO(example);
         dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
 
         validateAndAddPosts(dto, idPostAnimal, idPostItem);
@@ -100,13 +98,12 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ContributionDTO update(Integer currentId, ContributionExample example, Integer idPostAnimal,
+    public ContributionDTO update(Integer currentId, ContributionDTO dto, Integer idPostAnimal,
                                   Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator) {
         this.validator.entityNotExist(currentId, this.repository);
 
         ContributionEntity vesselContributionEntity = this.repository.getOne(currentId);
 
-        ContributionDTO dto = buildDTO(example);
         this.validator.entityNotExist(idUsurRequest, this.usurRepository);
         dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
 
@@ -126,12 +123,11 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ContributionDTO quickUpdate(Integer currentId, ContributionExample example) {
+    public ContributionDTO quickUpdate(Integer currentId, ContributionDTO dto) {
         this.validator.entityNotExist(currentId, this.repository);
 
         ContributionEntity vesselContributionEntity = this.repository.getOne(currentId);
 
-        ContributionDTO dto = buildDTO(example);
         ContributionEntity newContributionEntity = ContributionAdapter.convertToEntity(dto);
         newContributionEntity.setPostAnimalEntity(vesselContributionEntity.getPostAnimalEntity());
         newContributionEntity.setPostItemEntity(vesselContributionEntity.getPostItemEntity());
@@ -170,11 +166,11 @@ public class ContributionServiceImpl implements ContributionService {
         return new ListResultDTO<>(contributionEntityPages, contributionDTOS);
     }
 
-    private BooleanExpression queryGeneration(ContributionExample example) {
+    private BooleanExpression queryGeneration(ContributionDTO dto) {
         QContributionEntity root = QContributionEntity.contributionEntity;
 
+        String descriptionContribution = dto.getDescriptionContribution();
 
-        String descriptionContribution = example.getDescriptionContribution();
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
         if (StringUtils.isNotEmpty(descriptionContribution)) {
             expressionsAnd.add(root.descriptionContribution.like("%"+descriptionContribution+"%"));
@@ -193,17 +189,6 @@ public class ContributionServiceImpl implements ContributionService {
             this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
             dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(this.postAnimalRepository.getOne(idPostAnimal)));
         }
-    }
-
-    private ContributionDTO buildDTO(ContributionExample example) {
-        return ContributionDTO.builder()
-                .idContribution(null)
-                .descriptionContribution(example.getDescriptionContribution())
-                .postAnimalDTO(null)
-                .postItemDTO(null)
-                .usurDTOByIdRequest(null)
-                .usurDTOByIdDonator(null)
-                .build();
     }
 
 }

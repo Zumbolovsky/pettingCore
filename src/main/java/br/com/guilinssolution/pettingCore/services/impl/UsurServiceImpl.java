@@ -10,7 +10,6 @@ import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.State;
-import br.com.guilinssolution.pettingCore.model.example.UsurExample;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.MessageService;
 import br.com.guilinssolution.pettingCore.services.UsurService;
@@ -50,16 +49,16 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public ListResultDTO<UsurDTO> findAll(UsurExample example, PageDTO page) {
-        BooleanExpression query = queryGeneration(example);
+    public ListResultDTO<UsurDTO> findAll(UsurDTO dto, PageDTO page) {
+        BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<UsurDTO> findAllLite(UsurExample example, PageDTO page) {
-        BooleanExpression query = queryGeneration(example);
+    public ListResultDTO<UsurDTO> findAllLite(UsurDTO dto, PageDTO page) {
+        BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPageLite(page);
 
         return findAll(query, pageable, ConvertType.LITE);
@@ -76,8 +75,7 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO save(UsurExample example) {
-        UsurDTO dto = buildDTO(example);
+    public UsurDTO save(UsurDTO dto) {
         UsurEntity usurEntity = UsurAdapter.convertToEntity(dto);
 
         this.validator.entityExistByEmail(dto.getEmailUsur(), this.repository);
@@ -89,11 +87,10 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO update(Integer currentId, UsurExample example) {
+    public UsurDTO update(Integer currentId, UsurDTO dto) {
         this.validator.entityNotExist(currentId, this.repository);
 
         UsurEntity vesselUsurEntity = this.repository.getOne(currentId);
-        UsurDTO dto = buildDTO(example);
         UsurEntity newUsurEntity = UsurAdapter.convertToEntity(dto);
 
         this.validator.entityExistByEmail(newUsurEntity.getEmailUsur(), this.repository);
@@ -135,18 +132,18 @@ public class UsurServiceImpl implements UsurService {
         return new ListResultDTO<>(usurEntityPages, usurDTOS);
     }
 
-    private BooleanExpression queryGeneration(UsurExample example) {
+    private BooleanExpression queryGeneration(UsurDTO dto) {
         QUsurEntity root = QUsurEntity.usurEntity;
 
-        String addressUsur = example.getAddressUsur();
-        String cellphoneUsur = example.getCellphoneUsur();
-        String cityUsur = example.getCityUsur();
-        String cpfUsur = example.getCpfUsur();
-        String emailUsur = example.getEmailUsur();
-        String nameUsur = example.getNameUsur();
-        String passwordUsur = example.getPasswordUsur();
-        String phoneUsur = example.getPhoneUsur();
-        State stateUsur = example.getStateUsur();
+        String addressUsur = dto.getAddressUsur();
+        String cellphoneUsur = dto.getCellphoneUsur();
+        String cityUsur = dto.getCityUsur();
+        String cpfUsur = dto.getCpfUsur();
+        String emailUsur = dto.getEmailUsur();
+        String nameUsur = dto.getNameUsur();
+        String passwordUsur = dto.getPasswordUsur();
+        String phoneUsur = dto.getPhoneUsur();
+        State stateUsur = dto.getStateUsur();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
         if (StringUtils.isNotEmpty(addressUsur)) {
@@ -178,21 +175,6 @@ public class UsurServiceImpl implements UsurService {
         }
 
         return addAnd(expressionsAnd);
-    }
-
-    private UsurDTO buildDTO(UsurExample example) {
-        return UsurDTO.builder()
-                .idUsur(null)
-                .nameUsur(example.getNameUsur())
-                .cpfUsur(example.getCpfUsur())
-                .emailUsur(example.getEmailUsur())
-                .passwordUsur(example.getPasswordUsur())
-                .phoneUsur(example.getPhoneUsur())
-                .cellphoneUsur(example.getCellphoneUsur())
-                .cityUsur(example.getCityUsur())
-                .addressUsur(example.getAddressUsur())
-                .stateUsur(example.getStateUsur())
-                .build();
     }
 
 }

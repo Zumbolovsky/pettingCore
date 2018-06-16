@@ -26,6 +26,10 @@ import java.util.Optional;
 
 import static br.com.guilinssolution.pettingCore.helper.SQLHelper.addAnd;
 
+//////////////////////////
+// TODO: Não implementado
+//////////////////////////
+
 @Service
 public class AnimalServiceImpl implements AnimalService {
 

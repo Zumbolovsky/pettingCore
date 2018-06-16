@@ -42,7 +42,8 @@ public class ContributionController {
     public ListResultDTO<ContributionDTO> findAll(@RequestBody ContributionExample example,
                                                   PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
-        return this.service.findAll(example, page);
+        ContributionDTO dto = buildDTO(example);
+        return this.service.findAll(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -50,7 +51,8 @@ public class ContributionController {
     public ListResultDTO<ContributionDTO> findAllLite(@RequestBody ContributionExample example,
                                                       PageDTO page) {
         log.info("Listar todos os dados de Contribuição");
-        return this.service.findAllLite(example, page);
+        ContributionDTO dto = buildDTO(example);
+        return this.service.findAllLite(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -70,7 +72,8 @@ public class ContributionController {
                                                 BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(example, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+        ContributionDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
                 HttpStatus.CREATED);
     }
 
@@ -85,7 +88,8 @@ public class ContributionController {
                                                   BindingResult result) {
         log.info("Atualizando dados de uma Contribuição e suas relações");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, example, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+        ContributionDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
                 HttpStatus.ACCEPTED);
     }
 
@@ -96,7 +100,8 @@ public class ContributionController {
                                                        BindingResult result) {
         log.info("Atualizando dados de uma Contribuição");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.quickUpdate(currentId, example), HttpStatus.ACCEPTED);
+        ContributionDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
@@ -113,4 +118,16 @@ public class ContributionController {
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return this.service.listByDonator(Integer.parseInt(principal), pageDTO);
     }
+
+    private ContributionDTO buildDTO(ContributionExample example) {
+        return ContributionDTO.builder()
+                .idContribution(null)
+                .descriptionContribution(example.getDescriptionContribution())
+                .postAnimalDTO(null)
+                .postItemDTO(null)
+                .usurDTOByIdRequest(null)
+                .usurDTOByIdDonator(null)
+                .build();
+    }
+
 }
