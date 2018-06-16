@@ -2,6 +2,7 @@ package br.com.guilinssolution.pettingCore.controller;
 
 import javax.validation.Valid;
 
+import br.com.guilinssolution.pettingCore.model.dto.custom.ContributionCustomDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import io.swagger.annotations.Authorization;
@@ -21,6 +22,9 @@ import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -120,6 +124,15 @@ public class ContributionController extends GenericController {
         return this.service.listByDonator(Integer.parseInt(principal), pageExample);
     }
 
+    @ApiOperation(value = "Lista por ID de usuário contribuinte customizada", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all/donator-custom", method = RequestMethod.GET)
+    public PageableDTO listByDonatorCustom(PageExample pageExample) {
+        log.info("Listando Contribuições customizadas por usuário contribuinte");
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ListResultExample<ContributionDTO> listResultExample = this.service.listByDonator(Integer.parseInt(principal), pageExample);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
+    }
+
     private ContributionDTO buildDTO(ContributionExample example) {
         return ContributionDTO.builder()
                 .idContribution(null)
@@ -129,6 +142,21 @@ public class ContributionController extends GenericController {
                 .usurDTOByIdRequest(null)
                 .usurDTOByIdDonator(null)
                 .build();
+    }
+
+    private List<ContributionCustomDTO> buildCustomList(List<ContributionDTO> content) {
+        return content.stream().map(c ->
+                new ContributionCustomDTO(c.getIdContribution(),
+                c.getPostAnimalDTO() == null ?
+                        c.getPostItemDTO().getIdPostItem() :
+                        c.getPostAnimalDTO().getIdPostAnimal(),
+                c.getPostAnimalDTO() == null ?
+                        c.getPostItemDTO().getTitlePostItem() :
+                        c.getPostAnimalDTO().getTitlePostAnimal(),
+                c.getPostAnimalDTO() == null ?
+                        c.getPostItemDTO().getDescriptionPostItem() :
+                        c.getPostAnimalDTO().getDescriptionPostAnimal()))
+                .collect(Collectors.toList());
     }
 
 }

@@ -163,6 +163,7 @@ public class PostItemServiceImpl implements PostItemService {
 
         String descriptionPostItem = dto.getDescriptionPostItem();
         String titlePostItem = dto.getTitlePostItem();
+        Type typePostItem = dto.getTypePostItem();
         Species speciesPostItem = dto.getSpeciesPostItem();
 
         List<BooleanExpression> expressionsAnd = new ArrayList<>();
@@ -171,6 +172,9 @@ public class PostItemServiceImpl implements PostItemService {
         }
         if (StringUtils.isNotEmpty(titlePostItem)) {
             expressionsAnd.add(root.titlePostItem.like("%"+titlePostItem+"%"));
+        }
+        if (typePostItem != null) {
+            expressionsAnd.add(root.typePostItem.eq(typePostItem));
         }
         if (speciesPostItem != null) {
             expressionsAnd.add(root.speciesPostItem.eq(speciesPostItem));
