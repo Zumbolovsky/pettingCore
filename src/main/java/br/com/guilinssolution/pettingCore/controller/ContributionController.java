@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import br.com.guilinssolution.pettingCore.model.dto.custom.ContributionCustomDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
+import br.com.guilinssolution.pettingCore.model.enums.Kind;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,23 @@ public class ContributionController extends GenericController {
         return this.service.findAllLite(dto, page);
     }
 
+    @ApiOperation(value = "Lista por ID de usuário contribuinte", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all/donator", method = RequestMethod.GET)
+    public ListResultExample<ContributionDTO> listByDonator(PageExample pageExample) {
+        log.info("Listando Contribuições por usuário contribuinte");
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByDonator(Integer.parseInt(principal), pageExample);
+    }
+
+    @ApiOperation(value = "Lista por ID de usuário contribuinte customizada", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all/donator-custom", method = RequestMethod.GET)
+    public PageableDTO listByDonatorCustom(PageExample pageExample) {
+        log.info("Listando Contribuições customizadas por usuário contribuinte");
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ListResultExample<ContributionDTO> listResultExample = this.service.listByDonator(Integer.parseInt(principal), pageExample);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
+    }
+
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<ContributionDTO> findOne(@PathVariable Integer id) {
@@ -79,6 +97,21 @@ public class ContributionController extends GenericController {
         this.validator.hibernateException(result);
         ContributionDTO dto = buildDTO(example);
         return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+                HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Cadastra dados no banco (usuário da sessão)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/usur", method = RequestMethod.POST)
+    public ResponseEntity<ContributionDTO> saveSessionUser(@Valid @RequestBody ContributionExample example,
+                                                           @RequestParam(required = false) Integer idPostAnimal,
+                                                           @RequestParam(required = false) Integer idPostItem,
+                                                           @RequestParam(required = false) Integer idUsurDonator,
+                                                           BindingResult result) {
+        log.info("Cadastrando dados de uma Contribuição (sessão)");
+        this.validator.hibernateException(result);
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ContributionDTO dto = buildDTO(example);
+        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, Integer.parseInt(principal), idUsurDonator),
                 HttpStatus.CREATED);
     }
 
@@ -116,23 +149,6 @@ public class ContributionController extends GenericController {
         this.service.delete(id);
     }
 
-    @ApiOperation(value = "Lista por ID de usuário contribuinte", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/all/donator", method = RequestMethod.GET)
-    public ListResultExample<ContributionDTO> listByDonator(PageExample pageExample) {
-        log.info("Listando Contribuições por usuário contribuinte");
-        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByDonator(Integer.parseInt(principal), pageExample);
-    }
-
-    @ApiOperation(value = "Lista por ID de usuário contribuinte customizada", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/all/donator-custom", method = RequestMethod.GET)
-    public PageableDTO listByDonatorCustom(PageExample pageExample) {
-        log.info("Listando Contribuições customizadas por usuário contribuinte");
-        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ListResultExample<ContributionDTO> listResultExample = this.service.listByDonator(Integer.parseInt(principal), pageExample);
-        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
-    }
-
     private ContributionDTO buildDTO(ContributionExample example) {
         return ContributionDTO.builder()
                 .idContribution(null)
@@ -155,7 +171,10 @@ public class ContributionController extends GenericController {
                         c.getPostAnimalDTO().getTitlePostAnimal(),
                 c.getPostAnimalDTO() == null ?
                         c.getPostItemDTO().getDescriptionPostItem() :
-                        c.getPostAnimalDTO().getDescriptionPostAnimal()))
+                        c.getPostAnimalDTO().getDescriptionPostAnimal(),
+                c.getPostAnimalDTO() == null ?
+                        Kind.ITEM.name() :
+                        Kind.ANIMAL.name()))
                 .collect(Collectors.toList());
     }
 

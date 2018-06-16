@@ -38,7 +38,7 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
         query = query
                 .select(contribution)
                 .from(contribution)
-                .where(contribution.usurEntityByIdDonator.idUsur.eq(idUsur))
+                .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur))
                 .restrict(modifiers);
 
         List<ContributionEntity> entityList = query.fetch();
