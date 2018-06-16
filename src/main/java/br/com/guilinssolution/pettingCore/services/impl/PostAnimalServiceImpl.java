@@ -8,6 +8,7 @@ import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
+import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Size;
@@ -79,12 +80,18 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
-    public PostAnimalDTO findOne(Integer id) {
+    public PostAnimalDTO findOne(Integer id, Custom custom) {
         PostAnimalEntity postAnimalEntity = this.repository.getOne(id);
 
         this.validator.entityNull(postAnimalEntity);
         this.validator.entityNotExist(id, this.repository);
 
+        if (custom.equals(Custom.CUSTOM)) {
+            postAnimalEntity.setUsurEntity(UsurEntity.builder()
+                    .idUsur(postAnimalEntity.getUsurEntity().getIdUsur())
+                    .nameUsur(postAnimalEntity.getUsurEntity().getNameUsur())
+                    .build());
+        }
         return PostAnimalAdapter.convertToDTO(postAnimalEntity);
     }
 

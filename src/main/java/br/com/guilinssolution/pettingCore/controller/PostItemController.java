@@ -105,7 +105,14 @@ public class PostItemController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PostItemDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Publicação Item");
-        return ResponseEntity.ok(this.service.findOne(id));
+        return ResponseEntity.ok(this.service.findOne(id, Custom.NORMAL));
+    }
+
+    @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/{id}-custom", method = RequestMethod.GET)
+    public ResponseEntity<PostItemDTO> findOneCustom(@PathVariable Integer id) {
+        log.info("Pesquisando dados customizados de um Publicação Item");
+        return ResponseEntity.ok(this.service.findOne(id, Custom.CUSTOM));
     }
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })

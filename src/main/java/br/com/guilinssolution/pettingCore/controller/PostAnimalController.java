@@ -159,7 +159,14 @@ public class PostAnimalController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PostAnimalDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Publicação Animal");
-        return new ResponseEntity<>(this.service.findOne(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(this.service.findOne(id, Custom.NORMAL), HttpStatus.FOUND);
+    }
+
+    @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/{id}-custom", method = RequestMethod.GET)
+    public ResponseEntity<PostAnimalDTO> findOneCustom(@PathVariable Integer id) {
+        log.info("Pesquisando dados customizados de um Publicação Animal");
+        return new ResponseEntity<>(this.service.findOne(id, Custom.CUSTOM), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })

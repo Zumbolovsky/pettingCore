@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.controller;
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.example.UsurExample;
 import br.com.guilinssolution.pettingCore.services.UsurService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -56,7 +57,14 @@ public class UsurController {
     @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.GET)
     public ResponseEntity<UsurDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Usuário");
-        return new ResponseEntity<>(this.service.findOne(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(this.service.findOne(id, Custom.NORMAL), HttpStatus.FOUND);
+    }
+
+    @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.GET)
+    public ResponseEntity<UsurDTO> findOneCustom(@PathVariable Integer id) {
+        log.info("Pesquisando dados customizados de um Usuário");
+        return new ResponseEntity<>(this.service.findOne(id, Custom.CUSTOM), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Cadastra dados no banco")

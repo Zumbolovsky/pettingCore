@@ -8,6 +8,7 @@ import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostItemEntity;
+import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Species;
@@ -79,12 +80,18 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public PostItemDTO findOne(Integer id) {
+    public PostItemDTO findOne(Integer id, Custom custom) {
         PostItemEntity postItemEntity = this.repository.getOne(id);
 
         this.validator.entityNull(postItemEntity);
         this.validator.entityNotExist(id, this.repository);
 
+        if (custom.equals(Custom.CUSTOM)) {
+            postItemEntity.setUsurEntity(UsurEntity.builder()
+                    .idUsur(postItemEntity.getUsurEntity().getIdUsur())
+                    .nameUsur(postItemEntity.getUsurEntity().getNameUsur())
+                    .build());
+        }
         return PostItemAdapter.convertToDTO(postItemEntity);
     }
 

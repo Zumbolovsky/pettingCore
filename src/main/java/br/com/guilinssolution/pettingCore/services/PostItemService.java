@@ -11,7 +11,7 @@ public interface PostItemService {
     ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, Type type, Custom custom, PageDTO page);
     ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page);
     ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO);
-    PostItemDTO findOne(Integer id);
+    PostItemDTO findOne(Integer id, Custom custom);
     PostItemDTO save(PostItemDTO dto, Integer idUsur);
     PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idUsur);
     PostItemDTO quickUpdate(Integer currentId, PostItemDTO dto);

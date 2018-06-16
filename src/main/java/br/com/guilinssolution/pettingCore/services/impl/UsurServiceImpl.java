@@ -9,6 +9,7 @@ import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.State;
 import br.com.guilinssolution.pettingCore.repositories.UsurRepository;
 import br.com.guilinssolution.pettingCore.services.MessageService;
@@ -65,12 +66,19 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public UsurDTO findOne(Integer id) {
+    public UsurDTO findOne(Integer id, Custom custom) {
         UsurEntity usurEntity = this.repository.getOne(id);
 
         this.validator.entityNull(usurEntity);
         this.validator.entityNotExist(id, this.repository);
 
+        if (custom.equals(Custom.CUSTOM)) {
+            usurEntity = UsurEntity.builder()
+                    .nameUsur(usurEntity.getNameUsur())
+                    .emailUsur(usurEntity.getEmailUsur())
+                    .phoneUsur(usurEntity.getPhoneUsur())
+                    .build();
+        }
         return UsurAdapter.convertToDTO(usurEntity);
     }
 
