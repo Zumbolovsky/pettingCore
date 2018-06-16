@@ -3,8 +3,8 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.AnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.AnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
@@ -44,7 +44,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public ListResultDTO<AnimalDTO> findAll(AnimalDTO dto, PageDTO page) {
+    public ListResultExample<AnimalDTO> findAll(AnimalDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -52,7 +52,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public ListResultDTO<AnimalDTO> findAllLite(AnimalDTO dto, PageDTO page) {
+    public ListResultExample<AnimalDTO> findAllLite(AnimalDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPageLite(page);
 
@@ -102,7 +102,7 @@ public class AnimalServiceImpl implements AnimalService {
         this.repository.delete(entity);
     }
 
-    private ListResultDTO<AnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
+    private ListResultExample<AnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<AnimalEntity> animalEntityPages = this.repository.findAll(query, page);
         List<AnimalDTO> animalDTOS = new ArrayList<>();
 
@@ -111,7 +111,7 @@ public class AnimalServiceImpl implements AnimalService {
             animalDTOS.add(conversionDTO);
         }
 
-        return new ListResultDTO<>(animalEntityPages, animalDTOS);
+        return new ListResultExample<>(animalEntityPages, animalDTOS);
     }
 
     private BooleanExpression queryGeneration(AnimalDTO dto) {

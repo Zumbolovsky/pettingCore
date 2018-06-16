@@ -1,8 +1,8 @@
 package br.com.guilinssolution.pettingCore.controller;
 
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.example.UsurExample;
 import br.com.guilinssolution.pettingCore.services.UsurService;
@@ -37,8 +37,8 @@ public class UsurController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/all", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAll(@RequestBody UsurExample example,
-                                          PageDTO page) {
+    public ListResultExample<UsurDTO> findAll(@RequestBody UsurExample example,
+                                              PageExample page) {
         log.info("Listar todos os dados de Usuário");
         UsurDTO dto = buildDTO(example);
         return this.service.findAll(dto, page);
@@ -46,8 +46,8 @@ public class UsurController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/secured/usur/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<UsurDTO> findAllLite(@RequestBody UsurExample example,
-                                              PageDTO page) {
+    public ListResultExample<UsurDTO> findAllLite(@RequestBody UsurExample example,
+                                                  PageExample page) {
         log.info("Listar todos os dados de Usuário");
         UsurDTO dto = buildDTO(example);
         return this.service.findAllLite(dto, page);
@@ -61,7 +61,7 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/secured/usur/{id}-custom", method = RequestMethod.GET)
     public ResponseEntity<UsurDTO> findOneCustom(@PathVariable Integer id) {
         log.info("Pesquisando dados customizados de um Usuário");
         return new ResponseEntity<>(this.service.findOne(id, Custom.CUSTOM), HttpStatus.FOUND);

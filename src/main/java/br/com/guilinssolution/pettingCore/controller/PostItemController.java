@@ -1,9 +1,10 @@
 package br.com.guilinssolution.pettingCore.controller;
 
-import br.com.guilinssolution.pettingCore.model.dto.custom.PostItemCustomDTO;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.dto.custom.PostItemCustomDTO;
+import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Type;
 import br.com.guilinssolution.pettingCore.model.example.PostItemExample;
@@ -22,12 +23,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 @RequestMapping("/secured/post-item")
 @Api(value = "PostItemControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "PostItem Controller")
-public class PostItemController {
+public class PostItemController extends GenericController {
 
     private final PostItemService service;
 
@@ -41,8 +44,8 @@ public class PostItemController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAll(PostItemExample example,
-                                              PageDTO page) {
+    public ListResultExample<PostItemDTO> findAll(PostItemExample example,
+                                                  PageExample page) {
         log.info("Listar todos os dados de Publicação Item");
         PostItemDTO dto = buildDTO(example);
         return this.service.findAll(dto, example.getTypePostItem(), Custom.NORMAL, page);
@@ -50,8 +53,8 @@ public class PostItemController {
 
     @ApiOperation(value = "Lista de todos dados (para remédios)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-medicine", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllMedicine(PostItemExample example,
-                                                      PageDTO page) {
+    public ListResultExample<PostItemDTO> findAllMedicine(PostItemExample example,
+                                                              PageExample page) {
         log.info("Listar todos os dados de Publicação Item");
         PostItemDTO dto = buildDTO(example);
         return this.service.findAll(dto, Type.REMEDIO, Custom.NORMAL, page);
@@ -59,17 +62,18 @@ public class PostItemController {
 
     @ApiOperation(value = "Lista de dados customizados (para remédios)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-medicine-custom", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllMedicineCustom(PostItemExample example,
-                                                            PageDTO page) {
+    public PageableDTO findAllMedicineCustom(PostItemExample example,
+                                             PageExample page) {
         log.info("Listar dados customizados de Publicação Item");
         PostItemDTO dto = buildDTO(example);
-        return this.service.findAll(dto, Type.REMEDIO, Custom.CUSTOM, page);
+        ListResultExample<PostItemDTO> listResultExample = this.service.findAll(dto, Type.REMEDIO, Custom.CUSTOM, page);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Lista de todos dados (para produtos)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-product", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllProduct(PostItemExample example,
-                                                     PageDTO page) {
+    public ListResultExample<PostItemDTO> findAllProduct(PostItemExample example,
+                                                         PageExample page) {
         log.info("Listar todos os dados de Publicação Item");
         PostItemDTO dto = buildDTO(example);
         return this.service.findAll(dto, Type.PRODUTO, Custom.NORMAL, page);
@@ -77,17 +81,18 @@ public class PostItemController {
 
     @ApiOperation(value = "Lista de dados customizados (para produtos)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-product-custom", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllProductCustom(PostItemExample example,
-                                                                 PageDTO page) {
+    public PageableDTO findAllProductCustom(PostItemExample example,
+                                            PageExample page) {
         log.info("Listar dados customizados de Publicação Item");
         PostItemDTO dto = buildDTO(example);
-        return this.service.findAll(dto, Type.PRODUTO, Custom.CUSTOM, page);
+        ListResultExample<PostItemDTO> listResultExample = this.service.findAll(dto, Type.PRODUTO, Custom.CUSTOM, page);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> findAllLite(@RequestBody PostItemExample example,
-                                                  PageDTO page) {
+    public ListResultExample<PostItemDTO> findAllLite(@RequestBody PostItemExample example,
+                                                      PageExample page) {
         log.info("Listar todos os dados de Publicação Item");
         PostItemDTO dto = buildDTO(example);
         return this.service.findAllLite(dto, page);
@@ -95,10 +100,10 @@ public class PostItemController {
 
     @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all/usur", method = RequestMethod.GET)
-    public ListResultDTO<PostItemDTO> listByUsur(PageDTO pageDTO) {
+    public ListResultExample<PostItemDTO> listByUsur(PageExample pageExample) {
         log.info("Listando Publicações Item por usuário");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByUsur(Integer.parseInt(principal), pageDTO);
+        return this.service.listByUsur(Integer.parseInt(principal), pageExample);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -176,6 +181,15 @@ public class PostItemController {
                 .speciesPostItem(example.getSpeciesPostItem())
                 .usurDTO(null)
                 .build();
+    }
+
+    private List<PostItemCustomDTO> buildCustomList(List<PostItemDTO> content) {
+        return content.stream().map(p ->
+                new PostItemCustomDTO(p.getIdPostItem(),
+                        p.getTitlePostItem(),
+                        p.getDescriptionPostItem(),
+                        p.getSpeciesPostItem()))
+                .collect(Collectors.toList());
     }
 
 }

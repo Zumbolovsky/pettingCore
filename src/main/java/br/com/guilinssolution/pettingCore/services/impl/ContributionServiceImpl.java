@@ -6,8 +6,8 @@ import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
@@ -52,7 +52,7 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ListResultDTO<ContributionDTO> findAll(ContributionDTO dto, PageDTO page) {
+    public ListResultExample<ContributionDTO> findAll(ContributionDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -60,7 +60,7 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ListResultDTO<ContributionDTO> findAllLite(ContributionDTO dto, PageDTO page) {
+    public ListResultExample<ContributionDTO> findAllLite(ContributionDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -150,11 +150,11 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ListResultDTO<ContributionDTO> listByDonator(Integer idUsur, PageDTO pageDTO) {
-        return this.repository.listByDonator(idUsur, pageDTO);
+    public ListResultExample<ContributionDTO> listByDonator(Integer idUsur, PageExample pageExample) {
+        return this.repository.listByDonator(idUsur, pageExample);
     }
 
-    private ListResultDTO<ContributionDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
+    private ListResultExample<ContributionDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<ContributionEntity> contributionEntityPages = this.repository.findAll(query, page);
         List<ContributionDTO> contributionDTOS = new ArrayList<>();
 
@@ -163,7 +163,7 @@ public class ContributionServiceImpl implements ContributionService {
             contributionDTOS.add(conversionDTO);
         }
 
-        return new ListResultDTO<>(contributionEntityPages, contributionDTOS);
+        return new ListResultExample<>(contributionEntityPages, contributionDTOS);
     }
 
     private BooleanExpression queryGeneration(ContributionDTO dto) {

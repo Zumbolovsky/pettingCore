@@ -3,8 +3,8 @@ package br.com.guilinssolution.pettingCore.repositories.custom.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.ContributionAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.*;
 import br.com.guilinssolution.pettingCore.repositories.custom.ContributionRepositoryCustom;
 import com.querydsl.core.QueryModifiers;
@@ -24,11 +24,11 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
     private EntityManager entityManager;
 
     @Override
-    public ListResultDTO<ContributionDTO> listByDonator(Integer idUsur, PageDTO pageDTO) {
+    public ListResultExample<ContributionDTO> listByDonator(Integer idUsur, PageExample pageExample) {
         QContributionEntity contribution = QContributionEntity.contributionEntity;
         JPAQuery<ContributionEntity> query = new JPAQuery<>(this.entityManager);
 
-        Pageable pageable = PageHelper.getPage(pageDTO);
+        Pageable pageable = PageHelper.getPage(pageExample);
 
         long limit = Integer.toUnsignedLong(pageable.getPageSize());
         long offset = pageable.getOffset();
@@ -45,7 +45,7 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
         List<ContributionDTO> dtoList = entityList.stream().map(ContributionAdapter::convertToDTO).collect(Collectors.toList());
         Page<ContributionDTO> page = new PageImpl<>(dtoList, pageable, query.fetchCount());
 
-        return new ListResultDTO<>(page, dtoList);
+        return new ListResultExample<>(page, dtoList);
     }
 
 }

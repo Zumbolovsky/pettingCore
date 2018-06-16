@@ -1,6 +1,6 @@
 package br.com.guilinssolution.pettingCore.helper;
 
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,17 +15,17 @@ public class PageHelper {
     private static final int MAXLIMIT = 20;
     private static final int MINLIMIT = 1;
 
-    public static Pageable getPage(PageDTO page) {
+    public static Pageable getPage(PageExample page) {
         log.debug("Criando paginação dos dados...");
         return getPageable(page, MAXLIMIT);
     }
 
-    public static Pageable getPageLite(PageDTO page) {
+    public static Pageable getPageLite(PageExample page) {
         log.debug("Criando paginação dos dados LITE...");
         return getPageable(page, MAXLIMIT_LITE);
     }
 
-    private static Pageable getPageable(final PageDTO page, final int maxLimit ) {
+    private static Pageable getPageable(final PageExample page, final int maxLimit ) {
 
         int thisLimit = maxLimit;
         int thisOffSet = 0;

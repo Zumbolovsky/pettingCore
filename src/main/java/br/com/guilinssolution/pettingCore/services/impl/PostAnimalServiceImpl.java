@@ -3,8 +3,8 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
@@ -52,27 +52,27 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
-    public ListResultDTO<PostAnimalDTO> findAll(PostAnimalDTO dto, Species species, Custom custom, PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAll(PostAnimalDTO dto, Species species, Custom custom, PageExample page) {
         dto.setSpeciesPostAnimal(species);
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
         if (custom.equals(Custom.CUSTOM)) {
-            ListResultDTO<PostAnimalDTO> listResultDTO = findAll(query, pageable, ConvertType.NORMAL);
-            List<PostAnimalDTO> customList = buildCustomList(listResultDTO);
+            ListResultExample<PostAnimalDTO> listResultExample = findAll(query, pageable, ConvertType.NORMAL);
+            List<PostAnimalDTO> customList = buildCustomList(listResultExample);
             Page<PostAnimalDTO> customPage = new PageImpl<>(customList, pageable, pageable.getPageSize());
-            return new ListResultDTO<>(customPage, customList);
+            return new ListResultExample<>(customPage, customList);
         }
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<PostAnimalDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
-        return this.repository.listByUsur(idUsur, pageDTO);
+    public ListResultExample<PostAnimalDTO> listByUsur(Integer idUsur, PageExample pageExample) {
+        return this.repository.listByUsur(idUsur, pageExample);
     }
 
     @Override
-    public ListResultDTO<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPageLite(page);
 
@@ -146,7 +146,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         this.repository.delete(entity);
     }
 
-    private ListResultDTO<PostAnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
+    private ListResultExample<PostAnimalDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<PostAnimalEntity> postAnimalEntityPages = this.repository.findAll(query, page);
         List<PostAnimalDTO> postAnimalDTOS = new ArrayList<>();
 
@@ -155,7 +155,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
             postAnimalDTOS.add(conversionDTO);
         }
 
-        return new ListResultDTO<>(postAnimalEntityPages, postAnimalDTOS);
+        return new ListResultExample<>(postAnimalEntityPages, postAnimalDTOS);
     }
 
     private BooleanExpression queryGeneration(PostAnimalDTO dto) {
@@ -183,8 +183,8 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         return addAnd(expressionsAnd);
     }
 
-    private List<PostAnimalDTO> buildCustomList(ListResultDTO<PostAnimalDTO> listResultDTO) {
-        return listResultDTO.getContent().stream()
+    private List<PostAnimalDTO> buildCustomList(ListResultExample<PostAnimalDTO> listResultExample) {
+        return listResultExample.getContent().stream()
                 .map(item -> PostAnimalDTO.builder()
                         .idPostAnimal(item.getIdPostAnimal())
                         .titlePostAnimal(item.getTitlePostAnimal())

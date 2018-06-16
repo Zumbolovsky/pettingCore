@@ -3,8 +3,8 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostItemEntity;
@@ -52,22 +52,22 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, Type type, Custom custom, PageDTO page) {
+    public ListResultExample<PostItemDTO> findAll(PostItemDTO dto, Type type, Custom custom, PageExample page) {
         dto.setTypePostItem(type);
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
         if (custom.equals(Custom.CUSTOM)) {
-            ListResultDTO<PostItemDTO> listResultDTO = findAll(query, pageable, ConvertType.NORMAL);
-            List<PostItemDTO> customList = buildCustomList(listResultDTO);
+            ListResultExample<PostItemDTO> listResultExample = findAll(query, pageable, ConvertType.NORMAL);
+            List<PostItemDTO> customList = buildCustomList(listResultExample);
             Page<PostItemDTO> customPage = new PageImpl<>(customList, pageable, pageable.getPageSize());
-            return new ListResultDTO<>(customPage, customList);
+            return new ListResultExample<>(customPage, customList);
         }
         return findAll(query, pageable, ConvertType.NORMAL);
     }
 
     @Override
-    public ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page) {
+    public ListResultExample<PostItemDTO> findAllLite(PostItemDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPageLite(page);
 
@@ -75,8 +75,8 @@ public class PostItemServiceImpl implements PostItemService {
     }
 
     @Override
-    public ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
-        return this.repository.listByUsur(idUsur, pageDTO);
+    public ListResultExample<PostItemDTO> listByUsur(Integer idUsur, PageExample pageExample) {
+        return this.repository.listByUsur(idUsur, pageExample);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class PostItemServiceImpl implements PostItemService {
         this.repository.delete(entity);
     }
 
-    private ListResultDTO<PostItemDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
+    private ListResultExample<PostItemDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<PostItemEntity> postItemEntityPages = this.repository.findAll(query, page);
         List<PostItemDTO> postItemDTOS = new ArrayList<>();
 
@@ -155,7 +155,7 @@ public class PostItemServiceImpl implements PostItemService {
             postItemDTOS.add(conversionDTO);
         }
 
-        return new ListResultDTO<>(postItemEntityPages, postItemDTOS);
+        return new ListResultExample<>(postItemEntityPages, postItemDTOS);
     }
 
     private BooleanExpression queryGeneration(PostItemDTO dto) {
@@ -179,8 +179,8 @@ public class PostItemServiceImpl implements PostItemService {
         return addAnd(expressionsAnd);
     }
 
-    private List<PostItemDTO> buildCustomList(ListResultDTO<PostItemDTO> listResultDTO) {
-        return listResultDTO.getContent().stream()
+    private List<PostItemDTO> buildCustomList(ListResultExample<PostItemDTO> listResultExample) {
+        return listResultExample.getContent().stream()
                 .map(item -> PostItemDTO.builder()
                         .idPostItem(item.getIdPostItem())
                         .titlePostItem(item.getTitlePostItem())

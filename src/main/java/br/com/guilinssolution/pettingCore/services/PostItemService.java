@@ -1,16 +1,16 @@
 package br.com.guilinssolution.pettingCore.services;
 
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Type;
 
 public interface PostItemService {
 
-    ListResultDTO<PostItemDTO> findAll(PostItemDTO dto, Type type, Custom custom, PageDTO page);
-    ListResultDTO<PostItemDTO> findAllLite(PostItemDTO dto, PageDTO page);
-    ListResultDTO<PostItemDTO> listByUsur(Integer idUsur, PageDTO pageDTO);
+    ListResultExample<PostItemDTO> findAll(PostItemDTO dto, Type type, Custom custom, PageExample page);
+    ListResultExample<PostItemDTO> findAllLite(PostItemDTO dto, PageExample page);
+    ListResultExample<PostItemDTO> listByUsur(Integer idUsur, PageExample pageExample);
     PostItemDTO findOne(Integer id, Custom custom);
     PostItemDTO save(PostItemDTO dto, Integer idUsur);
     PostItemDTO update(Integer currentId, PostItemDTO dto, Integer idUsur);

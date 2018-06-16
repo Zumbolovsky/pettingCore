@@ -1,8 +1,8 @@
 package br.com.guilinssolution.pettingCore.controller;
 
 import br.com.guilinssolution.pettingCore.model.dto.AnimalDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.services.AnimalService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
 import io.swagger.annotations.Api;
@@ -40,16 +40,16 @@ public class AnimalController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<AnimalDTO> findAll(@RequestBody AnimalDTO dto,
-                                            PageDTO page) {
+    public ListResultExample<AnimalDTO> findAll(@RequestBody AnimalDTO dto,
+                                                PageExample page) {
         log.info("Listar todos os dados de Animal");
         return this.service.findAll(dto, page);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<AnimalDTO> findAllLite(@RequestBody AnimalDTO dto,
-                                                PageDTO page) {
+    public ListResultExample<AnimalDTO> findAllLite(@RequestBody AnimalDTO dto,
+                                                    PageExample page) {
         log.info("Listar todos os dados de Animal");
         return this.service.findAllLite(dto, page);
     }

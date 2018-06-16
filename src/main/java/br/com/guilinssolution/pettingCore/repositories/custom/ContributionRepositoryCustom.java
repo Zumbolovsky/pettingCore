@@ -1,11 +1,11 @@
 package br.com.guilinssolution.pettingCore.repositories.custom;
 
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 
 public interface ContributionRepositoryCustom {
 
-    ListResultDTO<ContributionDTO> listByDonator(Integer idUsur, PageDTO pageDTO);
+    ListResultExample<ContributionDTO> listByDonator(Integer idUsur, PageExample pageExample);
 
 }

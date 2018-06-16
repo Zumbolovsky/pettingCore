@@ -2,6 +2,8 @@ package br.com.guilinssolution.pettingCore.controller;
 
 import javax.validation.Valid;
 
+import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.ContributionExample;
 import br.com.guilinssolution.pettingCore.services.ContributionService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -25,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(path = "/secured/contribution")
 @Api(value = "ContributionControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "Contribution Controller")
-public class ContributionController {
+public class ContributionController extends GenericController {
 
     private final ContributionService service;
 
@@ -39,8 +40,8 @@ public class ContributionController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAll(@RequestBody ContributionExample example,
-                                                  PageDTO page) {
+    public ListResultExample<ContributionDTO> findAll(@RequestBody ContributionExample example,
+                                                PageExample page) {
         log.info("Listar todos os dados de Contribuição");
         ContributionDTO dto = buildDTO(example);
         return this.service.findAll(dto, page);
@@ -48,8 +49,8 @@ public class ContributionController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> findAllLite(@RequestBody ContributionExample example,
-                                                      PageDTO page) {
+    public ListResultExample<ContributionDTO> findAllLite(@RequestBody ContributionExample example,
+                                                          PageExample page) {
         log.info("Listar todos os dados de Contribuição");
         ContributionDTO dto = buildDTO(example);
         return this.service.findAllLite(dto, page);
@@ -113,10 +114,10 @@ public class ContributionController {
 
     @ApiOperation(value = "Lista por ID de usuário contribuinte", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all/donator", method = RequestMethod.GET)
-    public ListResultDTO<ContributionDTO> listByDonator(PageDTO pageDTO) {
+    public ListResultExample<ContributionDTO> listByDonator(PageExample pageExample) {
         log.info("Listando Contribuições por usuário contribuinte");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByDonator(Integer.parseInt(principal), pageDTO);
+        return this.service.listByDonator(Integer.parseInt(principal), pageExample);
     }
 
     private ContributionDTO buildDTO(ContributionExample example) {

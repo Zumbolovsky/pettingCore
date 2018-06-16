@@ -2,6 +2,10 @@ package br.com.guilinssolution.pettingCore.controller;
 
 import javax.validation.Valid;
 
+import br.com.guilinssolution.pettingCore.model.dto.custom.PostAnimalCustomDTO;
+import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Species;
 import io.swagger.annotations.Authorization;
@@ -14,8 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
 import br.com.guilinssolution.pettingCore.model.example.PostAnimalExample;
 import br.com.guilinssolution.pettingCore.services.PostAnimalService;
 import br.com.guilinssolution.pettingCore.validation.Validator;
@@ -23,11 +25,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RestController
 @RequestMapping("/secured/post-animal")
 @Api(value = "PostAnimalControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE, tags = "PostAnimal Controller")
-public class PostAnimalController {
+public class PostAnimalController extends GenericController {
 
     private final PostAnimalService service;
 
@@ -41,8 +46,8 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAll(@RequestBody PostAnimalExample example,
-                                                PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAll(@RequestBody PostAnimalExample example,
+                                                    PageExample page) {
         log.info("Listar todos os dados de Publicação Animal");
         PostAnimalDTO dto = buildDTO(example);
         return this.service.findAll(dto, null, Custom.NORMAL, page);
@@ -50,8 +55,8 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista de todos dados (para cachorros)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-dog", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllDog(@RequestBody PostAnimalExample example,
-                                                   PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAllDog(@RequestBody PostAnimalExample example,
+                                                       PageExample page) {
         log.info("Listar todos os dados de Publicação Animal (tipo cachorro)");
         PostAnimalDTO dto = buildDTO(example);
         return this.service.findAll(dto, Species.CACHORRO, Custom.NORMAL, page);
@@ -59,17 +64,18 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista dados customizados (para cachorros)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-dog-custom", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllDogCustom(@RequestBody PostAnimalExample example,
-                                                         PageDTO page) {
+    public PageableDTO findAllDogCustom(@RequestBody PostAnimalExample example,
+                                        PageExample page) {
         log.info("Listar dados customizados de Publicação Animal (tipo cachorro)");
         PostAnimalDTO dto = buildDTO(example);
-        return this.service.findAll(dto, Species.CACHORRO, Custom.CUSTOM, page);
+        ListResultExample<PostAnimalDTO> listResultExample = this.service.findAll(dto, Species.CACHORRO, Custom.CUSTOM, page);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Lista de todos dados (para gatos)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-cat", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllCat(@RequestBody PostAnimalExample example,
-                                                   PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAllCat(@RequestBody PostAnimalExample example,
+                                                       PageExample page) {
         log.info("Listar todos os dados de Publicação Animal (tipo gato)");
         PostAnimalDTO dto = buildDTO(example);
         return this.service.findAll(dto, Species.GATO, Custom.NORMAL, page);
@@ -77,17 +83,18 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista dados customizados (para gatos)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-cat-custom", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllCatCustom(@RequestBody PostAnimalExample example,
-                                                         PageDTO page) {
+    public PageableDTO findAllCatCustom(@RequestBody PostAnimalExample example,
+                                        PageExample page) {
         log.info("Listar dados customizados de Publicação Animal (tipo gato)");
         PostAnimalDTO dto = buildDTO(example);
-        return this.service.findAll(dto, Species.GATO, Custom.CUSTOM, page);
+        ListResultExample<PostAnimalDTO> listResultExample = this.service.findAll(dto, Species.GATO, Custom.CUSTOM, page);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Lista de todos dados (para pássaros)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-bird", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllBird(@RequestBody PostAnimalExample example,
-                                                    PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAllBird(@RequestBody PostAnimalExample example,
+                                                        PageExample page) {
         log.info("Listar todos os dados de Publicação Animal (tipo pássaro)");
         PostAnimalDTO dto = buildDTO(example);
         return this.service.findAll(dto, Species.PASSARO, Custom.NORMAL, page);
@@ -95,17 +102,18 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista dados customizados (para pássaros)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-bird-custom", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllBirdCustom(@RequestBody PostAnimalExample example,
-                                                          PageDTO page) {
+    public PageableDTO findAllBirdCustom(@RequestBody PostAnimalExample example,
+                                         PageExample page) {
         log.info("Listar dados customizados de Publicação Animal (tipo pássaro)");
         PostAnimalDTO dto = buildDTO(example);
-        return this.service.findAll(dto, Species.PASSARO, Custom.CUSTOM, page);
+        ListResultExample<PostAnimalDTO> listResultExample = this.service.findAll(dto, Species.PASSARO, Custom.CUSTOM, page);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Lista de todos dados (para roedores)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-rodent", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllRodent(@RequestBody PostAnimalExample example,
-                                                      PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAllRodent(@RequestBody PostAnimalExample example,
+                                                          PageExample page) {
         log.info("Listar todos os dados de Publicação Animal (tipo roedor)");
         PostAnimalDTO dto = buildDTO(example);
         return this.service.findAll(dto, Species.ROEDOR, Custom.NORMAL, page);
@@ -113,17 +121,18 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista dados customizados (para roedores)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-rodent-custom", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllRodentCustom(@RequestBody PostAnimalExample example,
-                                                            PageDTO page) {
+    public PageableDTO findAllRodentCustom(@RequestBody PostAnimalExample example,
+                                           PageExample page) {
         log.info("Listar dados customizados de Publicação Animal (tipo roedor)");
         PostAnimalDTO dto = buildDTO(example);
-        return this.service.findAll(dto, Species.ROEDOR, Custom.CUSTOM, page);
+        ListResultExample<PostAnimalDTO> listResultExample = this.service.findAll(dto, Species.ROEDOR, Custom.CUSTOM, page);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Lista de todos dados (para outros)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-other", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllOther(@RequestBody PostAnimalExample example,
-                                                     PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAllOther(@RequestBody PostAnimalExample example,
+                                                         PageExample page) {
         log.info("Listar todos os dados de Publicação Animal (tipo outros)");
         PostAnimalDTO dto = buildDTO(example);
         return this.service.findAll(dto, Species.OUTROS, Custom.NORMAL, page);
@@ -131,17 +140,18 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista dados customizados (para outros)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-other-custom", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllOtherCustom(@RequestBody PostAnimalExample example,
-                                                           PageDTO page) {
+    public PageableDTO findAllOtherCustom(@RequestBody PostAnimalExample example,
+                                          PageExample page) {
         log.info("Listar dados customizados de Publicação Animal (tipo outros)");
         PostAnimalDTO dto = buildDTO(example);
-        return this.service.findAll(dto, Species.OUTROS, Custom.CUSTOM, page);
+        ListResultExample<PostAnimalDTO> listResultExample = this.service.findAll(dto, Species.OUTROS, Custom.CUSTOM, page);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> findAllLite(@RequestBody PostAnimalExample example,
-                                                    PageDTO page) {
+    public ListResultExample<PostAnimalDTO> findAllLite(@RequestBody PostAnimalExample example,
+                                                        PageExample page) {
         log.info("Listar todos os dados de Publicação Animal");
         PostAnimalDTO dto = buildDTO(example);
         return this.service.findAllLite(dto, page);
@@ -149,10 +159,10 @@ public class PostAnimalController {
 
     @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all/usur", method = RequestMethod.GET)
-    public ListResultDTO<PostAnimalDTO> listByUsur(PageDTO pageDTO) {
+    public ListResultExample<PostAnimalDTO> listByUsur(PageExample pageExample) {
         log.info("Listando Publicações Animal por usuário");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByUsur(Integer.parseInt(principal), pageDTO);
+        return this.service.listByUsur(Integer.parseInt(principal), pageExample);
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -230,6 +240,15 @@ public class PostAnimalController {
                 .speciesPostAnimal(example.getSpeciesPostAnimal())
                 .usurDTO(null)
                 .build();
+    }
+
+    private List<PostAnimalCustomDTO> buildCustomList(List<PostAnimalDTO> content) {
+        return content.stream().map(p ->
+                new PostAnimalCustomDTO(p.getIdPostAnimal(),
+                        p.getTitlePostAnimal(),
+                        p.getDescriptionPostAnimal(),
+                        p.getSizePostAnimal()))
+                .collect(Collectors.toList());
     }
 
 }

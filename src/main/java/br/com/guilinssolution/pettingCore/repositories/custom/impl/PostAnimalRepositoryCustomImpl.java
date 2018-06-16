@@ -3,8 +3,8 @@ package br.com.guilinssolution.pettingCore.repositories.custom.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
 import br.com.guilinssolution.pettingCore.repositories.custom.PostAnimalRepositoryCustom;
@@ -25,11 +25,11 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
     private EntityManager entityManager;
 
     @Override
-    public ListResultDTO<PostAnimalDTO> listByUsur(Integer idUsur, PageDTO pageDTO) {
+    public ListResultExample<PostAnimalDTO> listByUsur(Integer idUsur, PageExample pageExample) {
         QPostAnimalEntity postAnimal = QPostAnimalEntity.postAnimalEntity;
         JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
 
-        Pageable pageable = PageHelper.getPage(pageDTO);
+        Pageable pageable = PageHelper.getPage(pageExample);
 
         long limit = Integer.toUnsignedLong(pageable.getPageSize());
         long offset = pageable.getOffset();
@@ -46,7 +46,7 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
         List<PostAnimalDTO> dtoList = entityList.stream().map(PostAnimalAdapter::convertToDTO).collect(Collectors.toList());
         Page<PostAnimalDTO> page = new PageImpl<>(dtoList, pageable, query.fetchCount());
 
-        return new ListResultDTO<>(page, dtoList);
+        return new ListResultExample<>(page, dtoList);
     }
 
 }

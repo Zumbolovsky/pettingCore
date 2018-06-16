@@ -4,8 +4,8 @@ import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.CustomUserDetails;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.*;
-import br.com.guilinssolution.pettingCore.model.dto.util.ListResultDTO;
-import br.com.guilinssolution.pettingCore.model.dto.util.PageDTO;
+import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
+import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.QUsurEntity;
 import br.com.guilinssolution.pettingCore.model.entities.UsurEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
@@ -50,7 +50,7 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public ListResultDTO<UsurDTO> findAll(UsurDTO dto, PageDTO page) {
+    public ListResultExample<UsurDTO> findAll(UsurDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPage(page);
 
@@ -58,7 +58,7 @@ public class UsurServiceImpl implements UsurService {
     }
 
     @Override
-    public ListResultDTO<UsurDTO> findAllLite(UsurDTO dto, PageDTO page) {
+    public ListResultExample<UsurDTO> findAllLite(UsurDTO dto, PageExample page) {
         BooleanExpression query = queryGeneration(dto);
         Pageable pageable = PageHelper.getPageLite(page);
 
@@ -128,7 +128,7 @@ public class UsurServiceImpl implements UsurService {
         return new CustomUserDetails(usurEntity);
     }
 
-    private ListResultDTO<UsurDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
+    private ListResultExample<UsurDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
         Page<UsurEntity> usurEntityPages = this.repository.findAll(query, page);
         List<UsurDTO> usurDTOS = new ArrayList<>();
 
@@ -137,7 +137,7 @@ public class UsurServiceImpl implements UsurService {
             usurDTOS.add(conversionDTO);
         }
 
-        return new ListResultDTO<>(usurEntityPages, usurDTOS);
+        return new ListResultExample<>(usurEntityPages, usurDTOS);
     }
 
     private BooleanExpression queryGeneration(UsurDTO dto) {
