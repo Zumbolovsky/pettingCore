@@ -1,6 +1,7 @@
 package br.com.guilinssolution.pettingCore.controller;
 
 import br.com.guilinssolution.pettingCore.model.dto.UsurDTO;
+import br.com.guilinssolution.pettingCore.model.dto.custom.UsurCustomDTO;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.enums.Custom;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,10 +63,12 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur/{id}-custom", method = RequestMethod.GET)
-    public ResponseEntity<UsurDTO> findOneCustom(@PathVariable Integer id) {
+    @RequestMapping(value = "/secured/usur", method = RequestMethod.GET)
+    public ResponseEntity<UsurCustomDTO> findOneCustom() {
         log.info("Pesquisando dados customizados de um Usuário");
-        return new ResponseEntity<>(this.service.findOne(id, Custom.CUSTOM), HttpStatus.FOUND);
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UsurDTO dto = this.service.findOne(Integer.parseInt(principal), Custom.CUSTOM);
+        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Cadastra dados no banco")
@@ -108,6 +112,10 @@ public class UsurController {
                 .addressUsur(example.getAddressUsur())
                 .stateUsur(example.getStateUsur())
                 .build();
+    }
+
+    private UsurCustomDTO buildCustomDTO(UsurDTO dto) {
+        return new UsurCustomDTO(dto.getNameUsur(), dto.getEmailUsur(), dto.getPhoneUsur());
     }
 
 }

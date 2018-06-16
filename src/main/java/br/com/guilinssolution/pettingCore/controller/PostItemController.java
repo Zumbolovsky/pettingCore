@@ -2,6 +2,7 @@ package br.com.guilinssolution.pettingCore.controller;
 
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
 import br.com.guilinssolution.pettingCore.model.dto.custom.PostItemCustomDTO;
+import br.com.guilinssolution.pettingCore.model.dto.custom.PostItemCustomDTOForList;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
@@ -110,14 +111,15 @@ public class PostItemController extends GenericController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PostItemDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Publicação Item");
-        return ResponseEntity.ok(this.service.findOne(id, Custom.NORMAL));
+        return new ResponseEntity<>(this.service.findOne(id, Custom.NORMAL), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{id}-custom", method = RequestMethod.GET)
-    public ResponseEntity<PostItemDTO> findOneCustom(@PathVariable Integer id) {
+    public ResponseEntity<PostItemCustomDTO> findOneCustom(@PathVariable Integer id) {
         log.info("Pesquisando dados customizados de um Publicação Item");
-        return ResponseEntity.ok(this.service.findOne(id, Custom.CUSTOM));
+        PostItemDTO dto = this.service.findOne(id, Custom.CUSTOM);
+        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
@@ -183,13 +185,23 @@ public class PostItemController extends GenericController {
                 .build();
     }
 
-    private List<PostItemCustomDTO> buildCustomList(List<PostItemDTO> content) {
+    private List<PostItemCustomDTOForList> buildCustomList(List<PostItemDTO> content) {
         return content.stream().map(p ->
-                new PostItemCustomDTO(p.getIdPostItem(),
+                new PostItemCustomDTOForList(p.getIdPostItem(),
                         p.getTitlePostItem(),
                         p.getDescriptionPostItem(),
                         p.getSpeciesPostItem()))
                 .collect(Collectors.toList());
+    }
+
+    private PostItemCustomDTO buildCustomDTO(PostItemDTO dto) {
+        return new PostItemCustomDTO(dto.getIdPostItem(),
+                dto.getTitlePostItem(),
+                dto.getDescriptionPostItem(),
+                dto.getTypePostItem(),
+                dto.getSpeciesPostItem(),
+                dto.getUsurDTO().getIdUsur(),
+                dto.getUsurDTO().getNameUsur());
     }
 
 }

@@ -1,7 +1,6 @@
 package br.com.guilinssolution.pettingCore.model.dto.custom;
 
 import br.com.guilinssolution.pettingCore.model.enums.Size;
-import br.com.guilinssolution.pettingCore.model.enums.Species;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -11,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"idPostAnimal"})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PostAnimalCustomDTO {
+public class PostAnimalCustomDTOForList {
 
     private Integer idPostAnimal;
 
@@ -20,11 +19,5 @@ public class PostAnimalCustomDTO {
     private String descriptionPostAnimal;
 
     private Size sizePostAnimal;
-
-    private Species speciesPostAnimal;
-
-    private Integer idUsur;
-
-    private String nameUsur;
-
+    
 }

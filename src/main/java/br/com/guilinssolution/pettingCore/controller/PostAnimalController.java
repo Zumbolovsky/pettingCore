@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.controller;
 import javax.validation.Valid;
 
 import br.com.guilinssolution.pettingCore.model.dto.custom.PostAnimalCustomDTO;
+import br.com.guilinssolution.pettingCore.model.dto.custom.PostAnimalCustomDTOForList;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
@@ -174,9 +175,10 @@ public class PostAnimalController extends GenericController {
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/{id}-custom", method = RequestMethod.GET)
-    public ResponseEntity<PostAnimalDTO> findOneCustom(@PathVariable Integer id) {
+    public ResponseEntity<PostAnimalCustomDTO> findOneCustom(@PathVariable Integer id) {
         log.info("Pesquisando dados customizados de um Publicação Animal");
-        return new ResponseEntity<>(this.service.findOne(id, Custom.CUSTOM), HttpStatus.FOUND);
+        PostAnimalDTO dto = this.service.findOne(id, Custom.CUSTOM);
+        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.FOUND);
     }
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
@@ -242,13 +244,23 @@ public class PostAnimalController extends GenericController {
                 .build();
     }
 
-    private List<PostAnimalCustomDTO> buildCustomList(List<PostAnimalDTO> content) {
+    private List<PostAnimalCustomDTOForList> buildCustomList(List<PostAnimalDTO> content) {
         return content.stream().map(p ->
-                new PostAnimalCustomDTO(p.getIdPostAnimal(),
+                new PostAnimalCustomDTOForList(p.getIdPostAnimal(),
                         p.getTitlePostAnimal(),
                         p.getDescriptionPostAnimal(),
                         p.getSizePostAnimal()))
                 .collect(Collectors.toList());
+    }
+
+    private PostAnimalCustomDTO buildCustomDTO(PostAnimalDTO dto) {
+        return new PostAnimalCustomDTO(dto.getIdPostAnimal(),
+                dto.getTitlePostAnimal(),
+                dto.getDescriptionPostAnimal(),
+                dto.getSizePostAnimal(),
+                dto.getSpeciesPostAnimal(),
+                dto.getUsurDTO().getIdUsur(),
+                dto.getUsurDTO().getNameUsur());
     }
 
 }
