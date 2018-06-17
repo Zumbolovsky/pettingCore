@@ -140,67 +140,67 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- FIXTURE FACTORY -->
-		<dependency>
-			<groupId>br.com.six2six</groupId>
-			<artifactId>fixture-factory</artifactId>
-			<version>${fixture-factory.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+		<!--&lt;!&ndash; FIXTURE FACTORY &ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>br.com.six2six</groupId>-->
+			<!--<artifactId>fixture-factory</artifactId>-->
+			<!--<version>${fixture-factory.version}</version>-->
+			<!--<exclusions>-->
+				<!--<exclusion>-->
+					<!--<groupId>junit</groupId>-->
+					<!--<artifactId>junit</artifactId>-->
+				<!--</exclusion>-->
+			<!--</exclusions>-->
+		<!--</dependency>-->
 
-		<!-- REST ASSURED -->
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-library</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>test</scope>
-		</dependency>
+		<!--&lt;!&ndash; REST ASSURED &ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>io.rest-assured</groupId>-->
+			<!--<artifactId>rest-assured</artifactId>-->
+			<!--<exclusions>-->
+				<!--<exclusion>-->
+					<!--<groupId>org.hamcrest</groupId>-->
+					<!--<artifactId>hamcrest-core</artifactId>-->
+				<!--</exclusion>-->
+				<!--<exclusion>-->
+					<!--<groupId>org.hamcrest</groupId>-->
+					<!--<artifactId>hamcrest-library</artifactId>-->
+				<!--</exclusion>-->
+			<!--</exclusions>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
 
-		<!-- H2 -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!--&lt;!&ndash; H2 &ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>com.h2database</groupId>-->
+			<!--<artifactId>h2</artifactId>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
 
-		<!-- CUCUMBER -->
-		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-junit</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>${cucumber.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-spring</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-core</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
-		</dependency>
+		<!--&lt;!&ndash; CUCUMBER &ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>info.cukes</groupId>-->
+			<!--<artifactId>cucumber-junit</artifactId>-->
+			<!--<version>${cucumber.version}</version>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>info.cukes</groupId>-->
+			<!--<artifactId>cucumber-java</artifactId>-->
+			<!--<version>${cucumber.version}</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>info.cukes</groupId>-->
+			<!--<artifactId>cucumber-spring</artifactId>-->
+			<!--<version>${cucumber.version}</version>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>info.cukes</groupId>-->
+			<!--<artifactId>cucumber-core</artifactId>-->
+			<!--<version>${cucumber.version}</version>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
 	</dependencies>
 
 	<build>
@@ -231,19 +231,19 @@
 		</resources>
 
 		<plugins>
-			<!-- INTEGRATION TEST -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			<!--&lt;!&ndash; INTEGRATION TEST &ndash;&gt;-->
+			<!--<plugin>-->
+				<!--<groupId>org.apache.maven.plugins</groupId>-->
+				<!--<artifactId>maven-failsafe-plugin</artifactId>-->
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<goals>-->
+							<!--<goal>integration-test</goal>-->
+							<!--<goal>verify</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			<!--</plugin>-->
 
             <!-- SPRING BOOT -->
 			<plugin>
