@@ -44,6 +44,7 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
                         .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur)
                                 .and(contribution.postItemEntity.isNull()))
                         .restrict(modifiers);
+                break;
             case ITEM:
                 query = query
                         .select(contribution)
@@ -51,6 +52,7 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
                         .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur)
                                 .and(contribution.postAnimalEntity.isNull()))
                         .restrict(modifiers);
+                break;
             default:
                 query = query
                         .select(contribution)
