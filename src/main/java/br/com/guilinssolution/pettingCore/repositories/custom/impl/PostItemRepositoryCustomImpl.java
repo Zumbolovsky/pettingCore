@@ -55,9 +55,10 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
     @Override
     public ListResultExample<PostItemDTO> findAllCustom(PostItemDTO dto, Pageable pageable) {
         QPostItemEntity postItem = QPostItemEntity.postItemEntity;
-        QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
+        QContributionEntity contribution = QContributionEntity.contributionEntity;
         JPAQuery<PostItemEntity> query = new JPAQuery<>(this.entityManager);
         JPAQuery<Integer> subQuery = new JPAQuery<>(this.entityManager);
+        JPAQuery<Integer> countSubQuery = new JPAQuery<>(this.entityManager);
 
         long limit = Integer.toUnsignedLong(pageable.getPageSize());
         long offset = pageable.getOffset();
@@ -84,17 +85,30 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
                     postItem.typePostItem.eq(dto.getTypePostItem());
         }
 
-        subQuery
-                .select(contributionEntity.postAnimalEntity.idPostAnimal)
-                .from(contributionEntity);
-        BooleanExpression condition = postItem.idPostItem.notIn(subQuery.fetch());
-        query
-                .select(postItem)
-                .from(postItem)
-                .join(contributionEntity)
-                .on(contributionEntity.postItemEntity.idPostItem.eq(postItem.idPostItem))
-                .where(filter != null ? filter.and(condition) : condition)
-                .restrict(modifiers);
+        countSubQuery
+                .select(contribution.postAnimalEntity.idPostAnimal)
+                .from(contribution);
+        Integer count = countSubQuery
+                .from(contribution)
+                .fetch().size();
+
+        if (count > 0) {
+            subQuery
+                    .select(contribution.postAnimalEntity.idPostAnimal)
+                    .from(contribution);
+            BooleanExpression condition = postItem.idPostItem.notIn(subQuery.fetch());
+            query
+                    .select(postItem)
+                    .from(postItem, contribution)
+                    .where(filter != null ? filter.and(condition) : condition)
+                    .restrict(modifiers);
+        } else {
+            query
+                    .select(postItem)
+                    .from(postItem)
+                    .where(postItem.typePostItem.eq(dto.getTypePostItem()))
+                    .restrict(modifiers);
+        }
 
         List<PostItemEntity> entityList = query.fetch();
         List<PostItemDTO> dtoList = entityList.stream().map(PostItemAdapter::convertToDTO).collect(Collectors.toList());

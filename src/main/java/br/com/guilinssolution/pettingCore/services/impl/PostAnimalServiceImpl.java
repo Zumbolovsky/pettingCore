@@ -67,6 +67,11 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
+    public Integer customCount(Species species) {
+        return this.repository.customCount(species);
+    }
+
+    @Override
     public ListResultExample<PostAnimalDTO> listByUsur(Integer idUsur, PageExample pageExample) {
         return this.repository.listByUsur(idUsur, pageExample);
     }

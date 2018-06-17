@@ -73,6 +73,13 @@ public class PostAnimalController extends GenericController {
         return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
+    @ApiOperation(value = "Contagem de animais disponíveis (para cachorros)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/count-dog", method = RequestMethod.GET)
+    public Integer countDog() {
+        log.info("Contagem de dados de Publicação Animal disponíveis (tipo cachorro)");
+        return this.service.customCount(Species.CACHORRO);
+    }
+
     @ApiOperation(value = "Lista de todos dados (para gatos)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-cat", method = RequestMethod.GET)
     public ListResultExample<PostAnimalDTO> findAllCat(PostAnimalExample example,
@@ -90,6 +97,13 @@ public class PostAnimalController extends GenericController {
         PostAnimalDTO dto = buildDTO(example);
         ListResultExample<PostAnimalDTO> listResultExample = this.service.findAll(dto, Species.GATO, Custom.CUSTOM, page);
         return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
+    }
+
+    @ApiOperation(value = "Contagem de animais disponíveis (para gatos)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/count-cat", method = RequestMethod.GET)
+    public Integer countCat() {
+        log.info("Contagem de dados de Publicação Animal disponíveis (tipo gato)");
+        return this.service.customCount(Species.GATO);
     }
 
     @ApiOperation(value = "Lista de todos dados (para pássaros)", authorizations = { @Authorization(value="apiKey") })
@@ -111,6 +125,13 @@ public class PostAnimalController extends GenericController {
         return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
+    @ApiOperation(value = "Contagem de animais disponíveis (para pássaros)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/count-bird", method = RequestMethod.GET)
+    public Integer countBird() {
+        log.info("Contagem de dados de Publicação Animal disponíveis (tipo pássaro)");
+        return this.service.customCount(Species.PASSARO);
+    }
+
     @ApiOperation(value = "Lista de todos dados (para roedores)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-rodent", method = RequestMethod.GET)
     public ListResultExample<PostAnimalDTO> findAllRodent(PostAnimalExample example,
@@ -128,6 +149,13 @@ public class PostAnimalController extends GenericController {
         PostAnimalDTO dto = buildDTO(example);
         ListResultExample<PostAnimalDTO> listResultExample = this.service.findAll(dto, Species.ROEDOR, Custom.CUSTOM, page);
         return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
+    }
+
+    @ApiOperation(value = "Contagem de animais disponíveis (para roedores)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/count-rodent", method = RequestMethod.GET)
+    public Integer countRodent() {
+        log.info("Contagem de dados de Publicação Animal disponíveis (tipo roedor)");
+        return this.service.customCount(Species.ROEDOR);
     }
 
     @ApiOperation(value = "Lista de todos dados (para outros)", authorizations = { @Authorization(value="apiKey") })
@@ -149,6 +177,13 @@ public class PostAnimalController extends GenericController {
         return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
+    @ApiOperation(value = "Contagem de animais disponíveis (para outros)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/count-other", method = RequestMethod.GET)
+    public Integer countOther() {
+        log.info("Contagem de dados de Publicação Animal disponíveis (tipo outros)");
+        return this.service.customCount(Species.OUTROS);
+    }
+
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
     public ListResultExample<PostAnimalDTO> findAllLite(PostAnimalExample example,
@@ -160,10 +195,11 @@ public class PostAnimalController extends GenericController {
 
     @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all/usur", method = RequestMethod.GET)
-    public ListResultExample<PostAnimalDTO> listByUsur(PageExample pageExample) {
+    public PageableDTO listByUsur(PageExample pageExample) {
         log.info("Listando Publicações Animal por usuário");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByUsur(Integer.parseInt(principal), pageExample);
+        ListResultExample<PostAnimalDTO> listResultExample = this.service.listByUsur(Integer.parseInt(principal), pageExample);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })

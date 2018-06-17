@@ -5,6 +5,7 @@ import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
 import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
+import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
@@ -57,9 +58,10 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
     @Override
     public ListResultExample<PostAnimalDTO> findAllCustom(PostAnimalDTO dto, Pageable pageable) {
         QPostAnimalEntity postAnimal = QPostAnimalEntity.postAnimalEntity;
-        QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
+        QContributionEntity contribution = QContributionEntity.contributionEntity;
         JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
         JPAQuery<Integer> subQuery = new JPAQuery<>(this.entityManager);
+        JPAQuery<Integer> countSubQuery = new JPAQuery<>(this.entityManager);
 
         long limit = Integer.toUnsignedLong(pageable.getPageSize());
         long offset = pageable.getOffset();
@@ -68,7 +70,7 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
 
         BooleanExpression filter = null;
         if (StringUtils.isNotEmpty(dto.getDescriptionPostAnimal())) {
-            filter = postAnimal.descriptionPostAnimal.like("%"+dto.getDescriptionPostAnimal()+"%");
+            filter = postAnimal.descriptionPostAnimal.like("%" + dto.getDescriptionPostAnimal() + "%");
         }
         if (dto.getSizePostAnimal() != null) {
             filter = filter != null ?
@@ -77,8 +79,8 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
         }
         if (StringUtils.isNotEmpty(dto.getTitlePostAnimal())) {
             filter = filter != null ?
-                    filter.and(postAnimal.titlePostAnimal.like("%"+dto.getTitlePostAnimal()+"%")) :
-                    postAnimal.titlePostAnimal.like("%"+dto.getTitlePostAnimal()+"%");
+                    filter.and(postAnimal.titlePostAnimal.like("%" + dto.getTitlePostAnimal() + "%")) :
+                    postAnimal.titlePostAnimal.like("%" + dto.getTitlePostAnimal() + "%");
         }
         if (dto.getSpeciesPostAnimal() != null) {
             filter = filter != null ?
@@ -86,23 +88,70 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
                     postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal());
         }
 
-        subQuery
-                .select(contributionEntity.postAnimalEntity.idPostAnimal)
-                .from(contributionEntity);
-        BooleanExpression condition = postAnimal.idPostAnimal.notIn(subQuery.fetch());
-        query
-                .select(postAnimal)
-                .from(postAnimal)
-                .join(contributionEntity)
-                .on(contributionEntity.postAnimalEntity.idPostAnimal.eq(postAnimal.idPostAnimal))
-                .where(filter != null ? filter.and(condition) : condition)
-                .restrict(modifiers);
+        countSubQuery
+                .select(contribution.postAnimalEntity.idPostAnimal)
+                .from(contribution);
+        Integer count = countSubQuery
+                .from(contribution)
+                .fetch().size();
+
+        if (count > 0) {
+            subQuery
+                    .select(contribution.postAnimalEntity.idPostAnimal)
+                    .from(contribution);
+            BooleanExpression condition = postAnimal.idPostAnimal.notIn(subQuery.fetch());
+            query
+                    .select(postAnimal)
+                    .from(postAnimal, contribution)
+                    .where(filter != null ? filter.and(condition) : condition)
+                    .restrict(modifiers);
+        } else {
+            query
+                    .select(postAnimal)
+                    .from(postAnimal)
+                    .where(postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal()))
+                    .restrict(modifiers);
+        }
+
 
         List<PostAnimalEntity> entityList = query.fetch();
         List<PostAnimalDTO> dtoList = entityList.stream().map(PostAnimalAdapter::convertToDTO).collect(Collectors.toList());
         Page<PostAnimalDTO> page = new PageImpl<>(dtoList, pageable, query.fetchCount());
 
         return new ListResultExample<>(page, dtoList);
+    }
+
+    @Override
+    public Integer customCount(Species species) {
+        QPostAnimalEntity postAnimal = QPostAnimalEntity.postAnimalEntity;
+        QContributionEntity contribution = QContributionEntity.contributionEntity;
+        JPAQuery<Integer> query = new JPAQuery<>(this.entityManager);
+        JPAQuery<Integer> subQuery = new JPAQuery<>(this.entityManager);
+        JPAQuery<Integer> countSubQuery = new JPAQuery<>(this.entityManager);
+
+        countSubQuery
+                .select(contribution.postAnimalEntity.idPostAnimal)
+                .from(contribution);
+        Integer count = countSubQuery
+                .from(contribution)
+                .fetch().size();
+
+        if (count > 0) {
+            query
+                    .select(postAnimal.idPostAnimal)
+                    .from(postAnimal, contribution)
+                    .where(postAnimal.speciesPostAnimal.eq(species)
+                            .and(postAnimal.idPostAnimal.notIn(subQuery.fetch())))
+                    .distinct();
+        } else {
+            query
+                    .select(postAnimal.idPostAnimal)
+                    .from(postAnimal)
+                    .where(postAnimal.speciesPostAnimal.eq(species))
+                    .distinct();
+        }
+
+        return query.fetch().size();
     }
 
 }

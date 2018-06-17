@@ -9,6 +9,7 @@ import br.com.guilinssolution.pettingCore.model.enums.Species;
 public interface PostAnimalService {
 
     ListResultExample<PostAnimalDTO> findAll(PostAnimalDTO dto, Species species, Custom custom, PageExample page);
+    Integer customCount(Species species);
     ListResultExample<PostAnimalDTO> findAllLite(PostAnimalDTO dto, PageExample page);
     ListResultExample<PostAnimalDTO> listByUsur(Integer idUsur, PageExample pageExample);
     PostAnimalDTO findOne(Integer id, Custom custom);
@@ -16,5 +17,4 @@ public interface PostAnimalService {
     PostAnimalDTO update(Integer currentId, PostAnimalDTO dto, Integer idUsur);
     PostAnimalDTO quickUpdate(Integer currentId, PostAnimalDTO dto);
     void delete(Integer id);
-
 }
