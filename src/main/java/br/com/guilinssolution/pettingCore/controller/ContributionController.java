@@ -121,7 +121,7 @@ public class ContributionController extends GenericController {
                                                   @RequestParam(required = false) Integer idPostAnimal,
                                                   @RequestParam(required = false) Integer idPostItem,
                                                   @RequestParam Integer idUsurRequest,
-                                                  @RequestParam(required = false) Integer idUsurDonator,
+                                                  @RequestParam Integer idUsurDonator,
                                                   @Valid @RequestBody ContributionExample example,
                                                   BindingResult result) {
         log.info("Atualizando dados de uma Contribuição e suas relações");

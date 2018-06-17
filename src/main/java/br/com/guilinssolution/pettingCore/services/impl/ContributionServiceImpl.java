@@ -80,16 +80,7 @@ public class ContributionServiceImpl implements ContributionService {
     @Override
     public ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem,
                                 Integer idUsurRequest, Integer idUsurDonator) {
-        this.validator.entityNotExist(idUsurRequest, this.usurRepository);
-
-        dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
-
-        validateAndAddPosts(dto, idPostAnimal, idPostItem);
-
-        if(idUsurDonator != null) {
-            this.validator.entityNotExist(idUsurDonator, this.usurRepository);
-            dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
-        }
+        validateAndAdd(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator);
 
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(dto);
 
@@ -101,18 +92,9 @@ public class ContributionServiceImpl implements ContributionService {
     public ContributionDTO update(Integer currentId, ContributionDTO dto, Integer idPostAnimal,
                                   Integer idPostItem, Integer idUsurRequest, Integer idUsurDonator) {
         this.validator.entityNotExist(currentId, this.repository);
-
         ContributionEntity vesselContributionEntity = this.repository.getOne(currentId);
 
-        this.validator.entityNotExist(idUsurRequest, this.usurRepository);
-        dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
-
-        validateAndAddPosts(dto, idPostAnimal, idPostItem);
-
-        if(idUsurDonator != null) {
-            this.validator.entityNotExist(idUsurDonator, this.usurRepository);
-            dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
-        }
+        validateAndAdd(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator);
 
         ContributionEntity newContributionEntity = ContributionAdapter.convertToEntity(dto);
 
@@ -179,7 +161,12 @@ public class ContributionServiceImpl implements ContributionService {
         return addAnd(expressionsAnd);
     }
 
-    private void validateAndAddPosts(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem) {
+    private void validateAndAdd(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem,
+                                Integer idUsurRequest, Integer idUsurDonator) {
+        this.validator.entityNotExist(idUsurRequest, this.usurRepository);
+        dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurRequest)));
+        this.validator.entityNotExist(idUsurDonator, this.usurRepository);
+        dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
         if ((idPostAnimal == null && idPostItem == null) || (idPostAnimal != null && idPostItem != null)) {
             this.validator.entityNotExist(null, repository);
         } else if (idPostAnimal == null) {
