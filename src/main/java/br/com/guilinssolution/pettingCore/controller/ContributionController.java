@@ -46,7 +46,7 @@ public class ContributionController extends GenericController {
     @ApiOperation(value = "Lista de todos dados", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ListResultExample<ContributionDTO> findAll(@RequestBody ContributionExample example,
-                                                PageExample page) {
+                                                      PageExample page) {
         log.info("Listar todos os dados de Contribuição");
         ContributionDTO dto = buildDTO(example);
         return this.service.findAll(dto, page);
