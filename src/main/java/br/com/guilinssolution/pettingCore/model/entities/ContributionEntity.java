@@ -32,15 +32,15 @@ public class ContributionEntity implements Serializable {
 	private Integer idContribution;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_postAnimal")
+	@JoinColumn(name = "id_postAnimal", unique = true)
 	private PostAnimalEntity postAnimalEntity;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_postItem")
+	@JoinColumn(name = "id_postItem", unique = true)
 	private PostItemEntity postItemEntity;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_donator")
+	@JoinColumn(name = "id_donator", nullable = false)
 	private UsurEntity usurEntityByIdDonator;
 
 	@ManyToOne(fetch = FetchType.LAZY)
