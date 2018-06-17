@@ -101,10 +101,11 @@ public class PostItemController extends GenericController {
 
     @ApiOperation(value = "Lista por ID de usuário", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all/usur", method = RequestMethod.GET)
-    public ListResultExample<PostItemDTO> listByUsur(PageExample pageExample) {
+    public PageableDTO listByUsur(PageExample pageExample) {
         log.info("Listando Publicações Item por usuário");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByUsur(Integer.parseInt(principal), pageExample);
+        ListResultExample<PostItemDTO> listResultExample = this.service.listByUsur(Integer.parseInt(principal), pageExample);
+        return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
