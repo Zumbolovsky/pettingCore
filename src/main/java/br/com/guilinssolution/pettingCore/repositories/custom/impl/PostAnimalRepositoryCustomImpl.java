@@ -59,39 +59,43 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
         QPostAnimalEntity postAnimal = QPostAnimalEntity.postAnimalEntity;
         QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
         JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
+        JPAQuery<Integer> subQuery = new JPAQuery<>(this.entityManager);
 
         long limit = Integer.toUnsignedLong(pageable.getPageSize());
         long offset = pageable.getOffset();
 
         QueryModifiers modifiers = new QueryModifiers(limit, offset);
 
-        BooleanExpression expression = null;
+        BooleanExpression filter = null;
         if (StringUtils.isNotEmpty(dto.getDescriptionPostAnimal())) {
-            expression = postAnimal.descriptionPostAnimal.like("%"+dto.getDescriptionPostAnimal()+"%");
+            filter = postAnimal.descriptionPostAnimal.like("%"+dto.getDescriptionPostAnimal()+"%");
         }
         if (dto.getSizePostAnimal() != null) {
-            expression = expression != null ?
-                    expression.and(postAnimal.sizePostAnimal.eq(dto.getSizePostAnimal())) :
+            filter = filter != null ?
+                    filter.and(postAnimal.sizePostAnimal.eq(dto.getSizePostAnimal())) :
                     postAnimal.sizePostAnimal.eq(dto.getSizePostAnimal());
         }
         if (StringUtils.isNotEmpty(dto.getTitlePostAnimal())) {
-            expression = expression != null ?
-                    expression.and(postAnimal.titlePostAnimal.like("%"+dto.getTitlePostAnimal()+"%")) :
+            filter = filter != null ?
+                    filter.and(postAnimal.titlePostAnimal.like("%"+dto.getTitlePostAnimal()+"%")) :
                     postAnimal.titlePostAnimal.like("%"+dto.getTitlePostAnimal()+"%");
         }
         if (dto.getSpeciesPostAnimal() != null) {
-            expression = expression != null ?
-                    expression.and(postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal())) :
+            filter = filter != null ?
+                    filter.and(postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal())) :
                     postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal());
         }
 
+        subQuery
+                .select(contributionEntity.postAnimalEntity.idPostAnimal)
+                .from(contributionEntity);
+        BooleanExpression condition = postAnimal.idPostAnimal.notIn(subQuery.fetch());
         query
                 .select(postAnimal)
                 .from(postAnimal)
                 .join(contributionEntity)
                 .on(contributionEntity.postAnimalEntity.idPostAnimal.eq(postAnimal.idPostAnimal))
-                .where(expression != null ? expression.and(contributionEntity.usurEntityByIdDonator.isNull()) :
-                        contributionEntity.usurEntityByIdDonator.isNull())
+                .where(filter != null ? filter.and(condition) : condition)
                 .restrict(modifiers);
 
         List<PostAnimalEntity> entityList = query.fetch();
