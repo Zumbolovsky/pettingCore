@@ -91,11 +91,9 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
         countSubQuery
                 .select(contribution.postAnimalEntity.idPostAnimal)
                 .from(contribution);
-        Integer count = countSubQuery
-                .from(contribution)
-                .fetch().size();
+        List<Integer> count = countSubQuery.fetch();
 
-        if (count > 0) {
+        if (count.size() > 0 && count.get(0) != null) {
             subQuery
                     .select(contribution.postAnimalEntity.idPostAnimal)
                     .from(contribution);
@@ -112,7 +110,6 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
                     .where(postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal()))
                     .restrict(modifiers);
         }
-
 
         List<PostAnimalEntity> entityList = query.fetch();
         List<PostAnimalDTO> dtoList = entityList.stream().map(PostAnimalAdapter::convertToDTO).collect(Collectors.toList());

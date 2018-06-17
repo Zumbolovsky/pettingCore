@@ -86,15 +86,13 @@ public class PostItemRepositoryCustomImpl implements PostItemRepositoryCustom {
         }
 
         countSubQuery
-                .select(contribution.postAnimalEntity.idPostAnimal)
+                .select(contribution.postItemEntity.idPostItem)
                 .from(contribution);
-        Integer count = countSubQuery
-                .from(contribution)
-                .fetch().size();
+        List<Integer> count = countSubQuery.fetch();
 
-        if (count > 0) {
+        if (count.size() > 0 && count.get(0) != null) {
             subQuery
-                    .select(contribution.postAnimalEntity.idPostAnimal)
+                    .select(contribution.postItemEntity.idPostItem)
                     .from(contribution);
             BooleanExpression condition = postItem.idPostItem.notIn(subQuery.fetch());
             query
