@@ -92,7 +92,7 @@ public class PostItemController extends GenericController {
 
     @ApiOperation(value = "Busca dados pelo identificador", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/all-lite", method = RequestMethod.GET)
-    public ListResultExample<PostItemDTO> findAllLite(@RequestBody PostItemExample example,
+    public ListResultExample<PostItemDTO> findAllLite(PostItemExample example,
                                                       PageExample page) {
         log.info("Listar todos os dados de Publicação Item");
         PostItemDTO dto = buildDTO(example);
