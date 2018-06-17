@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
+import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.dto.PostItemDTO;
@@ -58,7 +59,7 @@ public class PostItemServiceImpl implements PostItemService {
         Pageable pageable = PageHelper.getPage(page);
 
         if (custom.equals(Custom.CUSTOM)) {
-            ListResultExample<PostItemDTO> listResultExample = findAll(query, pageable, ConvertType.NORMAL);
+            ListResultExample<PostItemDTO> listResultExample = this.repository.findAllCustom(dto, pageable);
             List<PostItemDTO> customList = buildCustomList(listResultExample);
             Page<PostItemDTO> customPage = new PageImpl<>(customList, pageable, pageable.getPageSize());
             return new ListResultExample<>(customPage, customList);

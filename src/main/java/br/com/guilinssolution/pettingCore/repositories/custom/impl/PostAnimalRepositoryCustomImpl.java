@@ -3,13 +3,18 @@ package br.com.guilinssolution.pettingCore.repositories.custom.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
+import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
+import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
 import br.com.guilinssolution.pettingCore.repositories.custom.PostAnimalRepositoryCustom;
 import com.querydsl.core.QueryModifiers;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +45,53 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
                 .select(postAnimal)
                 .from(postAnimal)
                 .where(postAnimal.usurEntity.idUsur.eq(idUsur))
+                .restrict(modifiers);
+
+        List<PostAnimalEntity> entityList = query.fetch();
+        List<PostAnimalDTO> dtoList = entityList.stream().map(PostAnimalAdapter::convertToDTO).collect(Collectors.toList());
+        Page<PostAnimalDTO> page = new PageImpl<>(dtoList, pageable, query.fetchCount());
+
+        return new ListResultExample<>(page, dtoList);
+    }
+
+    @Override
+    public ListResultExample<PostAnimalDTO> findAllCustom(PostAnimalDTO dto, Pageable pageable) {
+        QPostAnimalEntity postAnimal = QPostAnimalEntity.postAnimalEntity;
+        QContributionEntity contributionEntity = QContributionEntity.contributionEntity;
+        JPAQuery<PostAnimalEntity> query = new JPAQuery<>(this.entityManager);
+
+        long limit = Integer.toUnsignedLong(pageable.getPageSize());
+        long offset = pageable.getOffset();
+
+        QueryModifiers modifiers = new QueryModifiers(limit, offset);
+
+        BooleanExpression expression = null;
+        if (StringUtils.isNotEmpty(dto.getDescriptionPostAnimal())) {
+            expression = postAnimal.descriptionPostAnimal.like("%"+dto.getDescriptionPostAnimal()+"%");
+        }
+        if (dto.getSizePostAnimal() != null) {
+            expression = expression != null ?
+                    expression.and(postAnimal.sizePostAnimal.eq(dto.getSizePostAnimal())) :
+                    postAnimal.sizePostAnimal.eq(dto.getSizePostAnimal());
+        }
+        if (StringUtils.isNotEmpty(dto.getTitlePostAnimal())) {
+            expression = expression != null ?
+                    expression.and(postAnimal.titlePostAnimal.like("%"+dto.getTitlePostAnimal()+"%")) :
+                    postAnimal.titlePostAnimal.like("%"+dto.getTitlePostAnimal()+"%");
+        }
+        if (dto.getSpeciesPostAnimal() != null) {
+            expression = expression != null ?
+                    expression.and(postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal())) :
+                    postAnimal.speciesPostAnimal.eq(dto.getSpeciesPostAnimal());
+        }
+
+        query
+                .select(postAnimal)
+                .from(postAnimal)
+                .join(contributionEntity)
+                .on(contributionEntity.postAnimalEntity.idPostAnimal.eq(postAnimal.idPostAnimal))
+                .where(expression != null ? expression.and(contributionEntity.usurEntityByIdDonator.isNull()) :
+                        contributionEntity.usurEntityByIdDonator.isNull())
                 .restrict(modifiers);
 
         List<PostAnimalEntity> entityList = query.fetch();

@@ -3,6 +3,7 @@ package br.com.guilinssolution.pettingCore.services.impl;
 import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
+import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
@@ -58,7 +59,7 @@ public class PostAnimalServiceImpl implements PostAnimalService {
         Pageable pageable = PageHelper.getPage(page);
 
         if (custom.equals(Custom.CUSTOM)) {
-            ListResultExample<PostAnimalDTO> listResultExample = findAll(query, pageable, ConvertType.NORMAL);
+            ListResultExample<PostAnimalDTO> listResultExample = this.repository.findAllCustom(dto, pageable);
             List<PostAnimalDTO> customList = buildCustomList(listResultExample);
             Page<PostAnimalDTO> customPage = new PageImpl<>(customList, pageable, pageable.getPageSize());
             return new ListResultExample<>(customPage, customList);
