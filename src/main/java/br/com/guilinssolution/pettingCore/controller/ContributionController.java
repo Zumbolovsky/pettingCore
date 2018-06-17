@@ -91,7 +91,7 @@ public class ContributionController extends GenericController {
                                                 @RequestParam(required = false) Integer idPostAnimal,
                                                 @RequestParam(required = false) Integer idPostItem,
                                                 @RequestParam Integer idUsurRequest,
-                                                @RequestParam(required = false) Integer idUsurDonator,
+                                                @RequestParam Integer idUsurDonator,
                                                 BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição");
         this.validator.hibernateException(result);
@@ -105,7 +105,7 @@ public class ContributionController extends GenericController {
     public ResponseEntity<ContributionDTO> saveSessionUser(@Valid @RequestBody ContributionExample example,
                                                            @RequestParam(required = false) Integer idPostAnimal,
                                                            @RequestParam(required = false) Integer idPostItem,
-                                                           @RequestParam(required = false) Integer idUsurDonator,
+                                                           @RequestParam Integer idUsurDonator,
                                                            BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição (sessão)");
         this.validator.hibernateException(result);
