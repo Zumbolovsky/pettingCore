@@ -66,7 +66,23 @@ public class ContributionController extends GenericController {
     public ListResultExample<ContributionDTO> listByDonator(PageExample pageExample) {
         log.info("Listando Contribuições por usuário contribuinte");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.service.listByDonator(Integer.parseInt(principal), pageExample);
+        return this.service.listByDonator(Integer.parseInt(principal), pageExample, null);
+    }
+
+    @ApiOperation(value = "Lista animais por ID de usuário contribuinte", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-animal/donator", method = RequestMethod.GET)
+    public ListResultExample<ContributionDTO> listAnimalByDonator(PageExample pageExample) {
+        log.info("Listando Publicações Animal Contribuições por usuário contribuinte");
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByDonator(Integer.parseInt(principal), pageExample, Kind.ANIMAL);
+    }
+
+    @ApiOperation(value = "Lista itens por ID de usuário contribuinte", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/all-item/donator", method = RequestMethod.GET)
+    public ListResultExample<ContributionDTO> listItemByDonator(PageExample pageExample) {
+        log.info("Listando Publicações Item Contribuições por usuário contribuinte");
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.service.listByDonator(Integer.parseInt(principal), pageExample, Kind.ITEM);
     }
 
     @ApiOperation(value = "Lista por ID de usuário contribuinte customizada", authorizations = { @Authorization(value="apiKey") })
@@ -74,7 +90,7 @@ public class ContributionController extends GenericController {
     public PageableDTO listByDonatorCustom(PageExample pageExample) {
         log.info("Listando Contribuições customizadas por usuário contribuinte");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ListResultExample<ContributionDTO> listResultExample = this.service.listByDonator(Integer.parseInt(principal), pageExample);
+        ListResultExample<ContributionDTO> listResultExample = this.service.listByDonator(Integer.parseInt(principal), pageExample, null);
         return buildPageableDTO(listResultExample, buildCustomList(listResultExample.getContent()));
     }
 

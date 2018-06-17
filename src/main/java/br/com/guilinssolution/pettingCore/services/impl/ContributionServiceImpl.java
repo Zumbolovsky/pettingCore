@@ -6,6 +6,7 @@ import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
+import br.com.guilinssolution.pettingCore.model.enums.Kind;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
@@ -132,8 +133,8 @@ public class ContributionServiceImpl implements ContributionService {
     }
 
     @Override
-    public ListResultExample<ContributionDTO> listByDonator(Integer idUsur, PageExample pageExample) {
-        return this.repository.listByDonator(idUsur, pageExample);
+    public ListResultExample<ContributionDTO> listByDonator(Integer idUsur, PageExample pageExample, Kind kind) {
+        return this.repository.listByDonator(idUsur, pageExample, kind);
     }
 
     private ListResultExample<ContributionDTO> findAll(BooleanExpression query, Pageable page, ConvertType conversionType) {
