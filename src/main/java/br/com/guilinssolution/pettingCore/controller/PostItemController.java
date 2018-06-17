@@ -116,7 +116,7 @@ public class PostItemController extends GenericController {
     }
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/{idCustom}", method = RequestMethod.GET)
+    @RequestMapping(value = "/custom/{idCustom}", method = RequestMethod.GET)
     public ResponseEntity<PostItemCustomDTO> findOneCustom(@PathVariable Integer idCustom) {
         log.info("Pesquisando dados customizados de um Publicação Item");
         PostItemDTO dto = this.service.findOne(idCustom, Custom.CUSTOM);
