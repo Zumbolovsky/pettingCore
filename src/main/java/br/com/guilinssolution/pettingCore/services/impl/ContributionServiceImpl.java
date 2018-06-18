@@ -6,8 +6,10 @@ import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
+import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
+import br.com.guilinssolution.pettingCore.model.entities.PostItemEntity;
+import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Kind;
-import br.com.guilinssolution.pettingCore.model.example.ContributionExample;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
@@ -81,14 +83,26 @@ public class ContributionServiceImpl implements ContributionService {
 
     @Override
     public ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem,
-                                Integer idUsurRequest, Integer idUsurDonator) {
-        if (idPostAnimal != null) {
-            dto.setDescriptionContribution(this.postAnimalRepository.getOne(idPostAnimal).getDescriptionPostAnimal());
-        } else if (idPostItem != null) {
-            dto.setDescriptionContribution(this.postItemRepository.getOne(idPostItem).getDescriptionPostItem());
+                                Integer idUsurRequest, Integer idUsurDonator, Custom custom) {
+        if (custom.equals(Custom.CUSTOM)) {
+            this.validator.entityNotExist(idUsurDonator, this.usurRepository);
+            if (idPostAnimal != null) {
+                this.validator.entityNotExist(idPostAnimal, this.postAnimalRepository);
+                PostAnimalEntity entity = this.postAnimalRepository.getOne(idPostAnimal);
+                dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(entity.getUsurEntity()));
+                dto.setPostAnimalDTO(PostAnimalAdapter.convertToDTO(entity));
+                dto.setDescriptionContribution(entity.getDescriptionPostAnimal());
+            } else if (idPostItem != null) {
+                this.validator.entityNotExist(idPostItem, this.postItemRepository);
+                PostItemEntity entity = this.postItemRepository.getOne(idPostItem);
+                dto.setUsurDTOByIdRequest(UsurAdapter.convertToDTO(entity.getUsurEntity()));
+                dto.setPostItemDTO(PostItemAdapter.convertToDTO(entity));
+                dto.setDescriptionContribution(entity.getDescriptionPostItem());
+            }
+            dto.setUsurDTOByIdDonator(UsurAdapter.convertToDTO(this.usurRepository.getOne(idUsurDonator)));
+        } else {
+            validateAndAdd(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator);
         }
-
-        validateAndAdd(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator);
 
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(dto);
 

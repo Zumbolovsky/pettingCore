@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import br.com.guilinssolution.pettingCore.model.dto.custom.ContributionCustomDTO;
 import br.com.guilinssolution.pettingCore.model.dto.util.PageableDTO;
+import br.com.guilinssolution.pettingCore.model.enums.Custom;
 import br.com.guilinssolution.pettingCore.model.enums.Kind;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import io.swagger.annotations.Authorization;
@@ -110,20 +111,17 @@ public class ContributionController extends GenericController {
                                                 BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.save(new ContributionDTO(), idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+        return new ResponseEntity<>(this.service.save(new ContributionDTO(), idPostAnimal, idPostItem, idUsurRequest, idUsurDonator, Custom.NORMAL),
                 HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Cadastra dados no banco (usuário da sessão)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/usur", method = RequestMethod.POST)
     public ResponseEntity<ContributionDTO> saveSessionUser(@RequestParam(required = false) Integer idPostAnimal,
-                                                           @RequestParam(required = false) Integer idPostItem,
-                                                           @RequestParam Integer idUsurRequest,
-                                                           BindingResult result) {
+                                                           @RequestParam(required = false) Integer idPostItem) {
         log.info("Cadastrando dados de uma Contribuição (sessão)");
-        this.validator.hibernateException(result);
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new ResponseEntity<>(this.service.save(new ContributionDTO(), idPostAnimal, idPostItem, idUsurRequest, Integer.parseInt(principal)),
+        return new ResponseEntity<>(this.service.save(new ContributionDTO(), idPostAnimal, idPostItem, null, Integer.parseInt(principal), Custom.CUSTOM),
                 HttpStatus.CREATED);
     }
 
