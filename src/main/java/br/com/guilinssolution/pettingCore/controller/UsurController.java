@@ -63,9 +63,17 @@ public class UsurController {
     }
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
-    @RequestMapping(value = "/secured/usur", method = RequestMethod.GET)
-    public ResponseEntity<UsurCustomDTO> findOneCustom() {
+    @RequestMapping(value = "/secured/usur-custom/{id}", method = RequestMethod.GET)
+    public ResponseEntity<UsurCustomDTO> findOneCustom(@PathVariable Integer id) {
         log.info("Pesquisando dados customizados de um Usuário");
+        UsurDTO dto = this.service.findOne(id, Custom.CUSTOM);
+        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Busca dados customizados pelo identificador (sessão)", authorizations = { @Authorization(value="apiKey") })
+    @RequestMapping(value = "/secured/usur", method = RequestMethod.GET)
+    public ResponseEntity<UsurCustomDTO> findOneSessionCustom() {
+        log.info("Pesquisando dados customizados de um Usuário (sessão)");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UsurDTO dto = this.service.findOne(Integer.parseInt(principal), Custom.CUSTOM);
         return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.OK);
