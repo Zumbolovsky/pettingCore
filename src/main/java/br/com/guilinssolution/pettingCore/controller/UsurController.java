@@ -59,7 +59,7 @@ public class UsurController {
     @RequestMapping(value = "/secured/usur/{id}", method = RequestMethod.GET)
     public ResponseEntity<UsurDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Usuário");
-        return new ResponseEntity<>(this.service.findOne(id, Custom.NORMAL), HttpStatus.FOUND);
+        return new ResponseEntity<>(this.service.findOne(id, Custom.NORMAL), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -68,7 +68,7 @@ public class UsurController {
         log.info("Pesquisando dados customizados de um Usuário");
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UsurDTO dto = this.service.findOne(Integer.parseInt(principal), Custom.CUSTOM);
-        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.FOUND);
+        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Cadastra dados no banco")

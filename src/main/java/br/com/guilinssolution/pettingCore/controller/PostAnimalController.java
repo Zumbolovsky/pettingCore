@@ -206,7 +206,7 @@ public class PostAnimalController extends GenericController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PostAnimalDTO> findOne(@PathVariable Integer id) {
         log.info("Pesquisando dados de um Publicação Animal");
-        return new ResponseEntity<>(this.service.findOne(id, Custom.NORMAL), HttpStatus.FOUND);
+        return new ResponseEntity<>(this.service.findOne(id, Custom.NORMAL), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Busca dados customizados pelo identificador", authorizations = { @Authorization(value="apiKey") })
@@ -214,7 +214,7 @@ public class PostAnimalController extends GenericController {
     public ResponseEntity<PostAnimalCustomDTO> findOneCustom(@PathVariable Integer idCustom) {
         log.info("Pesquisando dados customizados de um Publicação Animal");
         PostAnimalDTO dto = this.service.findOne(idCustom, Custom.CUSTOM);
-        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.FOUND);
+        return new ResponseEntity<>(buildCustomDTO(dto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
