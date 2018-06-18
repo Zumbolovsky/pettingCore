@@ -77,7 +77,7 @@ public class AnimalController {
                                             BindingResult result) {
         log.info("Atualizando dados de um Animal");
         this.validator.hibernateException(result);
-        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })

@@ -89,7 +89,7 @@ public class UsurController {
         log.info("Atualizando dados de um Usuário");
         this.validator.hibernateException(result);
         UsurDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, dto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })

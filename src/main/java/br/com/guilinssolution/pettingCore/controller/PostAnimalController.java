@@ -248,7 +248,7 @@ public class PostAnimalController extends GenericController {
         log.info("Atualizando dados de um Publicação Animal e suas relações");
         this.validator.hibernateException(result);
         PostAnimalDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.update(currentId, dto, idUsur), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idUsur), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
@@ -259,7 +259,7 @@ public class PostAnimalController extends GenericController {
         log.info("Atualizando dados de um Publicação Animal");
         this.validator.hibernateException(result);
         PostAnimalDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })

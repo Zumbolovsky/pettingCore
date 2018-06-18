@@ -154,7 +154,7 @@ public class PostItemController extends GenericController {
         log.info("Atualizando dados de um Publicação Item e suas relações");
         this.validator.hibernateException(result);
         PostItemDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.update(currentId, dto, idUsur), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.update(currentId, dto, idUsur), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Atualiza dados no banco (sem especificar relações)", authorizations = { @Authorization(value="apiKey") })
@@ -165,7 +165,7 @@ public class PostItemController extends GenericController {
         log.info("Atualizando dados de um Publicação Item");
         this.validator.hibernateException(result);
         PostItemDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.service.quickUpdate(currentId, dto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Exclui dados no banco", authorizations = { @Authorization(value="apiKey") })
