@@ -67,8 +67,8 @@ public class PostAnimalServiceImpl implements PostAnimalService {
     }
 
     @Override
-    public Integer customCount(Species species) {
-        return this.repository.customCount(species);
+    public List<Integer> customCount() {
+        return this.repository.customCount();
     }
 
     @Override

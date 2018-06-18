@@ -4,7 +4,6 @@ import br.com.guilinssolution.pettingCore.helper.PageHelper;
 import br.com.guilinssolution.pettingCore.model.adapter.PostAnimalAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.PostAnimalDTO;
 import br.com.guilinssolution.pettingCore.model.entities.QContributionEntity;
-import br.com.guilinssolution.pettingCore.model.enums.ConvertType;
 import br.com.guilinssolution.pettingCore.model.enums.Species;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
@@ -12,7 +11,6 @@ import br.com.guilinssolution.pettingCore.model.entities.PostAnimalEntity;
 import br.com.guilinssolution.pettingCore.model.entities.QPostAnimalEntity;
 import br.com.guilinssolution.pettingCore.repositories.custom.PostAnimalRepositoryCustom;
 import com.querydsl.core.QueryModifiers;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -119,36 +118,42 @@ public class PostAnimalRepositoryCustomImpl implements PostAnimalRepositoryCusto
     }
 
     @Override
-    public Integer customCount(Species species) {
+    public List<Integer> customCount() {
         QPostAnimalEntity postAnimal = QPostAnimalEntity.postAnimalEntity;
         QContributionEntity contribution = QContributionEntity.contributionEntity;
-        JPAQuery<Integer> query = new JPAQuery<>(this.entityManager);
-        JPAQuery<Integer> subQuery = new JPAQuery<>(this.entityManager);
-        JPAQuery<Integer> countSubQuery = new JPAQuery<>(this.entityManager);
+        List<Integer> adoptionList = new ArrayList<>();
+        for (Species s: Species.values()) {
+            JPAQuery<Integer> query = new JPAQuery<>(this.entityManager);
+            JPAQuery<Integer> subQuery = new JPAQuery<>(this.entityManager);
+            JPAQuery<Integer> countSubQuery = new JPAQuery<>(this.entityManager);
 
-        countSubQuery
-                .select(contribution.postAnimalEntity.idPostAnimal)
-                .from(contribution);
-        Integer count = countSubQuery
-                .from(contribution)
-                .fetch().size();
+            countSubQuery
+                    .select(contribution.postAnimalEntity.idPostAnimal)
+                    .from(contribution);
+            Integer count = countSubQuery
+                    .from(contribution)
+                    .fetch().size();
 
-        if (count > 0) {
-            query
-                    .select(postAnimal.idPostAnimal)
-                    .from(postAnimal, contribution)
-                    .where(postAnimal.speciesPostAnimal.eq(species)
-                            .and(postAnimal.idPostAnimal.notIn(subQuery.fetch())))
-                    .distinct();
-        } else {
-            query
-                    .select(postAnimal.idPostAnimal)
-                    .from(postAnimal)
-                    .where(postAnimal.speciesPostAnimal.eq(species))
-                    .distinct();
+            if (count > 0) {
+                subQuery
+                        .select(contribution.postAnimalEntity.idPostAnimal)
+                        .from(contribution);
+                query
+                        .select(postAnimal.idPostAnimal)
+                        .from(postAnimal, contribution)
+                        .where(postAnimal.speciesPostAnimal.eq(s)
+                                .and(postAnimal.idPostAnimal.notIn(subQuery.fetch())))
+                        .distinct();
+            } else {
+                query
+                        .select(postAnimal.idPostAnimal)
+                        .from(postAnimal)
+                        .where(postAnimal.speciesPostAnimal.eq(s))
+                        .distinct();
+            }
+            adoptionList.add(query.fetch().size());
         }
-
-        return query.fetch().size();
+        return adoptionList;
     }
 
 }
