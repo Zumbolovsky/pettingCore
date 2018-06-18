@@ -121,13 +121,13 @@ public class ContributionController extends GenericController {
     public ResponseEntity<ContributionDTO> saveSessionUser(@Valid @RequestBody ContributionExample example,
                                                            @RequestParam(required = false) Integer idPostAnimal,
                                                            @RequestParam(required = false) Integer idPostItem,
-                                                           @RequestParam Integer idUsurDonator,
+                                                           @RequestParam Integer idUsurRequest,
                                                            BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição (sessão)");
         this.validator.hibernateException(result);
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ContributionDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, Integer.parseInt(principal), idUsurDonator),
+        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, idUsurRequest, Integer.parseInt(principal)),
                 HttpStatus.CREATED);
     }
 
