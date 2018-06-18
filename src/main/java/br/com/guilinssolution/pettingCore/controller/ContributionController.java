@@ -103,31 +103,27 @@ public class ContributionController extends GenericController {
 
     @ApiOperation(value = "Cadastra dados no banco", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ContributionDTO> save(@Valid @RequestBody ContributionExample example,
-                                                @RequestParam(required = false) Integer idPostAnimal,
+    public ResponseEntity<ContributionDTO> save(@RequestParam(required = false) Integer idPostAnimal,
                                                 @RequestParam(required = false) Integer idPostItem,
                                                 @RequestParam Integer idUsurRequest,
                                                 @RequestParam Integer idUsurDonator,
                                                 BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição");
         this.validator.hibernateException(result);
-        ContributionDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
+        return new ResponseEntity<>(this.service.save(new ContributionDTO(), idPostAnimal, idPostItem, idUsurRequest, idUsurDonator),
                 HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Cadastra dados no banco (usuário da sessão)", authorizations = { @Authorization(value="apiKey") })
     @RequestMapping(value = "/usur", method = RequestMethod.POST)
-    public ResponseEntity<ContributionDTO> saveSessionUser(@Valid @RequestBody ContributionExample example,
-                                                           @RequestParam(required = false) Integer idPostAnimal,
+    public ResponseEntity<ContributionDTO> saveSessionUser(@RequestParam(required = false) Integer idPostAnimal,
                                                            @RequestParam(required = false) Integer idPostItem,
                                                            @RequestParam Integer idUsurRequest,
                                                            BindingResult result) {
         log.info("Cadastrando dados de uma Contribuição (sessão)");
         this.validator.hibernateException(result);
         String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ContributionDTO dto = buildDTO(example);
-        return new ResponseEntity<>(this.service.save(dto, idPostAnimal, idPostItem, idUsurRequest, Integer.parseInt(principal)),
+        return new ResponseEntity<>(this.service.save(new ContributionDTO(), idPostAnimal, idPostItem, idUsurRequest, Integer.parseInt(principal)),
                 HttpStatus.CREATED);
     }
 

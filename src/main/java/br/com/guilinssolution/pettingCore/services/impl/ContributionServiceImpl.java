@@ -7,6 +7,7 @@ import br.com.guilinssolution.pettingCore.model.adapter.PostItemAdapter;
 import br.com.guilinssolution.pettingCore.model.adapter.UsurAdapter;
 import br.com.guilinssolution.pettingCore.model.dto.ContributionDTO;
 import br.com.guilinssolution.pettingCore.model.enums.Kind;
+import br.com.guilinssolution.pettingCore.model.example.ContributionExample;
 import br.com.guilinssolution.pettingCore.model.example.ListResultExample;
 import br.com.guilinssolution.pettingCore.model.example.PageExample;
 import br.com.guilinssolution.pettingCore.model.entities.ContributionEntity;
@@ -81,6 +82,12 @@ public class ContributionServiceImpl implements ContributionService {
     @Override
     public ContributionDTO save(ContributionDTO dto, Integer idPostAnimal, Integer idPostItem,
                                 Integer idUsurRequest, Integer idUsurDonator) {
+        if (idPostAnimal != null) {
+            dto.setDescriptionContribution(this.postAnimalRepository.getOne(idPostAnimal).getDescriptionPostAnimal());
+        } else if (idPostItem != null) {
+            dto.setDescriptionContribution(this.postItemRepository.getOne(idPostItem).getDescriptionPostItem());
+        }
+
         validateAndAdd(dto, idPostAnimal, idPostItem, idUsurRequest, idUsurDonator);
 
         ContributionEntity contributionEntity = ContributionAdapter.convertToEntity(dto);
