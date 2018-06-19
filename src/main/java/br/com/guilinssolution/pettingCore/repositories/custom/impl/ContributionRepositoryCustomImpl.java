@@ -36,29 +36,33 @@ public class ContributionRepositoryCustomImpl implements ContributionRepositoryC
 
         QueryModifiers modifiers = new QueryModifiers(limit, offset);
 
-        switch (kind) {
-            case ANIMAL:
-                query = query
-                        .select(contribution)
-                        .from(contribution)
-                        .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur)
-                                .and(contribution.postItemEntity.isNull()))
-                        .restrict(modifiers);
-                break;
-            case ITEM:
-                query = query
-                        .select(contribution)
-                        .from(contribution)
-                        .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur)
-                                .and(contribution.postAnimalEntity.isNull()))
-                        .restrict(modifiers);
-                break;
-            default:
-                query = query
-                        .select(contribution)
-                        .from(contribution)
-                        .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur))
-                        .restrict(modifiers);
+        if (kind == null) {
+            query = query
+                    .select(contribution)
+                    .from(contribution)
+                    .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur))
+                    .restrict(modifiers);
+        } else {
+            switch (kind) {
+                case ANIMAL:
+                    query = query
+                            .select(contribution)
+                            .from(contribution)
+                            .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur)
+                                    .and(contribution.postItemEntity.isNull()))
+                            .restrict(modifiers);
+                    break;
+                case ITEM:
+                    query = query
+                            .select(contribution)
+                            .from(contribution)
+                            .where(contribution.usurEntityByIdRequest.idUsur.eq(idUsur)
+                                    .and(contribution.postAnimalEntity.isNull()))
+                            .restrict(modifiers);
+                    break;
+                default:
+
+            }
         }
 
         List<ContributionEntity> entityList = query.fetch();
