@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: pettingCore
+  datasource:
+    url: "@datasource.url@"
+    username: "@datasource.username@"
+    password: "@datasource.password@"
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    properties:
+      hibernate:
+        dialect: "@jpa.properties.hibernate.dialect@"
+    show-sql: true
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+management:
+  endpoint:
+    auditevents:
+      enabled: false
+  endpoints:
+    web:
+      cors:
+        allowed-origins: '*'
+info:
+  version: "@project.version@"
+  properties.from: "@properties.from@"
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+  encoding: "@project.build.sourceEncoding@"
+  java:
+    version: "@java.version@"
